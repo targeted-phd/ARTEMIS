@@ -1,0 +1,160 @@
+{
+  "freq_mhz": 1090.0,
+  "kurtosis": 90.5698,
+  "papr_db": 20.89,
+  "mean_pwr_db": -43.93,
+  "spectral_flatness": 0.9722,
+  "sta_lta_max": 2.717,
+  "sta_lta_triggers": 0,
+  "pulse_count": 70,
+  "pulses": [
+    {
+      "offset_ms": 4.705,
+      "width_us": 1.25,
+      "peak_snr_db": "16.3"
+    },
+    {
+      "offset_ms": 18.28,
+      "width_us": 1.67,
+      "peak_snr_db": "19.8"
+    },
+    {
+      "offset_ms": 18.288,
+      "width_us": 2.92,
+      "peak_snr_db": "20.8"
+    },
+    {
+      "offset_ms": 18.291,
+      "width_us": 1.25,
+      "peak_snr_db": "20.2"
+    },
+    {
+      "offset_ms": 18.294,
+      "width_us": 1.25,
+      "peak_snr_db": "18.8"
+    },
+    {
+      "offset_ms": 18.3,
+      "width_us": 2.08,
+      "peak_snr_db": "20.7"
+    },
+    {
+      "offset_ms": 18.303,
+      "width_us": 2.08,
+      "peak_snr_db": "20.9"
+    },
+    {
+      "offset_ms": 18.306,
+      "width_us": 1.67,
+      "peak_snr_db": "18.5"
+    },
+    {
+      "offset_ms": 18.308,
+      "width_us": 2.08,
+      "peak_snr_db": "21.1"
+    },
+    {
+      "offset_ms": 18.313,
+      "width_us": 1.25,
+      "peak_snr_db": "20.0"
+    },
+    {
+      "offset_ms": 18.315,
+      "width_us": 2.08,
+      "peak_snr_db": "19.8"
+    },
+    {
+      "offset_ms": 18.318,
+      "width_us": 2.08,
+      "peak_snr_db": "20.8"
+    },
+    {
+      "offset_ms": 18.321,
+      "width_us": 1.25,
+      "peak_snr_db": "17.7"
+    },
+    {
+      "offset_ms": 18.323,
+      "width_us": 1.25,
+      "peak_snr_db": "20.7"
+    },
+    {
+      "offset_ms": 18.329,
+      "width_us": 2.5,
+      "peak_snr_db": "20.0"
+    },
+    {
+      "offset_ms": 18.333,
+      "width_us": 2.08,
+      "peak_snr_db": "20.2"
+    },
+    {
+      "offset_ms": 18.337,
+      "width_us": 1.25,
+      "peak_snr_db": "19.4"
+    },
+    {
+      "offset_ms": 18.34,
+      "width_us": 1.25,
+      "peak_snr_db": "19.7"
+    },
+    {
+      "offset_ms": 18.343,
+      "width_us": 1.67,
+      "peak_snr_db": "17.5"
+    },
+    {
+      "offset_ms": 18.348,
+      "width_us": 2.08,
+      "peak_snr_db": "18.5"
+    },
+    {
+      "offset_ms": 18.35,
+      "width_us": 2.08,
+      "peak_snr_db": "20.2"
+    },
+    {
+      "offset_ms": 18.355,
+      "width_us": 2.5,
+      "peak_snr_db": "19.4"
+    },
+    {
+      "offset_ms": 18.358,
+      "width_us": 1.67,
+      "peak_snr_db": "18.5"
+    },
+    {
+      "offset_ms": 18.36,
+      "width_us": 2.08,
+      "peak_snr_db": "20.3"
+    },
+    {
+      "offset_ms": 18.363,
+      "width_us": 2.08,
+      "peak_snr_db": "21.5"
+    }
+  ],
+  "n_samples": 552000,
+  "flagged": true,
+  "flag_reasons": [
+    "kurtosis +47.9\u03c3 (90.570)",
+    "PAPR +18.5\u03c3 (20.9dB)",
+    "flatness -7.1\u03c3 (0.9722)",
+    "STA/LTA +55.2\u03c3 (2.72, 0 triggers)",
+    "70 pulses (\u22653 samples)"
+  ],
+  "timestamp": "2026-03-13T15:18:21.977598+00:00",
+  "iq_file": "captures/20260313_101821_1090.0MHz.iq",
+  "sample_rate": 2400000,
+  "baseline": {
+    "kurtosis_median": 9.0204,
+    "kurtosis_sigma": 1.70291436,
+    "papr_median": 11.04,
+    "papr_sigma": 0.5337359999999991,
+    "flatness_median": 0.9837,
+    "flatness_sigma": 0.0016308599999999849,
+    "sta_lta_median": 1.08,
+    "sta_lta_sigma": 0.029652000000000026,
+    "n_channels": 137
+  }
+}

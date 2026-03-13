@@ -1,0 +1,57 @@
+# RF Monitor - Python dependencies
+# Install: python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
+
+# Core scientific
+numpy
+scipy
+matplotlib
+scikit-learn
+pandas
+
+# SDR / signal processing
+# (rtl_power_fftw and rtl-sdr are system packages, not pip)
+
+# Neo4j knowledge graph
+neo4j
+
+# HTTP / API
+requests
+beautifulsoup4
+
+# PDF extraction
+grobid-client-python
+docling
+PyMuPDF
+pypdfium2
+pytesseract
+
+# NLP / ML
+torch
+torchvision
+transformers
+tokenizers
+accelerate
+safetensors
+
+# Document processing
+lxml
+python-docx
+python-pptx
+openpyxl
+xlsxwriter
+jsonlines
+
+# Utilities
+tqdm
+rich
+pydantic
+pydantic-settings
+python-dateutil
+python-dotenv
+PyYAML
+psutil
+tabulate
+dateparser
+regex
+Faker
+typer

@@ -1,6 +1,10 @@
 .venv/
 __pycache__/
-captures/
-results/
-*.iq
+#captures/
+#results/*
+#!results/knowledge_graph_v2/
+#results/knowledge_graph_v2/*
+#!results/knowledge_graph_v2/*.json
+#!results/knowledge_graph_v2/grobid/
+#*.iq
 *.pyc

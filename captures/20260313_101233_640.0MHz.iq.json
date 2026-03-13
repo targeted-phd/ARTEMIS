@@ -1,0 +1,30 @@
+{
+  "freq_mhz": 640.0,
+  "kurtosis": 5.3803,
+  "papr_db": 12.53,
+  "mean_pwr_db": -42.91,
+  "spectral_flatness": 0.9785,
+  "sta_lta_max": 1.23,
+  "sta_lta_triggers": 0,
+  "pulse_count": 0,
+  "pulses": [],
+  "n_samples": 552000,
+  "flagged": true,
+  "flag_reasons": [
+    "STA/LTA +5.1\u03c3 (1.23, 0 triggers)"
+  ],
+  "timestamp": "2026-03-13T15:12:33.592884+00:00",
+  "iq_file": "captures/20260313_101233_640.0MHz.iq",
+  "sample_rate": 2400000,
+  "baseline": {
+    "kurtosis_median": 9.0204,
+    "kurtosis_sigma": 1.70291436,
+    "papr_median": 11.04,
+    "papr_sigma": 0.5337359999999991,
+    "flatness_median": 0.9837,
+    "flatness_sigma": 0.0016308599999999849,
+    "sta_lta_median": 1.08,
+    "sta_lta_sigma": 0.029652000000000026,
+    "n_channels": 137
+  }
+}

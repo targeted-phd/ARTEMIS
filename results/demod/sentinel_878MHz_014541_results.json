@@ -1,0 +1,201 @@
+{
+  "file": "/home/tyler/projects/rf-monitor/captures/sentinel_878MHz_014541.iq",
+  "n_pulses": 9303,
+  "n_bursts": 323,
+  "timestamp": "2026-03-12T14:00:03.485631",
+  "methods": {
+    "ENVELOPE": {
+      "stats": {
+        "method": "ENVELOPE",
+        "decimate_factor": 150,
+        "decimate_stages": [
+          10,
+          10
+        ],
+        "effective_sr": 24000,
+        "audio_samples": 48000,
+        "audio_duration_s": 2.0,
+        "input_samples": 4800000,
+        "input_duration_s": 2.0
+      },
+      "analysis": {
+        "method": "ENVELOPE",
+        "n_samples": 48000,
+        "duration_s": 2.0,
+        "modulation": {
+          "syllable_mod_ratio": 1.4439123816761312,
+          "syllable_mod_fraction": 476.05060562490934,
+          "score": 0.14439123816761312
+        },
+        "formants": {
+          "score": 0.20202020202020202,
+          "mean_per_frame": 0.6060606060606061,
+          "frames_with_2plus": 0,
+          "total_frames": 132,
+          "f1_mean": 4033.8465265775303,
+          "f2_mean": 7107.330469374388,
+          "f3_mean": 8955.678983276484
+        },
+        "pitch": {
+          "mean_f0_hz": 113.15359396071362,
+          "std_f0_hz": 27.637863111405885,
+          "mean_confidence": 0.015983884106226094,
+          "voiced_frames": 5,
+          "total_frames": 197,
+          "in_human_range": true,
+          "varies_like_speech": true
+        },
+        "vad": {
+          "active_ratio": 0.3181818181818182,
+          "voiced_ratio": 0.26262626262626265,
+          "unvoiced_ratio": 0.05555555555555555,
+          "energy_mean_db": -31.52453723213778,
+          "energy_std_db": 6.569459810144928,
+          "zcr_mean": 0.051388888888888894
+        },
+        "mfcc": {
+          "structure_variance": 2.2526945313118856,
+          "n_frames": 198
+        },
+        "speech_score": 0.24423236990945374,
+        "classification": "WEAK INDICATORS",
+        "fuzzy_inputs": {
+          "mod_ratio": 1.4439123816761312,
+          "formant_score": 0.20202020202020202,
+          "pitch_confidence": 0.015983884106226094,
+          "pitch_in_range": 1,
+          "voiced_ratio": 0.26262626262626265,
+          "mfcc_structure": 1.0,
+          "energy_variance": 6.569459810144928
+        }
+      }
+    },
+    "BURST_PRF": {
+      "stats": {
+        "method": "BURST_PRF",
+        "mean_brf_hz": 2211.243496886759,
+        "std_brf_hz": 1296.9685617429802,
+        "min_brf_hz": 250.29983834802803,
+        "max_brf_hz": 6258.148631030295,
+        "n_bursts": 323,
+        "duration_s": 1.9955372916666667,
+        "audio_samples": 31911,
+        "audio_duration_s": 1.9944375
+      },
+      "analysis": {
+        "method": "BURST_PRF",
+        "n_samples": 31911,
+        "duration_s": 1.9944375,
+        "modulation": {
+          "syllable_mod_ratio": 0.573668348339268,
+          "syllable_mod_fraction": 185.34522099307827,
+          "score": 0.05736683483392681
+        },
+        "formants": {
+          "score": 0.638676844783715,
+          "mean_per_frame": 1.916030534351145,
+          "frames_with_2plus": 123,
+          "total_frames": 131,
+          "f1_mean": 1262.2861857018888,
+          "f2_mean": 3076.527351767379,
+          "f3_mean": 4833.445046992441
+        },
+        "pitch": {
+          "mean_f0_hz": 0,
+          "std_f0_hz": 0,
+          "mean_confidence": 0.0,
+          "voiced_frames": 0,
+          "total_frames": 196,
+          "in_human_range": false,
+          "varies_like_speech": false
+        },
+        "vad": {
+          "active_ratio": 0.2893401015228426,
+          "voiced_ratio": 0.08629441624365482,
+          "unvoiced_ratio": 0.20304568527918782,
+          "energy_mean_db": -13.656389186250365,
+          "energy_std_db": 2.889212851577339,
+          "zcr_mean": 0.006116751269035534
+        },
+        "mfcc": {
+          "structure_variance": 3.572077250984354,
+          "n_frames": 197
+        },
+        "speech_score": 0.33003790857975696,
+        "classification": "WEAK INDICATORS",
+        "fuzzy_inputs": {
+          "mod_ratio": 0.573668348339268,
+          "formant_score": 0.638676844783715,
+          "pitch_confidence": 0.0,
+          "pitch_in_range": 0,
+          "voiced_ratio": 0.08629441624365482,
+          "mfcc_structure": 1.0,
+          "energy_variance": 2.889212851577339
+        }
+      }
+    },
+    "BURST_PAM": {
+      "stats": {
+        "method": "BURST_PAM",
+        "mean_energy": 44174.4641768984,
+        "std_energy": 125740.37698422858,
+        "dynamic_range_db": 35.46696143388377,
+        "n_bursts": 323,
+        "duration_s": 1.9955372916666667,
+        "audio_samples": 31929,
+        "audio_duration_s": 1.9955625
+      },
+      "analysis": {
+        "method": "BURST_PAM",
+        "n_samples": 31929,
+        "duration_s": 1.9955625,
+        "modulation": {
+          "syllable_mod_ratio": 30.43574351553349,
+          "syllable_mod_fraction": 800.9780647310512,
+          "score": 1.0
+        },
+        "formants": {
+          "score": 0.5,
+          "mean_per_frame": 1.5,
+          "frames_with_2plus": 89,
+          "total_frames": 132,
+          "f1_mean": 1435.8951607376437,
+          "f2_mean": 3047.1710369003126,
+          "f3_mean": 4536.428750835311
+        },
+        "pitch": {
+          "mean_f0_hz": 0,
+          "std_f0_hz": 0,
+          "mean_confidence": 0.0,
+          "voiced_frames": 0,
+          "total_frames": 196,
+          "in_human_range": false,
+          "varies_like_speech": false
+        },
+        "vad": {
+          "active_ratio": 0.29292929292929293,
+          "voiced_ratio": 0.0,
+          "unvoiced_ratio": 0.29292929292929293,
+          "energy_mean_db": -23.031922769310896,
+          "energy_std_db": 4.821957055047483,
+          "zcr_mean": 0.004406565656565657
+        },
+        "mfcc": {
+          "structure_variance": 2.180422578346682,
+          "n_frames": 198
+        },
+        "speech_score": 0.5556151368284926,
+        "classification": "POSSIBLE SPEECH",
+        "fuzzy_inputs": {
+          "mod_ratio": 30.43574351553349,
+          "formant_score": 0.5,
+          "pitch_confidence": 0.0,
+          "pitch_in_range": 0,
+          "voiced_ratio": 0.0,
+          "mfcc_structure": 1.0,
+          "energy_variance": 4.821957055047483
+        }
+      }
+    }
+  }
+}

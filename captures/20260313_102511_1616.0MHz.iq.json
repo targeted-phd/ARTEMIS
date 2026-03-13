@@ -1,0 +1,41 @@
+{
+  "freq_mhz": 1616.0,
+  "kurtosis": 10.4468,
+  "papr_db": 10.74,
+  "mean_pwr_db": -44.31,
+  "spectral_flatness": 0.985,
+  "sta_lta_max": 1.063,
+  "sta_lta_triggers": 0,
+  "pulse_count": 2,
+  "pulses": [
+    {
+      "offset_ms": 46.998,
+      "width_us": 1.25,
+      "peak_snr_db": "7.2"
+    },
+    {
+      "offset_ms": 140.973,
+      "width_us": 1.25,
+      "peak_snr_db": "7.3"
+    }
+  ],
+  "n_samples": 552000,
+  "flagged": true,
+  "flag_reasons": [
+    "2 pulses (\u22653 samples)"
+  ],
+  "timestamp": "2026-03-13T15:25:11.466870+00:00",
+  "iq_file": "captures/20260313_102511_1616.0MHz.iq",
+  "sample_rate": 2400000,
+  "baseline": {
+    "kurtosis_median": 9.0204,
+    "kurtosis_sigma": 1.70291436,
+    "papr_median": 11.04,
+    "papr_sigma": 0.5337359999999991,
+    "flatness_median": 0.9837,
+    "flatness_sigma": 0.0016308599999999849,
+    "sta_lta_median": 1.08,
+    "sta_lta_sigma": 0.029652000000000026,
+    "n_channels": 137
+  }
+}

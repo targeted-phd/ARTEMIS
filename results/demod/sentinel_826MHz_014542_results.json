@@ -1,0 +1,74 @@
+{
+  "file": "captures/sentinel_826MHz_014542.iq",
+  "n_pulses": 423,
+  "n_bursts": 2,
+  "timestamp": "2026-03-12T22:35:59.183806",
+  "methods": {
+    "ENVELOPE": {
+      "stats": {
+        "method": "ENVELOPE",
+        "decimate_factor": 150,
+        "decimate_stages": [
+          10,
+          10
+        ],
+        "effective_sr": 24000,
+        "audio_samples": 4800,
+        "audio_duration_s": 0.2,
+        "input_samples": 480000,
+        "input_duration_s": 0.2
+      },
+      "analysis": {
+        "method": "ENVELOPE",
+        "n_samples": 4800,
+        "duration_s": 0.2,
+        "modulation": {
+          "syllable_mod_ratio": 3.131613789759127,
+          "syllable_mod_fraction": 753.9267015205454,
+          "score": 0.31316137897591273
+        },
+        "formants": {
+          "score": 0.3333333333333333,
+          "mean_per_frame": 1.0,
+          "frames_with_2plus": 0,
+          "total_frames": 12,
+          "f1_mean": 2690.377357986485,
+          "f2_mean": 5570.484355216875,
+          "f3_mean": 7391.619335272619
+        },
+        "pitch": {
+          "mean_f0_hz": 0,
+          "std_f0_hz": 0,
+          "mean_confidence": 0.0,
+          "voiced_frames": 0,
+          "total_frames": 17,
+          "in_human_range": false,
+          "varies_like_speech": false
+        },
+        "vad": {
+          "active_ratio": 0.3333333333333333,
+          "voiced_ratio": 0.1111111111111111,
+          "unvoiced_ratio": 0.2222222222222222,
+          "energy_mean_db": -40.46708463031256,
+          "energy_std_db": 8.833119672023097,
+          "zcr_mean": 0.42583333333333334
+        },
+        "mfcc": {
+          "structure_variance": 1.4484252986562878,
+          "n_frames": 18
+        },
+        "speech_score": 0.37702679009954687,
+        "classification": "WEAK INDICATORS",
+        "fuzzy_inputs": {
+          "mod_ratio": 3.131613789759127,
+          "formant_score": 0.3333333333333333,
+          "pitch_confidence": 0.0,
+          "pitch_in_range": 0,
+          "voiced_ratio": 0.1111111111111111,
+          "mfcc_structure": 0.7242126493281439,
+          "energy_variance": 8.833119672023097
+        }
+      }
+    }
+  }
+}

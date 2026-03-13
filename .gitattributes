@@ -1,0 +1,2 @@
+results/knowledge_graph_v2/*.json filter=lfs diff=lfs merge=lfs -text
+results/knowledge_graph_v2/grobid/*.json filter=lfs diff=lfs merge=lfs -text

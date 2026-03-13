@@ -41,7 +41,7 @@ import requests
 
 # ─── Config ───────────────────────────────────────────────────────────────────
 
-PDF_ROOT = "/home/tyler/projects/targeted-knowledge-graph"
+PDF_ROOT = os.path.expanduser("~/projects/targeted-knowledge-graph")
 OUTPUT_DIR = "results/knowledge_graph_v2"
 GROBID_URL = "http://localhost:8070"
 NEO4J_URL = "bolt://localhost:7687"

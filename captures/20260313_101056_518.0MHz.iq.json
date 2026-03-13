@@ -1,0 +1,103 @@
+{
+  "freq_mhz": 518.0,
+  "kurtosis": 3.5568,
+  "papr_db": 13.17,
+  "mean_pwr_db": -31.31,
+  "spectral_flatness": 0.4722,
+  "sta_lta_max": 1.158,
+  "sta_lta_triggers": 0,
+  "pulse_count": 14,
+  "pulses": [
+    {
+      "offset_ms": 3.385,
+      "width_us": 1.25,
+      "peak_snr_db": "12.7"
+    },
+    {
+      "offset_ms": 4.156,
+      "width_us": 1.25,
+      "peak_snr_db": "11.7"
+    },
+    {
+      "offset_ms": 4.814,
+      "width_us": 1.25,
+      "peak_snr_db": "10.9"
+    },
+    {
+      "offset_ms": 5.275,
+      "width_us": 1.25,
+      "peak_snr_db": "14.3"
+    },
+    {
+      "offset_ms": 7.222,
+      "width_us": 1.25,
+      "peak_snr_db": "11.9"
+    },
+    {
+      "offset_ms": 8.191,
+      "width_us": 1.25,
+      "peak_snr_db": "10.7"
+    },
+    {
+      "offset_ms": 11.327,
+      "width_us": 1.25,
+      "peak_snr_db": "11.4"
+    },
+    {
+      "offset_ms": 13.347,
+      "width_us": 1.25,
+      "peak_snr_db": "11.5"
+    },
+    {
+      "offset_ms": 14.107,
+      "width_us": 1.25,
+      "peak_snr_db": "10.6"
+    },
+    {
+      "offset_ms": 15.418,
+      "width_us": 1.25,
+      "peak_snr_db": "11.2"
+    },
+    {
+      "offset_ms": 17.426,
+      "width_us": 1.25,
+      "peak_snr_db": "11.6"
+    },
+    {
+      "offset_ms": 28.559,
+      "width_us": 1.25,
+      "peak_snr_db": "11.4"
+    },
+    {
+      "offset_ms": 30.95,
+      "width_us": 1.25,
+      "peak_snr_db": "12.8"
+    },
+    {
+      "offset_ms": 142.37,
+      "width_us": 1.25,
+      "peak_snr_db": "10.4"
+    }
+  ],
+  "n_samples": 552000,
+  "flagged": true,
+  "flag_reasons": [
+    "PAPR +4.0\u03c3 (13.2dB)",
+    "flatness -313.6\u03c3 (0.4722)",
+    "14 pulses (\u22653 samples)"
+  ],
+  "timestamp": "2026-03-13T15:10:56.250754+00:00",
+  "iq_file": "captures/20260313_101056_518.0MHz.iq",
+  "sample_rate": 2400000,
+  "baseline": {
+    "kurtosis_median": 9.0204,
+    "kurtosis_sigma": 1.70291436,
+    "papr_median": 11.04,
+    "papr_sigma": 0.5337359999999991,
+    "flatness_median": 0.9837,
+    "flatness_sigma": 0.0016308599999999849,
+    "sta_lta_median": 1.08,
+    "sta_lta_sigma": 0.029652000000000026,
+    "n_channels": 137
+  }
+}

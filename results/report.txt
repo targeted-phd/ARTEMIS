@@ -1,0 +1,782 @@
+========================================================================================
+  RF SENTINEL MONITORING REPORT
+  Generated: 2026-03-12 17:46:23 UTC
+  Data source: results/sentinel_*.jsonl (12 files, 518 cycles)
+========================================================================================
+
+========================================================================================
+  1. EXECUTIVE SUMMARY
+========================================================================================
+
+    An RTL-SDR receiver monitored six frequencies (826, 828, 830, 832, 834,
+    878 MHz) continuously for 10h 58m 23s beginning 2026-03-12 06:46 UTC,
+    collecting 15,540 individual captures across 518 cycles.
+    All six channels exhibit anomalous impulsive behavior with kurtosis
+    values ranging from 2.9 to 753.8 (mean 68.0),
+    far exceeding the ~3.5-4.0 expected for normal LTE SC-FDMA uplink traffic
+    or the ~8 baseline from RTL-SDR quantization noise. A total of
+    5,335,111 microsecond-scale pulses were detected. These measurements
+    are inconsistent with standard cellular traffic and warrant further
+    investigation with calibrated instrumentation.
+
+========================================================================================
+  2. MEASUREMENT PARAMETERS
+========================================================================================
+
+    SDR Hardware:         RTL-SDR (RTL2832U + R820T/R828D tuner)
+    Sample Rate:          2.4 MSPS (2,400,000 samples/sec)
+    Gain:                 28.0 dB
+    Stare Dwell Time:     200 ms per capture
+    Sweep Dwell Time:     100 ms per channel
+    Stare Pairs/Cycle:    5 (5 captures per frequency per cycle)
+    DC Notch:             +/-16 bins zeroed in FFT
+    PLL Settle Discard:   48,000 samples (20 ms)
+    Pulse Threshold:      mean + 4*sigma
+    Min Pulse Width:      3 samples (~1.25 us)
+
+    Target Frequencies:   826, 828, 830, 832, 834, 878 MHz
+    Sweep Range:          400-1000 MHz (6 MHz steps, every 3rd channel)
+
+    Monitoring Start:     2026-03-12T01:43:42.372041
+    Last Update:          2026-03-12T17:42:40.687135+00:00
+    Duration:             10h 58m 23s
+    Total Cycles:         516
+    Log Files:            12 hourly JSONL files
+
+    Baseline Kurtosis:    median=7.2880  sigma=2.1379
+
+========================================================================================
+  3. BASELINE CHARACTERIZATION
+========================================================================================
+
+    The baseline sweep measured 101 channels across 400-1000 MHz.
+    Baseline statistics are derived using Median Absolute Deviation (MAD)
+    for robustness against outliers.
+
+    Baseline median kurtosis:          7.2880
+    Baseline robust sigma (MAD*1.4826): 2.1379
+    Baseline kurtosis range:            2.293 - 52.828
+    Baseline kurtosis mean:             8.184
+
+    Reference Values:
+      Gaussian noise (theoretical):     kurtosis = 3.0
+      RTL-SDR 8-bit quantized noise:    kurtosis ~ 8-10
+      Normal LTE SC-FDMA uplink:        kurtosis = 3.5-4.0
+      Normal LTE OFDM downlink:         kurtosis = 3.8-4.5
+
+    Target frequency baseline kurtosis vs band median:
+      826 MHz: kurtosis = 52.83  (+21.3 sigma above median)
+      828 MHz: no baseline data
+      830 MHz: no baseline data
+      832 MHz: kurtosis = 52.77  (+21.3 sigma above median)
+      834 MHz: no baseline data
+      878 MHz: no baseline data
+
+========================================================================================
+  4. TARGET FREQUENCY ANALYSIS
+========================================================================================
+
+
+  --- 826 MHz -- Uplink (Band 5/26) ---------------------------------------------------
+
+    Total captures analyzed: 2590
+
+    Kurtosis:
+      Min:           4.923
+      Max:         753.816
+      Mean:         88.820
+      Median:       87.191
+      Std Dev:      68.421
+      P25:           8.725
+      P75:         131.751
+      P95:         210.493
+      P99:         272.996
+
+    PAPR (dB):
+      Min:           10.29
+      Max:           30.06
+      Mean:          20.36
+      Median:        23.11
+      Std Dev:        5.87
+      P25:           11.61
+      P75:           24.57
+      P95:           26.37
+      P99:           27.79
+
+    Pulse Count per Capture:
+      Min:               0
+      Max:            1362
+      Mean:          349.4
+      Median:          292
+      Std Dev:       322.5
+      Total:        904924
+
+    Pulse Widths (us) -- from 28796 recorded pulses:
+      Min:            1.25
+      Max:           34.17
+      Mean:           3.34
+      Median:         2.50
+      P95:            8.75
+
+      Width distribution:
+            < 2 us:   9296 ( 32.3%)  ################
+            2-5 us:  14155 ( 49.2%)  ########################
+           5-10 us:   4438 ( 15.4%)  #######
+          10-20 us:    867 (  3.0%)  #
+           > 20 us:     40 (  0.1%)  
+
+    Mean Power Level (dB):
+      Mean:         -42.60
+      Std Dev:        1.47
+      Range:    -44.03 to -32.19
+
+    Anomaly Rate (kurtosis > 13.7, i.e., > 3 sigma above baseline):
+      1889 / 2590 captures (72.9%)
+
+    Assessment:
+      Expected LTE SC-FDMA uplink kurtosis: 3.5-4.0
+      Observed mean kurtosis: 88.8 (24x expected)
+      Expected LTE SC-FDMA uplink PAPR: 7.0-8.0 dB
+      Observed mean PAPR: 20.4 dB (2.7x expected)
+      VERDICT: INCONSISTENT with normal SC-FDMA uplink traffic.
+               Kurtosis is 24x above expected range.
+               904,924 isolated us-scale pulses detected;
+               FDD LTE should produce continuous waveforms, not pulses.
+
+  --- 828 MHz -- Uplink (Band 5/26) ---------------------------------------------------
+
+    Total captures analyzed: 2590
+
+    Kurtosis:
+      Min:           3.438
+      Max:         243.990
+      Mean:         43.493
+      Median:       25.058
+      Std Dev:      42.815
+      P25:           8.668
+      P75:          69.182
+      P95:         126.334
+      P99:         185.781
+
+    PAPR (dB):
+      Min:            9.78
+      Max:           26.66
+      Mean:          17.14
+      Median:        18.04
+      Std Dev:        5.01
+      P25:           11.29
+      P75:           21.54
+      P95:           24.22
+      P99:           25.59
+
+    Pulse Count per Capture:
+      Min:               0
+      Max:            1320
+      Mean:          251.5
+      Median:          196
+      Std Dev:       271.7
+      Total:        651339
+
+    Pulse Widths (us) -- from 25802 recorded pulses:
+      Min:            1.25
+      Max:           22.08
+      Mean:           2.42
+      Median:         2.08
+      P95:            5.42
+
+      Width distribution:
+            < 2 us:  12674 ( 49.1%)  ########################
+            2-5 us:  11241 ( 43.6%)  #####################
+           5-10 us:   1774 (  6.9%)  ###
+          10-20 us:    110 (  0.4%)  
+           > 20 us:      3 (  0.0%)  
+
+    Mean Power Level (dB):
+      Mean:         -43.49
+      Std Dev:        0.75
+      Range:    -44.03 to -36.76
+
+    Anomaly Rate (kurtosis > 13.7, i.e., > 3 sigma above baseline):
+      1533 / 2590 captures (59.2%)
+
+    Assessment:
+      Expected LTE SC-FDMA uplink kurtosis: 3.5-4.0
+      Observed mean kurtosis: 43.5 (12x expected)
+      Expected LTE SC-FDMA uplink PAPR: 7.0-8.0 dB
+      Observed mean PAPR: 17.1 dB (2.3x expected)
+      VERDICT: INCONSISTENT with normal SC-FDMA uplink traffic.
+               Kurtosis is 12x above expected range.
+               651,339 isolated us-scale pulses detected;
+               FDD LTE should produce continuous waveforms, not pulses.
+
+  --- 830 MHz -- Uplink (Band 5/26) ---------------------------------------------------
+
+    Total captures analyzed: 2590
+
+    Kurtosis:
+      Min:           3.237
+      Max:         310.553
+      Mean:         73.974
+      Median:       63.570
+      Std Dev:      66.558
+      P25:           8.687
+      P75:         115.792
+      P95:         200.627
+      P99:         277.523
+
+    PAPR (dB):
+      Min:           10.31
+      Max:           29.36
+      Mean:          19.15
+      Median:        21.57
+      Std Dev:        5.98
+      P25:           11.30
+      P75:           24.12
+      P95:           26.50
+      P99:           27.53
+
+    Pulse Count per Capture:
+      Min:               0
+      Max:            1392
+      Mean:          305.6
+      Median:          215
+      Std Dev:       307.1
+      Total:        791492
+
+    Pulse Widths (us) -- from 26908 recorded pulses:
+      Min:            1.25
+      Max:           29.17
+      Mean:           2.85
+      Median:         2.08
+      P95:            7.08
+
+      Width distribution:
+            < 2 us:  10929 ( 40.6%)  ####################
+            2-5 us:  12568 ( 46.7%)  #######################
+           5-10 us:   2980 ( 11.1%)  #####
+          10-20 us:    420 (  1.6%)  
+           > 20 us:     11 (  0.0%)  
+
+    Mean Power Level (dB):
+      Mean:         -42.98
+      Std Dev:        1.30
+      Range:    -44.03 to -34.35
+
+    Anomaly Rate (kurtosis > 13.7, i.e., > 3 sigma above baseline):
+      1713 / 2590 captures (66.1%)
+
+    Assessment:
+      Expected LTE SC-FDMA uplink kurtosis: 3.5-4.0
+      Observed mean kurtosis: 74.0 (20x expected)
+      Expected LTE SC-FDMA uplink PAPR: 7.0-8.0 dB
+      Observed mean PAPR: 19.1 dB (2.6x expected)
+      VERDICT: INCONSISTENT with normal SC-FDMA uplink traffic.
+               Kurtosis is 20x above expected range.
+               791,492 isolated us-scale pulses detected;
+               FDD LTE should produce continuous waveforms, not pulses.
+
+  --- 832 MHz -- Uplink (Band 5/26) ---------------------------------------------------
+
+    Total captures analyzed: 2590
+
+    Kurtosis:
+      Min:           3.207
+      Max:         352.676
+      Mean:        103.343
+      Median:       99.127
+      Std Dev:      77.318
+      P25:          15.867
+      P75:         152.038
+      P95:         244.635
+      P99:         301.595
+
+    PAPR (dB):
+      Min:           10.31
+      Max:           30.30
+      Mean:          21.38
+      Median:        24.17
+      Std Dev:        6.13
+      P25:           17.27
+      P75:           25.57
+      P95:           27.44
+      P99:           28.61
+
+    Pulse Count per Capture:
+      Min:               0
+      Max:            1488
+      Mean:          389.3
+      Median:          329
+      Std Dev:       356.9
+      Total:       1008317
+
+    Pulse Widths (us) -- from 29487 recorded pulses:
+      Min:            1.25
+      Max:           47.92
+      Mean:           3.73
+      Median:         2.50
+      P95:           10.00
+
+      Width distribution:
+            < 2 us:   8405 ( 28.5%)  ##############
+            2-5 us:  14158 ( 48.0%)  ########################
+           5-10 us:   5398 ( 18.3%)  #########
+          10-20 us:   1459 (  4.9%)  ##
+           > 20 us:     67 (  0.2%)  
+
+    Mean Power Level (dB):
+      Mean:         -42.00
+      Std Dev:        1.98
+      Range:    -44.03 to -29.14
+
+    Anomaly Rate (kurtosis > 13.7, i.e., > 3 sigma above baseline):
+      1945 / 2590 captures (75.1%)
+
+    Assessment:
+      Expected LTE SC-FDMA uplink kurtosis: 3.5-4.0
+      Observed mean kurtosis: 103.3 (28x expected)
+      Expected LTE SC-FDMA uplink PAPR: 7.0-8.0 dB
+      Observed mean PAPR: 21.4 dB (2.9x expected)
+      VERDICT: INCONSISTENT with normal SC-FDMA uplink traffic.
+               Kurtosis is 28x above expected range.
+               1,008,317 isolated us-scale pulses detected;
+               FDD LTE should produce continuous waveforms, not pulses.
+
+  --- 834 MHz -- Uplink (Band 5/26) ---------------------------------------------------
+
+    Total captures analyzed: 2590
+
+    Kurtosis:
+      Min:           3.312
+      Max:         338.824
+      Mean:         80.581
+      Median:       60.522
+      Std Dev:      73.539
+      P25:           9.661
+      P75:         130.767
+      P95:         227.891
+      P99:         270.210
+
+    PAPR (dB):
+      Min:            9.79
+      Max:           28.90
+      Mean:          19.75
+      Median:        21.88
+      Std Dev:        5.75
+      P25:           13.14
+      P75:           24.74
+      P95:           26.43
+      P99:           27.42
+
+    Pulse Count per Capture:
+      Min:               0
+      Max:            1451
+      Mean:          312.3
+      Median:          224
+      Std Dev:       307.4
+      Total:        808846
+
+    Pulse Widths (us) -- from 30860 recorded pulses:
+      Min:            1.25
+      Max:          125.83
+      Mean:           5.09
+      Median:         2.92
+      P95:           17.92
+
+      Width distribution:
+            < 2 us:   9957 ( 32.3%)  ################
+            2-5 us:  11486 ( 37.2%)  ##################
+           5-10 us:   5522 ( 17.9%)  ########
+          10-20 us:   2788 (  9.0%)  ####
+           > 20 us:   1107 (  3.6%)  #
+
+    Mean Power Level (dB):
+      Mean:         -42.11
+      Std Dev:        1.90
+      Range:    -44.03 to -30.20
+
+    Anomaly Rate (kurtosis > 13.7, i.e., > 3 sigma above baseline):
+      1841 / 2590 captures (71.1%)
+
+    Assessment:
+      Expected LTE SC-FDMA uplink kurtosis: 3.5-4.0
+      Observed mean kurtosis: 80.6 (21x expected)
+      Expected LTE SC-FDMA uplink PAPR: 7.0-8.0 dB
+      Observed mean PAPR: 19.8 dB (2.6x expected)
+      VERDICT: INCONSISTENT with normal SC-FDMA uplink traffic.
+               Kurtosis is 21x above expected range.
+               808,846 isolated us-scale pulses detected;
+               FDD LTE should produce continuous waveforms, not pulses.
+
+  --- 878 MHz -- Downlink (Band 5/26) -------------------------------------------------
+
+    Total captures analyzed: 2590
+
+    Kurtosis:
+      Min:           2.894
+      Max:          92.589
+      Mean:         17.963
+      Median:       12.732
+      Std Dev:      14.729
+      P25:           6.633
+      P75:          25.574
+      P95:          48.711
+      P99:          62.596
+
+    PAPR (dB):
+      Min:           11.34
+      Max:           26.35
+      Mean:          19.43
+      Median:        19.52
+      Std Dev:        3.00
+      P25:           17.09
+      P75:           21.89
+      P95:           23.95
+      P99:           25.03
+
+    Pulse Count per Capture:
+      Min:               0
+      Max:            1471
+      Mean:          451.8
+      Median:          330
+      Std Dev:       414.7
+      Total:       1170193
+
+    Pulse Widths (us) -- from 33988 recorded pulses:
+      Min:            1.25
+      Max:           13.75
+      Mean:           1.54
+      Median:         1.25
+      P95:            2.50
+
+      Width distribution:
+            < 2 us:  28760 ( 84.6%)  ##########################################
+            2-5 us:   5115 ( 15.0%)  #######
+           5-10 us:    111 (  0.3%)  
+          10-20 us:      2 (  0.0%)  
+           > 20 us:      0 (  0.0%)  
+
+    Mean Power Level (dB):
+      Mean:         -27.70
+      Std Dev:        3.90
+      Range:    -36.76 to -14.65
+
+    Anomaly Rate (kurtosis > 13.7, i.e., > 3 sigma above baseline):
+      1223 / 2590 captures (47.2%)
+
+    Assessment:
+      Expected LTE OFDM downlink kurtosis: 3.8-4.5
+      Observed mean kurtosis: 18.0 (4x expected)
+      Expected LTE OFDM downlink PAPR: 10.0-12.0 dB
+      Observed mean PAPR: 19.4 dB (1.8x expected)
+      VERDICT: INCONSISTENT with normal OFDM downlink traffic.
+               Kurtosis is 4x above expected range.
+               1,170,193 isolated us-scale pulses detected;
+               FDD LTE should produce continuous waveforms, not pulses.
+
+========================================================================================
+  5. TEMPORAL ANALYSIS
+========================================================================================
+
+    Hourly Mean Kurtosis by Frequency:
+
+    Hour (UTC)                 826         828         830         832         834         878
+    ------------------  ----------  ----------  ----------  ----------  ----------  ----------
+    2026-03-12 06:00          97.7        49.7        74.1        89.1        91.3         8.7
+    2026-03-12 07:00          90.2        61.2        87.9        99.9       104.1        16.3
+    2026-03-12 08:00          97.9        59.1        89.4       118.9       102.0        30.3
+    2026-03-12 09:00          88.4        50.6        75.6       101.2        99.8        31.7
+    2026-03-12 10:00         100.3        53.1        88.3       108.4        96.3        20.5
+    2026-03-12 11:00          97.1        56.9        86.1       111.5       108.6        16.5
+    2026-03-12 12:00          92.5        62.1        80.7       106.1        77.8         9.6
+    2026-03-12 13:00          97.1        48.6        89.6       121.0        83.0        10.5
+    2026-03-12 14:00          85.4        21.6        62.5        96.9        56.2        20.7
+    2026-03-12 15:00          78.4        22.7        55.9        96.3        49.4        15.1
+    2026-03-12 16:00          74.4        18.5        53.0        94.5        51.0        15.9
+    2026-03-12 17:00          68.2        16.1        35.3        79.4        47.9        11.1
+
+    Significant Hourly Changes (delta > 20, above noise floor):
+      2026-03-12 12:00  834 MHz: 108.6 -> 77.8  (delta=30.8, DOWN)
+      2026-03-12 14:00  828 MHz: 48.6 -> 21.6  (delta=27.0, DOWN)
+      2026-03-12 14:00  830 MHz: 89.6 -> 62.5  (delta=27.1, DOWN)
+      2026-03-12 14:00  832 MHz: 121.0 -> 96.9  (delta=24.0, DOWN)
+      2026-03-12 14:00  834 MHz: 83.0 -> 56.2  (delta=26.9, DOWN)
+
+
+  --- Duty Cycle / Periodicity Assessment ---------------------------------------------
+
+    826 MHz:
+      Captures with kurtosis > 15 (active): 1886/2590 (72.8%)
+      Captures with kurtosis < 10 (quiet):  689/2590 (26.6%)
+      Signal appears intermittent (duty cycle ~73%)
+
+    828 MHz:
+      Captures with kurtosis > 15 (active): 1493/2590 (57.6%)
+      Captures with kurtosis < 10 (quiet):  931/2590 (35.9%)
+      Signal appears intermittent (duty cycle ~58%)
+
+    830 MHz:
+      Captures with kurtosis > 15 (active): 1705/2590 (65.8%)
+      Captures with kurtosis < 10 (quiet):  833/2590 (32.2%)
+      Signal appears intermittent (duty cycle ~66%)
+
+    832 MHz:
+      Captures with kurtosis > 15 (active): 1944/2590 (75.1%)
+      Captures with kurtosis < 10 (quiet):  634/2590 (24.5%)
+      Signal appears intermittent (duty cycle ~75%)
+
+    834 MHz:
+      Captures with kurtosis > 15 (active): 1826/2590 (70.5%)
+      Captures with kurtosis < 10 (quiet):  678/2590 (26.2%)
+      Signal appears intermittent (duty cycle ~71%)
+
+    878 MHz:
+      Captures with kurtosis > 15 (active): 1142/2590 (44.1%)
+      Captures with kurtosis < 10 (quiet):  1073/2590 (41.4%)
+      Signal appears intermittent (duty cycle ~44%)
+
+
+========================================================================================
+  6. CROSS-FREQUENCY CORRELATION
+========================================================================================
+
+    Pearson Correlation Matrix (per-cycle mean kurtosis):
+    Computed over 518 cycles.
+
+         MHz       826       828       830       832       834       878
+    --------  --------  --------  --------  --------  --------  --------
+         826     1.000     0.157     0.170     0.118     0.151     0.004
+         828     0.157     1.000     0.341     0.157     0.397     0.058
+         830     0.170     0.341     1.000     0.213     0.222     0.078
+         832     0.118     0.157     0.213     1.000     0.158     0.083
+         834     0.151     0.397     0.222     0.158     1.000     0.110
+         878     0.004     0.058     0.078     0.083     0.110     1.000
+
+    Interpretation:
+
+    Uplink cluster (826-834 MHz) mean pairwise correlation: r = 0.208
+      Moderate correlation -- some shared behavior across uplink channels.
+
+    Uplink-to-downlink (826-834 vs 878 MHz) correlations:
+      826 <-> 878 MHz: r = 0.004
+      828 <-> 878 MHz: r = 0.058
+      830 <-> 878 MHz: r = 0.078
+      832 <-> 878 MHz: r = 0.083
+      834 <-> 878 MHz: r = 0.110
+      Mean uplink-downlink correlation: r = 0.067
+
+      Weak correlation -- uplink and downlink may be independent phenomena.
+
+========================================================================================
+  7. SWEEP ANOMALY LOG
+========================================================================================
+
+    57 anomalies detected during sweep phases:
+
+    Timestamp                 Freq MHz    Kurtosis    Baseline   Deviation    Pulses
+    ----------------------  ----------  ----------  ----------  ----------  --------
+    2026-03-12T07:16:13.28     634.000       101.9        42.8      +28sig       339
+    2026-03-12T07:22:36.74     634.000       131.8        51.1      +38sig       343
+    2026-03-12T07:23:53.61     634.000       149.3        59.2      +42sig       299
+    2026-03-12T07:39:12.95     634.000       106.4        51.2      +26sig       383
+    2026-03-12T07:41:45.59     634.000       114.3        57.0      +27sig       350
+    2026-03-12T07:45:35.82     634.000       130.2        62.7      +32sig       332
+    2026-03-12T08:22:40.62     634.000       106.2        52.0      +25sig       357
+    2026-03-12T08:32:52.81     616.000        22.3         8.9       +6sig       143
+    2026-03-12T08:34:09.24     634.000       131.0        39.2      +43sig       352
+    2026-03-12T08:35:25.49     652.000        70.0         9.3      +28sig        44
+    2026-03-12T08:54:33.34     634.000       145.2        66.5      +37sig       317
+    2026-03-12T09:37:48.40     634.000       122.5        57.2      +30sig       328
+    2026-03-12T11:43:40.39     634.000       111.9        48.4      +30sig       349
+    2026-03-12T11:44:56.55     634.000       126.3        54.8      +34sig       341
+    2026-03-12T11:55:07.18     652.000        38.1         8.6      +14sig        29
+    2026-03-12T12:07:49.49     634.000        93.5        45.0      +23sig       366
+    2026-03-12T12:09:06.20     634.000       107.2        49.8      +27sig       394
+    2026-03-12T12:37:04.29     634.000        92.8        44.8      +22sig       356
+    2026-03-12T12:42:11.52     616.000        39.8         8.3      +15sig        46
+    2026-03-12T12:51:06.53     634.000        85.9        32.8      +25sig       394
+    2026-03-12T12:58:44.68     634.000        68.9        31.8      +17sig       386
+    2026-03-12T12:58:44.68     652.000        32.6         8.7      +11sig        76
+    2026-03-12T13:05:05.51     652.000        44.4         9.9      +16sig        12
+    2026-03-12T13:19:04.63     634.000        97.8        26.9      +33sig       344
+    2026-03-12T13:25:25.41     634.000        59.2        29.2      +14sig       473
+    2026-03-12T13:26:41.64     634.000        66.0        32.2      +16sig       384
+    2026-03-12T13:29:14.49     616.000        25.2         7.8       +8sig        36
+    2026-03-12T13:33:03.49     652.000        27.9         9.0       +9sig        46
+    2026-03-12T13:34:19.55     634.000        56.7        27.1      +14sig       369
+    2026-03-12T13:36:51.98     634.000        61.6        27.5      +16sig       327
+    2026-03-12T13:49:35.35     634.000        72.8        31.9      +19sig       323
+    2026-03-12T14:01:01.39     634.000        55.9        27.0      +14sig       348
+    2026-03-12T14:03:33.74     634.000        83.6        28.0      +26sig       373
+    2026-03-12T14:07:22.22     634.000        66.5        31.9      +16sig       308
+    2026-03-12T14:16:17.91     634.000       122.5        30.8      +43sig       309
+    2026-03-12T14:18:50.73     652.000        33.0        11.6      +10sig        46
+    2026-03-12T14:37:55.13     634.000       105.6        41.3      +30sig       343
+    2026-03-12T14:48:05.83     652.000        47.1        12.0      +16sig        61
+    2026-03-12T14:53:12.24     634.000        97.6        48.4      +23sig       395
+    2026-03-12T15:11:01.09     634.000        96.1        35.2      +28sig       311
+    2026-03-12T15:22:30.10     634.000        86.5        37.0      +23sig       404
+    2026-03-12T15:26:18.85     634.000        94.2        40.8      +25sig       357
+    2026-03-12T15:28:52.46     652.000       175.1         9.8      +77sig        73
+    2026-03-12T15:31:24.80     634.000       104.2        46.5      +27sig       371
+    2026-03-12T15:51:46.49     634.000        92.9        36.2      +27sig       390
+    2026-03-12T16:00:44.45     634.000       104.3        46.5      +27sig       377
+    2026-03-12T16:19:50.30     616.000        22.0         8.3       +6sig        64
+    2026-03-12T16:22:22.73     634.000        92.6        39.0      +25sig       395
+    2026-03-12T16:23:38.86     634.000       101.1        44.4      +26sig       361
+    2026-03-12T16:28:44.14     616.000        24.2         8.9       +7sig        81
+    2026-03-12T17:00:31.40     652.000       123.4         9.4      +53sig        16
+    2026-03-12T17:03:03.76     616.000        22.6         7.9       +7sig        39
+    2026-03-12T17:03:03.76     652.000        42.8        19.9      +11sig        36
+    2026-03-12T17:04:19.87     652.000        56.6        22.2      +16sig        65
+    2026-03-12T17:06:52.19     634.000        67.2        24.6      +20sig       416
+    2026-03-12T17:18:21.11     634.000        95.4        32.0      +30sig       347
+    2026-03-12T17:37:33.69     652.000        26.4        10.6       +7sig       124
+
+========================================================================================
+  8. MIGRATION ANALYSIS
+========================================================================================
+
+    Total migration events detected by sentinel: 0
+
+    826 MHz: Signal stable throughout monitoring period
+      First quarter mean: 94.0  Last quarter mean: 74.1
+
+    828 MHz: Signal stable throughout monitoring period
+      First quarter mean: 58.5  Last quarter mean: 19.3
+
+    830 MHz: Signal stable throughout monitoring period
+      First quarter mean: 84.4  Last quarter mean: 48.9
+
+    832 MHz: Signal stable throughout monitoring period
+      First quarter mean: 107.3  Last quarter mean: 91.1
+
+    834 MHz: Signal stable throughout monitoring period
+      First quarter mean: 101.6  Last quarter mean: 49.5
+
+    878 MHz: Signal stable throughout monitoring period
+      First quarter mean: 22.9  Last quarter mean: 14.3
+
+
+    No frequency migration events were detected. The anomalous signals
+    remained on their original frequencies throughout the monitoring period.
+    This persistence is consistent with a fixed-frequency source (e.g.,
+    hardware, infrastructure) rather than an adaptive/hopping signal.
+
+========================================================================================
+  9. COMPARISON TO EXPECTED LTE BEHAVIOR
+========================================================================================
+
+    This section compares observed RF characteristics against known
+    properties of standard 3GPP LTE signals on these bands.
+
+    Parameter             Expected (UL)   Expected (DL)   Observed (UL)   Observed (DL)    Match? 
+    --------------------  --------------  --------------  --------------  --------------  --------
+    Kurtosis                 3.5-4.0         3.8-4.5           78.0            18.0       NO (high)
+    PAPR (dB)                  7-8            10-12            19.6            19.4       NO (high)
+    Pulses/capture        ~0 (continuous)  ~0 (continuous)       322             452           NO   
+    Waveform              SC-FDMA (cont.)   OFDM (cont.)       Pulsed          Pulsed         NO   
+
+    Detailed Comparison:
+
+    1. KURTOSIS
+       LTE SC-FDMA uplink signals have near-Gaussian amplitude distributions
+       with kurtosis in the 3.5-4.0 range. The observed uplink mean of
+       78.0 is 21x above the expected
+       midpoint. This indicates extreme impulsive content not present in
+       standard SC-FDMA waveforms.
+
+    2. PAPR (Peak-to-Average Power Ratio)
+       SC-FDMA uplink PAPR is typically 7-8 dB. The observed mean of
+       19.6 dB significantly exceeds this, consistent with
+       sharp transient pulses riding above the noise floor.
+
+    3. PULSE STRUCTURE
+       FDD LTE transmits continuously in both directions (no TDD gaps).
+       Standard LTE should produce zero isolated microsecond-scale pulses
+       above 4-sigma. The observed mean of 322 pulses per
+       200ms uplink capture and 452 pulses per downlink
+       capture is completely inconsistent with any standard LTE mode.
+
+    4. SIGNAL CONTINUITY
+       The anomalous signal is intermittent -- some captures show baseline
+       kurtosis (~8) while others show extreme values (>100). Normal LTE
+       resource allocation is continuous for active carriers; this on/off
+       behavior is atypical.
+
+    OVERALL VERDICT:
+      Uplink (826-834 MHz) consistent with normal LTE:   NO
+      Downlink (878 MHz) consistent with normal LTE:     NO
+
+      The observed signals are NOT consistent with standard cellular
+      traffic. Something anomalous is present on these frequencies.
+
+========================================================================================
+  10. CONCLUSIONS
+========================================================================================
+
+    WHAT THE DATA SHOWS:
+
+    1. Anomalous impulsive RF activity is present on all six monitored
+       frequencies (826, 828, 830, 832, 834, 878 MHz) spanning both the
+       Band 5/26 uplink and downlink allocations.
+
+    2. The signal characteristics -- kurtosis 10x-70x above LTE norms,
+       PAPR exceeding SC-FDMA limits, thousands of us-scale pulses --
+       are inconsistent with any standard 3GPP LTE waveform.
+
+    3. The signals are PERSISTENT: observed across 10h 58m 23s
+       of monitoring with no migration to other frequencies.
+
+    4. The signals are INTERMITTENT: kurtosis varies from baseline (~8)
+       to extreme values (>200) across captures, suggesting a duty-cycled
+       or bursty source.
+
+    5. 5,335,111 discrete pulses were detected across 15,540
+       captures, with typical widths of 1-10 microseconds.
+
+    WHAT THE DATA DOES NOT SHOW:
+
+    1. The source of the anomalous signals. RTL-SDR is a receive-only
+       device and cannot determine signal origin or directionality.
+
+    2. Whether these are externally radiated signals or artifacts of
+       nearby electronics (intermodulation, spurious emissions, etc.).
+       An RTL-SDR has limited dynamic range and is susceptible to
+       strong signal overload.
+
+    3. The modulation content or information carried by the pulses.
+       Higher-resolution IQ analysis would be needed.
+
+    4. Whether the signals are intentional transmissions or unintentional
+       interference (e.g., switching power supplies, LED drivers, or other
+       broadband noise sources).
+
+    RECOMMENDED NEXT STEPS:
+
+    1. VALIDATE with calibrated equipment: Use a spectrum analyzer with
+       known sensitivity and dynamic range (e.g., Keysight N9344C or
+       equivalent) to confirm the signals are real and not RTL-SDR artifacts.
+
+    2. DIRECTION FINDING: Use a directional antenna (Yagi or log-periodic)
+       to determine signal bearing and narrow down the source location.
+
+    3. ISOLATION TEST: Move the RTL-SDR receiver to a different location
+       (>100m away) to determine if the signal is localized or widespread.
+
+    4. SHIELDED TEST: Place the SDR in an RF-shielded enclosure with a
+       known antenna to rule out direct coupling / conducted interference.
+
+    5. HIGH-RESOLUTION IQ ANALYSIS: Use the saved IQ captures to perform
+       detailed pulse characterization (rise times, spectral content,
+       modulation analysis) with tools such as GNU Radio or MATLAB.
+
+    6. If confirmed as real over-the-air signals, consider filing an
+       interference complaint with the FCC (Part 15/Part 22/Part 27
+       depending on source classification).
+
+========================================================================================
+  END OF REPORT
+  Total cycles analyzed: 518
+  Total captures: 15540
+  Total pulses detected: 5,335,111
+========================================================================================

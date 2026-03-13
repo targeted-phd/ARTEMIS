@@ -1,0 +1,19 @@
+{
+  "file": "captures/sentinel_826MHz_014542.iq",
+  "n_pulses": 423,
+  "timestamp": "2026-03-12T13:29:42.303396",
+  "results": {
+    "PRF": {
+      "method": "PRF",
+      "error": "insufficient_data"
+    },
+    "PAM": {
+      "method": "PAM",
+      "error": "insufficient_data"
+    },
+    "PWM": {
+      "method": "PWM",
+      "error": "insufficient_data"
+    }
+  }
+}

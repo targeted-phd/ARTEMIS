@@ -1,0 +1,299 @@
+{
+  "826": {
+    "freq_mhz": 826.0,
+    "n_captures": 1947,
+    "n_intervals": 26999,
+    "min_us": 1.6,
+    "max_us": 173135.0,
+    "mean_us": 106.7,
+    "median_us": 5.0,
+    "std_us": 2737.8,
+    "dominant_pris": [
+      {
+        "pri_us": 3.9,
+        "count_in_bin": 0,
+        "count_within_10pct": 2970,
+        "pct_of_total": 11.0,
+        "prominence": 819.7
+      },
+      {
+        "pri_us": 2.8,
+        "count_in_bin": 0,
+        "count_within_10pct": 3865,
+        "pct_of_total": 14.3,
+        "prominence": 100.3
+      },
+      {
+        "pri_us": 5.6,
+        "count_in_bin": 229,
+        "count_within_10pct": 2580,
+        "pct_of_total": 9.6,
+        "prominence": 66.6
+      }
+    ],
+    "protocol_matches": [
+      {
+        "protocol": "WiFi slot time",
+        "timing_us": 9.0,
+        "matches": 865,
+        "pct": 3.2
+      },
+      {
+        "protocol": "WiFi SIFS (2.4G)",
+        "timing_us": 10.0,
+        "matches": 984,
+        "pct": 3.64
+      }
+    ]
+  },
+  "828": {
+    "freq_mhz": 828.0,
+    "n_captures": 1770,
+    "n_intervals": 24167,
+    "min_us": 1.6,
+    "max_us": 153500.0,
+    "mean_us": 224.1,
+    "median_us": 5.5,
+    "std_us": 4001.7,
+    "dominant_pris": [
+      {
+        "pri_us": 4.4,
+        "count_in_bin": 0,
+        "count_within_10pct": 2403,
+        "pct_of_total": 9.9,
+        "prominence": 576.9
+      },
+      {
+        "pri_us": 6.2,
+        "count_in_bin": 742,
+        "count_within_10pct": 2237,
+        "pct_of_total": 9.3,
+        "prominence": 47.3
+      }
+    ],
+    "protocol_matches": [
+      {
+        "protocol": "WiFi slot time",
+        "timing_us": 9.0,
+        "matches": 737,
+        "pct": 3.05
+      },
+      {
+        "protocol": "WiFi SIFS (2.4G)",
+        "timing_us": 10.0,
+        "matches": 843,
+        "pct": 3.49
+      },
+      {
+        "protocol": "WiFi DIFS (2.4G)",
+        "timing_us": 50.0,
+        "matches": 123,
+        "pct": 0.51
+      },
+      {
+        "protocol": "LTE symbol (normal)",
+        "timing_us": 66.7,
+        "matches": 131,
+        "pct": 0.54
+      }
+    ]
+  },
+  "830": {
+    "freq_mhz": 830.0,
+    "n_captures": 1825,
+    "n_intervals": 25184,
+    "min_us": 1.6,
+    "max_us": 187025.4,
+    "mean_us": 137.7,
+    "median_us": 5.0,
+    "std_us": 3400.4,
+    "dominant_pris": [
+      {
+        "pri_us": 4.0,
+        "count_in_bin": 0,
+        "count_within_10pct": 2729,
+        "pct_of_total": 10.8,
+        "prominence": 702.5
+      },
+      {
+        "pri_us": 2.8,
+        "count_in_bin": 0,
+        "count_within_10pct": 2120,
+        "pct_of_total": 8.4,
+        "prominence": 103.3
+      }
+    ],
+    "protocol_matches": [
+      {
+        "protocol": "WiFi slot time",
+        "timing_us": 9.0,
+        "matches": 675,
+        "pct": 2.68
+      },
+      {
+        "protocol": "WiFi SIFS (2.4G)",
+        "timing_us": 10.0,
+        "matches": 793,
+        "pct": 3.15
+      }
+    ]
+  },
+  "832": {
+    "freq_mhz": 832.0,
+    "n_captures": 1988,
+    "n_intervals": 27634,
+    "min_us": 1.6,
+    "max_us": 159504.2,
+    "mean_us": 66.0,
+    "median_us": 5.4,
+    "std_us": 2076.4,
+    "dominant_pris": [
+      {
+        "pri_us": 4.4,
+        "count_in_bin": 230,
+        "count_within_10pct": 2799,
+        "pct_of_total": 10.1,
+        "prominence": 791.6
+      }
+    ],
+    "protocol_matches": [
+      {
+        "protocol": "WiFi slot time",
+        "timing_us": 9.0,
+        "matches": 1031,
+        "pct": 3.73
+      },
+      {
+        "protocol": "WiFi SIFS (2.4G)",
+        "timing_us": 10.0,
+        "matches": 999,
+        "pct": 3.62
+      }
+    ]
+  },
+  "834": {
+    "freq_mhz": 834.0,
+    "n_captures": 2104,
+    "n_intervals": 28906,
+    "min_us": 1.6,
+    "max_us": 194505.8,
+    "mean_us": 381.4,
+    "median_us": 7.1,
+    "std_us": 4578.3,
+    "dominant_pris": [
+      {
+        "pri_us": 6.3,
+        "count_in_bin": 1008,
+        "count_within_10pct": 2987,
+        "pct_of_total": 10.3,
+        "prominence": 740.5
+      },
+      {
+        "pri_us": 2.8,
+        "count_in_bin": 0,
+        "count_within_10pct": 1408,
+        "pct_of_total": 4.9,
+        "prominence": 75.3
+      }
+    ],
+    "protocol_matches": [
+      {
+        "protocol": "WiFi slot time",
+        "timing_us": 9.0,
+        "matches": 1003,
+        "pct": 3.47
+      },
+      {
+        "protocol": "WiFi SIFS (2.4G)",
+        "timing_us": 10.0,
+        "matches": 897,
+        "pct": 3.1
+      }
+    ]
+  },
+  "878": {
+    "freq_mhz": 878.0,
+    "n_captures": 2506,
+    "n_intervals": 31619,
+    "min_us": 1.6,
+    "max_us": 167017.9,
+    "mean_us": 2457.1,
+    "median_us": 27.1,
+    "std_us": 9320.8,
+    "dominant_pris": [
+      {
+        "pri_us": 4.9,
+        "count_in_bin": 474,
+        "count_within_10pct": 1556,
+        "pct_of_total": 4.9,
+        "prominence": 255.6
+      },
+      {
+        "pri_us": 8045.5,
+        "count_in_bin": 158,
+        "count_within_10pct": 341,
+        "pct_of_total": 1.1,
+        "prominence": 58.6
+      },
+      {
+        "pri_us": 7.4,
+        "count_in_bin": 318,
+        "count_within_10pct": 1210,
+        "pct_of_total": 3.8,
+        "prominence": 39.7
+      },
+      {
+        "pri_us": 49.8,
+        "count_in_bin": 230,
+        "count_within_10pct": 800,
+        "pct_of_total": 2.5,
+        "prominence": 36.5
+      },
+      {
+        "pri_us": 2.2,
+        "count_in_bin": 0,
+        "count_within_10pct": 889,
+        "pct_of_total": 2.8,
+        "prominence": 20.4
+      }
+    ],
+    "protocol_matches": [
+      {
+        "protocol": "WiFi slot time",
+        "timing_us": 9.0,
+        "matches": 635,
+        "pct": 2.01
+      },
+      {
+        "protocol": "WiFi SIFS (2.4G)",
+        "timing_us": 10.0,
+        "matches": 658,
+        "pct": 2.08
+      },
+      {
+        "protocol": "WiFi DIFS (2.4G)",
+        "timing_us": 50.0,
+        "matches": 370,
+        "pct": 1.17
+      },
+      {
+        "protocol": "LTE symbol (normal)",
+        "timing_us": 66.7,
+        "matches": 716,
+        "pct": 2.26
+      },
+      {
+        "protocol": "LTE symbol (ext)",
+        "timing_us": 83.3,
+        "matches": 340,
+        "pct": 1.08
+      },
+      {
+        "protocol": "LTE subframe",
+        "timing_us": 1000.0,
+        "matches": 233,
+        "pct": 0.74
+      }
+    ]
+  }
+}

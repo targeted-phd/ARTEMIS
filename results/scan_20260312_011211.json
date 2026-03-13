@@ -1,0 +1,3554 @@
+{
+  "scan_start": "2026-03-12T01:12:11.541541",
+  "elapsed_s": 695.7,
+  "baseline": {
+    "kurtosis_median": 9.6361,
+    "kurtosis_sigma": 0.7427826000000017,
+    "papr_median": 10.88,
+    "papr_sigma": 0.45960600000000074,
+    "flatness_median": 0.9844,
+    "flatness_sigma": 0.001,
+    "n_channels": 77
+  },
+  "channels_scanned": 384,
+  "channels_flagged": 141,
+  "flagged": [
+    {
+      "freq_mhz": 1118.0,
+      "kurtosis": 8.7036,
+      "papr_db": 12.66,
+      "mean_pwr_db": -44.02,
+      "spectral_flatness": 0.9837,
+      "pulse_count": 0,
+      "pulses": [],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "PAPR +3.9\u03c3 (12.7dB)"
+      ],
+      "timestamp": "2026-03-12T06:15:39.514402+00:00"
+    },
+    {
+      "freq_mhz": 1148.0,
+      "kurtosis": 8.3466,
+      "papr_db": 12.5,
+      "mean_pwr_db": -43.84,
+      "spectral_flatness": 0.9831,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 183.119,
+          "width_us": 1.25,
+          "peak_snr_db": "10.1"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "PAPR +3.5\u03c3 (12.5dB)",
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:16:02.833222+00:00"
+    },
+    {
+      "freq_mhz": 1150.0,
+      "kurtosis": 8.5096,
+      "papr_db": 11.43,
+      "mean_pwr_db": -43.83,
+      "spectral_flatness": 0.9828,
+      "pulse_count": 2,
+      "pulses": [
+        {
+          "offset_ms": 91.925,
+          "width_us": 1.25,
+          "peak_snr_db": "8.8"
+        },
+        {
+          "offset_ms": 107.55,
+          "width_us": 1.25,
+          "peak_snr_db": "9.4"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "2 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:16:04.315879+00:00"
+    },
+    {
+      "freq_mhz": 1152.0,
+      "kurtosis": 8.444,
+      "papr_db": 13.03,
+      "mean_pwr_db": -43.82,
+      "spectral_flatness": 0.9833,
+      "pulse_count": 2,
+      "pulses": [
+        {
+          "offset_ms": 92.636,
+          "width_us": 1.25,
+          "peak_snr_db": "11.4"
+        },
+        {
+          "offset_ms": 138.539,
+          "width_us": 1.25,
+          "peak_snr_db": "11.1"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "PAPR +4.7\u03c3 (13.0dB)",
+        "2 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:16:05.803721+00:00"
+    },
+    {
+      "freq_mhz": 1154.0,
+      "kurtosis": 8.1779,
+      "papr_db": 14.48,
+      "mean_pwr_db": -43.64,
+      "spectral_flatness": 0.9821,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 23.557,
+          "width_us": 1.67,
+          "peak_snr_db": "8.6"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "PAPR +7.8\u03c3 (14.5dB)",
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:16:07.290026+00:00"
+    },
+    {
+      "freq_mhz": 1156.0,
+      "kurtosis": 8.5286,
+      "papr_db": 11.39,
+      "mean_pwr_db": -43.79,
+      "spectral_flatness": 0.9825,
+      "pulse_count": 3,
+      "pulses": [
+        {
+          "offset_ms": 7.19,
+          "width_us": 1.25,
+          "peak_snr_db": "8.8"
+        },
+        {
+          "offset_ms": 94.662,
+          "width_us": 1.25,
+          "peak_snr_db": "10.1"
+        },
+        {
+          "offset_ms": 127.539,
+          "width_us": 1.25,
+          "peak_snr_db": "8.7"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "3 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:16:08.762874+00:00"
+    },
+    {
+      "freq_mhz": 1158.0,
+      "kurtosis": 8.1782,
+      "papr_db": 12.86,
+      "mean_pwr_db": -43.71,
+      "spectral_flatness": 0.9825,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 33.574,
+          "width_us": 1.25,
+          "peak_snr_db": "9.9"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "PAPR +4.3\u03c3 (12.9dB)",
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:16:10.244985+00:00"
+    },
+    {
+      "freq_mhz": 1160.0,
+      "kurtosis": 9.1895,
+      "papr_db": 12.83,
+      "mean_pwr_db": -43.64,
+      "spectral_flatness": 0.9745,
+      "pulse_count": 52,
+      "pulses": [
+        {
+          "offset_ms": 3.941,
+          "width_us": 1.25,
+          "peak_snr_db": "9.3"
+        },
+        {
+          "offset_ms": 17.065,
+          "width_us": 1.25,
+          "peak_snr_db": "9.8"
+        },
+        {
+          "offset_ms": 18.594,
+          "width_us": 1.25,
+          "peak_snr_db": "10.5"
+        },
+        {
+          "offset_ms": 23.965,
+          "width_us": 1.25,
+          "peak_snr_db": "9.8"
+        },
+        {
+          "offset_ms": 26.133,
+          "width_us": 1.25,
+          "peak_snr_db": "9.8"
+        },
+        {
+          "offset_ms": 26.218,
+          "width_us": 1.25,
+          "peak_snr_db": "11.3"
+        },
+        {
+          "offset_ms": 29.852,
+          "width_us": 1.67,
+          "peak_snr_db": "10.6"
+        },
+        {
+          "offset_ms": 31.853,
+          "width_us": 1.25,
+          "peak_snr_db": "9.2"
+        },
+        {
+          "offset_ms": 32.175,
+          "width_us": 1.25,
+          "peak_snr_db": "10.6"
+        },
+        {
+          "offset_ms": 33.542,
+          "width_us": 2.08,
+          "peak_snr_db": "11.8"
+        },
+        {
+          "offset_ms": 33.803,
+          "width_us": 1.25,
+          "peak_snr_db": "11.8"
+        },
+        {
+          "offset_ms": 34.092,
+          "width_us": 1.67,
+          "peak_snr_db": "10.6"
+        },
+        {
+          "offset_ms": 39.625,
+          "width_us": 1.25,
+          "peak_snr_db": "9.2"
+        },
+        {
+          "offset_ms": 40.958,
+          "width_us": 1.25,
+          "peak_snr_db": "9.8"
+        },
+        {
+          "offset_ms": 40.97,
+          "width_us": 1.25,
+          "peak_snr_db": "11.3"
+        },
+        {
+          "offset_ms": 41.042,
+          "width_us": 1.25,
+          "peak_snr_db": "10.0"
+        },
+        {
+          "offset_ms": 41.432,
+          "width_us": 1.25,
+          "peak_snr_db": "9.8"
+        },
+        {
+          "offset_ms": 47.462,
+          "width_us": 1.25,
+          "peak_snr_db": "9.8"
+        },
+        {
+          "offset_ms": 48.31,
+          "width_us": 1.67,
+          "peak_snr_db": "11.3"
+        },
+        {
+          "offset_ms": 70.695,
+          "width_us": 1.25,
+          "peak_snr_db": "9.2"
+        },
+        {
+          "offset_ms": 75.696,
+          "width_us": 1.25,
+          "peak_snr_db": "10.7"
+        },
+        {
+          "offset_ms": 78.058,
+          "width_us": 1.25,
+          "peak_snr_db": "9.8"
+        },
+        {
+          "offset_ms": 85.349,
+          "width_us": 1.25,
+          "peak_snr_db": "11.5"
+        },
+        {
+          "offset_ms": 85.36,
+          "width_us": 1.25,
+          "peak_snr_db": "10.5"
+        },
+        {
+          "offset_ms": 85.457,
+          "width_us": 1.25,
+          "peak_snr_db": "11.0"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "PAPR +4.2\u03c3 (12.8dB)",
+        "flatness -9.9\u03c3 (0.9745)",
+        "52 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:16:11.723503+00:00"
+    },
+    {
+      "freq_mhz": 1162.0,
+      "kurtosis": 6.9363,
+      "papr_db": 13.71,
+      "mean_pwr_db": -43.19,
+      "spectral_flatness": 0.9771,
+      "pulse_count": 2,
+      "pulses": [
+        {
+          "offset_ms": 73.087,
+          "width_us": 1.67,
+          "peak_snr_db": "10.3"
+        },
+        {
+          "offset_ms": 219.448,
+          "width_us": 1.25,
+          "peak_snr_db": "14.4"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "PAPR +6.2\u03c3 (13.7dB)",
+        "flatness -7.3\u03c3 (0.9771)",
+        "2 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:16:13.212165+00:00"
+    },
+    {
+      "freq_mhz": 1164.0,
+      "kurtosis": 6.826,
+      "papr_db": 12.51,
+      "mean_pwr_db": -43.29,
+      "spectral_flatness": 0.9799,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 144.032,
+          "width_us": 1.25,
+          "peak_snr_db": "8.4"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "PAPR +3.5\u03c3 (12.5dB)",
+        "flatness -4.5\u03c3 (0.9799)",
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:16:14.719488+00:00"
+    },
+    {
+      "freq_mhz": 1166.0,
+      "kurtosis": 7.3012,
+      "papr_db": 12.68,
+      "mean_pwr_db": -43.5,
+      "spectral_flatness": 0.9818,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 156.907,
+          "width_us": 1.25,
+          "peak_snr_db": "13.0"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "PAPR +3.9\u03c3 (12.7dB)",
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:16:16.218347+00:00"
+    },
+    {
+      "freq_mhz": 1172.0,
+      "kurtosis": 7.9029,
+      "papr_db": 11.36,
+      "mean_pwr_db": -43.75,
+      "spectral_flatness": 0.9818,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 146.659,
+          "width_us": 1.25,
+          "peak_snr_db": "9.8"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:16:20.682338+00:00"
+    },
+    {
+      "freq_mhz": 1174.0,
+      "kurtosis": 8.2142,
+      "papr_db": 13.04,
+      "mean_pwr_db": -43.85,
+      "spectral_flatness": 0.9829,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 158.012,
+          "width_us": 1.25,
+          "peak_snr_db": "10.0"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "PAPR +4.7\u03c3 (13.0dB)",
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:16:22.169298+00:00"
+    },
+    {
+      "freq_mhz": 1178.0,
+      "kurtosis": 8.0353,
+      "papr_db": 11.41,
+      "mean_pwr_db": -43.8,
+      "spectral_flatness": 0.9823,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 149.803,
+          "width_us": 1.25,
+          "peak_snr_db": "8.8"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:16:25.130957+00:00"
+    },
+    {
+      "freq_mhz": 1180.0,
+      "kurtosis": 7.5063,
+      "papr_db": 11.28,
+      "mean_pwr_db": -43.67,
+      "spectral_flatness": 0.9824,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 78.014,
+          "width_us": 1.25,
+          "peak_snr_db": "10.6"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:16:26.609456+00:00"
+    },
+    {
+      "freq_mhz": 1186.0,
+      "kurtosis": 8.4131,
+      "papr_db": 13.07,
+      "mean_pwr_db": -43.86,
+      "spectral_flatness": 0.9832,
+      "pulse_count": 0,
+      "pulses": [],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "PAPR +4.8\u03c3 (13.1dB)"
+      ],
+      "timestamp": "2026-03-12T06:16:31.074244+00:00"
+    },
+    {
+      "freq_mhz": 1192.0,
+      "kurtosis": 7.23,
+      "papr_db": 12.97,
+      "mean_pwr_db": -43.6,
+      "spectral_flatness": 0.9821,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 119.036,
+          "width_us": 1.25,
+          "peak_snr_db": "9.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "PAPR +4.5\u03c3 (13.0dB)",
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:16:35.513732+00:00"
+    },
+    {
+      "freq_mhz": 1194.0,
+      "kurtosis": 8.3467,
+      "papr_db": 11.53,
+      "mean_pwr_db": -43.93,
+      "spectral_flatness": 0.9834,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 89.968,
+          "width_us": 1.25,
+          "peak_snr_db": "8.9"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:16:36.998713+00:00"
+    },
+    {
+      "freq_mhz": 1284.0,
+      "kurtosis": 7.4131,
+      "papr_db": 12.27,
+      "mean_pwr_db": -43.69,
+      "spectral_flatness": 0.9823,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 218.003,
+          "width_us": 1.25,
+          "peak_snr_db": "8.7"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:17:44.932943+00:00"
+    },
+    {
+      "freq_mhz": 1290.0,
+      "kurtosis": 6.6456,
+      "papr_db": 12.04,
+      "mean_pwr_db": -43.43,
+      "spectral_flatness": 0.9809,
+      "pulse_count": 0,
+      "pulses": [],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "flatness -3.5\u03c3 (0.9809)"
+      ],
+      "timestamp": "2026-03-12T06:17:49.709712+00:00"
+    },
+    {
+      "freq_mhz": 1292.0,
+      "kurtosis": 6.4439,
+      "papr_db": 12.38,
+      "mean_pwr_db": -43.33,
+      "spectral_flatness": 0.9809,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 186.454,
+          "width_us": 1.25,
+          "peak_snr_db": "9.0"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "flatness -3.5\u03c3 (0.9809)",
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:17:51.318885+00:00"
+    },
+    {
+      "freq_mhz": 1300.0,
+      "kurtosis": 8.655,
+      "papr_db": 11.3,
+      "mean_pwr_db": -43.99,
+      "spectral_flatness": 0.9834,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 85.902,
+          "width_us": 1.25,
+          "peak_snr_db": "8.9"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:17:57.402480+00:00"
+    },
+    {
+      "freq_mhz": 1322.0,
+      "kurtosis": 9.6118,
+      "papr_db": 11.28,
+      "mean_pwr_db": -44.19,
+      "spectral_flatness": 0.9845,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 160.11,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:18:14.314633+00:00"
+    },
+    {
+      "freq_mhz": 1324.0,
+      "kurtosis": 9.5521,
+      "papr_db": 9.97,
+      "mean_pwr_db": -44.19,
+      "spectral_flatness": 0.9847,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 77.12,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:18:15.797504+00:00"
+    },
+    {
+      "freq_mhz": 1328.0,
+      "kurtosis": 9.7466,
+      "papr_db": 10.67,
+      "mean_pwr_db": -44.21,
+      "spectral_flatness": 0.9848,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 10.211,
+          "width_us": 1.25,
+          "peak_snr_db": "8.4"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:18:18.799705+00:00"
+    },
+    {
+      "freq_mhz": 1330.0,
+      "kurtosis": 9.76,
+      "papr_db": 10.95,
+      "mean_pwr_db": -44.21,
+      "spectral_flatness": 0.9842,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 75.833,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:18:20.280986+00:00"
+    },
+    {
+      "freq_mhz": 1332.0,
+      "kurtosis": 9.7584,
+      "papr_db": 10.96,
+      "mean_pwr_db": -44.21,
+      "spectral_flatness": 0.9845,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 165.437,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:18:21.761439+00:00"
+    },
+    {
+      "freq_mhz": 1334.0,
+      "kurtosis": 9.8517,
+      "papr_db": 11.31,
+      "mean_pwr_db": -44.21,
+      "spectral_flatness": 0.9845,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 34.408,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:18:23.239163+00:00"
+    },
+    {
+      "freq_mhz": 1338.0,
+      "kurtosis": 9.6818,
+      "papr_db": 10.95,
+      "mean_pwr_db": -44.21,
+      "spectral_flatness": 0.9845,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 202.846,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:18:26.220850+00:00"
+    },
+    {
+      "freq_mhz": 1346.0,
+      "kurtosis": 9.7708,
+      "papr_db": 11.52,
+      "mean_pwr_db": -44.21,
+      "spectral_flatness": 0.9849,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 166.904,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:18:32.157254+00:00"
+    },
+    {
+      "freq_mhz": 1350.0,
+      "kurtosis": 9.6859,
+      "papr_db": 10.95,
+      "mean_pwr_db": -44.2,
+      "spectral_flatness": 0.9843,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 227.447,
+          "width_us": 1.25,
+          "peak_snr_db": "7.1"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:18:35.115688+00:00"
+    },
+    {
+      "freq_mhz": 1358.0,
+      "kurtosis": 9.6371,
+      "papr_db": 11.48,
+      "mean_pwr_db": -44.19,
+      "spectral_flatness": 0.9844,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 209.065,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:18:41.668576+00:00"
+    },
+    {
+      "freq_mhz": 1364.0,
+      "kurtosis": 9.6583,
+      "papr_db": 10.62,
+      "mean_pwr_db": -44.19,
+      "spectral_flatness": 0.9844,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 86.646,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:18:46.106788+00:00"
+    },
+    {
+      "freq_mhz": 1366.0,
+      "kurtosis": 9.6067,
+      "papr_db": 10.63,
+      "mean_pwr_db": -44.19,
+      "spectral_flatness": 0.9848,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 111.67,
+          "width_us": 1.25,
+          "peak_snr_db": "9.1"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:18:47.600803+00:00"
+    },
+    {
+      "freq_mhz": 1368.0,
+      "kurtosis": 9.7701,
+      "papr_db": 11.32,
+      "mean_pwr_db": -44.21,
+      "spectral_flatness": 0.9848,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 172.97,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:18:49.078857+00:00"
+    },
+    {
+      "freq_mhz": 1378.0,
+      "kurtosis": 9.7302,
+      "papr_db": 11.52,
+      "mean_pwr_db": -44.21,
+      "spectral_flatness": 0.9846,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 215.832,
+          "width_us": 1.25,
+          "peak_snr_db": "8.4"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:18:56.526692+00:00"
+    },
+    {
+      "freq_mhz": 1382.0,
+      "kurtosis": 9.7916,
+      "papr_db": 10.64,
+      "mean_pwr_db": -44.21,
+      "spectral_flatness": 0.9844,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 28.011,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:18:59.501907+00:00"
+    },
+    {
+      "freq_mhz": 1392.0,
+      "kurtosis": 9.8328,
+      "papr_db": 10.65,
+      "mean_pwr_db": -44.21,
+      "spectral_flatness": 0.9847,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 171.346,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:19:06.955654+00:00"
+    },
+    {
+      "freq_mhz": 1394.0,
+      "kurtosis": 9.9237,
+      "papr_db": 11.83,
+      "mean_pwr_db": -44.22,
+      "spectral_flatness": 0.9848,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 66.845,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:19:08.442907+00:00"
+    },
+    {
+      "freq_mhz": 1400.0,
+      "kurtosis": 9.8005,
+      "papr_db": 11.33,
+      "mean_pwr_db": -44.22,
+      "spectral_flatness": 0.9849,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 35.961,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:19:12.960369+00:00"
+    },
+    {
+      "freq_mhz": 1406.0,
+      "kurtosis": 9.7442,
+      "papr_db": 10.96,
+      "mean_pwr_db": -44.21,
+      "spectral_flatness": 0.985,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 3.601,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:19:17.445368+00:00"
+    },
+    {
+      "freq_mhz": 1408.0,
+      "kurtosis": 9.8751,
+      "papr_db": 10.55,
+      "mean_pwr_db": -44.22,
+      "spectral_flatness": 0.9846,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 206.218,
+          "width_us": 1.25,
+          "peak_snr_db": "9.1"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:19:19.012494+00:00"
+    },
+    {
+      "freq_mhz": 1412.0,
+      "kurtosis": 9.6942,
+      "papr_db": 11.49,
+      "mean_pwr_db": -44.2,
+      "spectral_flatness": 0.9847,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 111.43,
+          "width_us": 1.25,
+          "peak_snr_db": "8.4"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:19:21.976174+00:00"
+    },
+    {
+      "freq_mhz": 1414.0,
+      "kurtosis": 9.7502,
+      "papr_db": 10.64,
+      "mean_pwr_db": -44.22,
+      "spectral_flatness": 0.985,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 62.929,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:19:23.452405+00:00"
+    },
+    {
+      "freq_mhz": 1418.0,
+      "kurtosis": 9.7365,
+      "papr_db": 10.95,
+      "mean_pwr_db": -44.22,
+      "spectral_flatness": 0.9849,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 90.08,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:19:26.418219+00:00"
+    },
+    {
+      "freq_mhz": 1420.0,
+      "kurtosis": 9.8126,
+      "papr_db": 10.65,
+      "mean_pwr_db": -44.21,
+      "spectral_flatness": 0.9847,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 29.022,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:19:27.911071+00:00"
+    },
+    {
+      "freq_mhz": 1422.0,
+      "kurtosis": 9.7394,
+      "papr_db": 11.28,
+      "mean_pwr_db": -44.21,
+      "spectral_flatness": 0.985,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 213.462,
+          "width_us": 1.25,
+          "peak_snr_db": "9.6"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:19:29.402915+00:00"
+    },
+    {
+      "freq_mhz": 1426.0,
+      "kurtosis": 9.6408,
+      "papr_db": 11.26,
+      "mean_pwr_db": -44.17,
+      "spectral_flatness": 0.9844,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 121.807,
+          "width_us": 1.25,
+          "peak_snr_db": "9.6"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:19:32.384547+00:00"
+    },
+    {
+      "freq_mhz": 1428.0,
+      "kurtosis": 9.7791,
+      "papr_db": 11.27,
+      "mean_pwr_db": -44.2,
+      "spectral_flatness": 0.985,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 226.049,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:19:33.953196+00:00"
+    },
+    {
+      "freq_mhz": 1430.0,
+      "kurtosis": 9.7234,
+      "papr_db": 10.65,
+      "mean_pwr_db": -44.2,
+      "spectral_flatness": 0.9846,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 223.599,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:19:35.447576+00:00"
+    },
+    {
+      "freq_mhz": 1434.0,
+      "kurtosis": 9.7345,
+      "papr_db": 10.5,
+      "mean_pwr_db": -44.2,
+      "spectral_flatness": 0.9848,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 147.891,
+          "width_us": 1.25,
+          "peak_snr_db": "9.1"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:19:38.440909+00:00"
+    },
+    {
+      "freq_mhz": 1442.0,
+      "kurtosis": 9.6506,
+      "papr_db": 10.51,
+      "mean_pwr_db": -44.2,
+      "spectral_flatness": 0.9846,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 96.726,
+          "width_us": 1.25,
+          "peak_snr_db": "9.1"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:19:44.402700+00:00"
+    },
+    {
+      "freq_mhz": 1450.0,
+      "kurtosis": 9.9031,
+      "papr_db": 10.99,
+      "mean_pwr_db": -44.23,
+      "spectral_flatness": 0.985,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 191.714,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:19:50.419555+00:00"
+    },
+    {
+      "freq_mhz": 1464.0,
+      "kurtosis": 10.0883,
+      "papr_db": 10.68,
+      "mean_pwr_db": -44.25,
+      "spectral_flatness": 0.9852,
+      "pulse_count": 2,
+      "pulses": [
+        {
+          "offset_ms": 106.905,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 176.163,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "2 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:20:00.868030+00:00"
+    },
+    {
+      "freq_mhz": 1478.0,
+      "kurtosis": 10.11,
+      "papr_db": 10.58,
+      "mean_pwr_db": -44.27,
+      "spectral_flatness": 0.985,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 93.724,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:20:11.347702+00:00"
+    },
+    {
+      "freq_mhz": 1480.0,
+      "kurtosis": 10.0569,
+      "papr_db": 10.67,
+      "mean_pwr_db": -44.26,
+      "spectral_flatness": 0.9847,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 170.005,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:20:12.837929+00:00"
+    },
+    {
+      "freq_mhz": 1482.0,
+      "kurtosis": 10.1925,
+      "papr_db": 11.0,
+      "mean_pwr_db": -44.26,
+      "spectral_flatness": 0.9853,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 188.138,
+          "width_us": 1.25,
+          "peak_snr_db": "9.1"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:20:14.328218+00:00"
+    },
+    {
+      "freq_mhz": 1484.0,
+      "kurtosis": 10.1039,
+      "papr_db": 10.71,
+      "mean_pwr_db": -44.27,
+      "spectral_flatness": 0.9854,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 200.428,
+          "width_us": 1.25,
+          "peak_snr_db": "9.1"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:20:15.811463+00:00"
+    },
+    {
+      "freq_mhz": 1490.0,
+      "kurtosis": 10.1278,
+      "papr_db": 11.56,
+      "mean_pwr_db": -44.26,
+      "spectral_flatness": 0.9846,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 8.15,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:20:20.288222+00:00"
+    },
+    {
+      "freq_mhz": 1494.0,
+      "kurtosis": 10.1775,
+      "papr_db": 11.04,
+      "mean_pwr_db": -44.27,
+      "spectral_flatness": 0.9849,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 186.293,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:20:23.277748+00:00"
+    },
+    {
+      "freq_mhz": 1496.0,
+      "kurtosis": 10.0738,
+      "papr_db": 11.34,
+      "mean_pwr_db": -44.28,
+      "spectral_flatness": 0.9852,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 153.562,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:20:24.763371+00:00"
+    },
+    {
+      "freq_mhz": 1498.0,
+      "kurtosis": 9.941,
+      "papr_db": 10.58,
+      "mean_pwr_db": -44.26,
+      "spectral_flatness": 0.9848,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 143.31,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:20:26.252538+00:00"
+    },
+    {
+      "freq_mhz": 1502.0,
+      "kurtosis": 10.1874,
+      "papr_db": 10.03,
+      "mean_pwr_db": -44.27,
+      "spectral_flatness": 0.9849,
+      "pulse_count": 2,
+      "pulses": [
+        {
+          "offset_ms": 58.812,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 212.683,
+          "width_us": 1.25,
+          "peak_snr_db": "9.7"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "2 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:20:29.230754+00:00"
+    },
+    {
+      "freq_mhz": 1514.0,
+      "kurtosis": 9.9159,
+      "papr_db": 10.95,
+      "mean_pwr_db": -44.25,
+      "spectral_flatness": 0.985,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 202.989,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:20:38.264727+00:00"
+    },
+    {
+      "freq_mhz": 1516.0,
+      "kurtosis": 9.9507,
+      "papr_db": 10.57,
+      "mean_pwr_db": -44.25,
+      "spectral_flatness": 0.9846,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 75.068,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:20:39.764711+00:00"
+    },
+    {
+      "freq_mhz": 1518.0,
+      "kurtosis": 10.0858,
+      "papr_db": 11.56,
+      "mean_pwr_db": -44.25,
+      "spectral_flatness": 0.9853,
+      "pulse_count": 2,
+      "pulses": [
+        {
+          "offset_ms": 62.265,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        },
+        {
+          "offset_ms": 205.418,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "2 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:20:41.327580+00:00"
+    },
+    {
+      "freq_mhz": 1532.0,
+      "kurtosis": 10.1736,
+      "papr_db": 10.03,
+      "mean_pwr_db": -44.26,
+      "spectral_flatness": 0.9849,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 38.975,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:20:52.303158+00:00"
+    },
+    {
+      "freq_mhz": 1536.0,
+      "kurtosis": 10.1908,
+      "papr_db": 11.57,
+      "mean_pwr_db": -44.27,
+      "spectral_flatness": 0.9852,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 46.58,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:20:55.497682+00:00"
+    },
+    {
+      "freq_mhz": 1540.0,
+      "kurtosis": 10.1771,
+      "papr_db": 11.85,
+      "mean_pwr_db": -44.27,
+      "spectral_flatness": 0.9847,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 158.012,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:20:58.704383+00:00"
+    },
+    {
+      "freq_mhz": 1542.0,
+      "kurtosis": 10.0855,
+      "papr_db": 11.02,
+      "mean_pwr_db": -44.26,
+      "spectral_flatness": 0.9854,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 83.852,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:21:00.356341+00:00"
+    },
+    {
+      "freq_mhz": 1550.0,
+      "kurtosis": 10.3692,
+      "papr_db": 10.72,
+      "mean_pwr_db": -44.29,
+      "spectral_flatness": 0.985,
+      "pulse_count": 2,
+      "pulses": [
+        {
+          "offset_ms": 94.227,
+          "width_us": 1.25,
+          "peak_snr_db": "9.1"
+        },
+        {
+          "offset_ms": 178.517,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "2 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:21:06.473518+00:00"
+    },
+    {
+      "freq_mhz": 1556.0,
+      "kurtosis": 10.242,
+      "papr_db": 10.72,
+      "mean_pwr_db": -44.29,
+      "spectral_flatness": 0.9851,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 193.871,
+          "width_us": 1.25,
+          "peak_snr_db": "8.5"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:21:11.048990+00:00"
+    },
+    {
+      "freq_mhz": 1560.0,
+      "kurtosis": 10.1968,
+      "papr_db": 10.58,
+      "mean_pwr_db": -44.29,
+      "spectral_flatness": 0.9846,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 64.288,
+          "width_us": 1.25,
+          "peak_snr_db": "9.7"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:21:14.053669+00:00"
+    },
+    {
+      "freq_mhz": 1564.0,
+      "kurtosis": 10.2735,
+      "papr_db": 10.72,
+      "mean_pwr_db": -44.28,
+      "spectral_flatness": 0.9848,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 35.139,
+          "width_us": 1.25,
+          "peak_snr_db": "8.5"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:21:17.197863+00:00"
+    },
+    {
+      "freq_mhz": 1566.0,
+      "kurtosis": 10.2088,
+      "papr_db": 11.0,
+      "mean_pwr_db": -44.28,
+      "spectral_flatness": 0.9847,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 12.805,
+          "width_us": 1.25,
+          "peak_snr_db": "9.7"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:21:18.689543+00:00"
+    },
+    {
+      "freq_mhz": 1574.0,
+      "kurtosis": 10.2823,
+      "papr_db": 10.73,
+      "mean_pwr_db": -44.29,
+      "spectral_flatness": 0.9849,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 173.806,
+          "width_us": 1.25,
+          "peak_snr_db": "8.5"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:21:24.645001+00:00"
+    },
+    {
+      "freq_mhz": 1588.0,
+      "kurtosis": 10.4205,
+      "papr_db": 11.58,
+      "mean_pwr_db": -44.29,
+      "spectral_flatness": 0.985,
+      "pulse_count": 3,
+      "pulses": [
+        {
+          "offset_ms": 51.395,
+          "width_us": 1.25,
+          "peak_snr_db": "8.5"
+        },
+        {
+          "offset_ms": 78.492,
+          "width_us": 1.25,
+          "peak_snr_db": "8.5"
+        },
+        {
+          "offset_ms": 211.042,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "3 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:21:35.045216+00:00"
+    },
+    {
+      "freq_mhz": 1600.0,
+      "kurtosis": 10.2319,
+      "papr_db": 11.87,
+      "mean_pwr_db": -44.27,
+      "spectral_flatness": 0.9848,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 19.148,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:21:43.950691+00:00"
+    },
+    {
+      "freq_mhz": 1608.0,
+      "kurtosis": 10.4918,
+      "papr_db": 10.74,
+      "mean_pwr_db": -44.31,
+      "spectral_flatness": 0.9853,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 159.719,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:21:49.921883+00:00"
+    },
+    {
+      "freq_mhz": 1612.0,
+      "kurtosis": 10.3781,
+      "papr_db": 10.63,
+      "mean_pwr_db": -44.3,
+      "spectral_flatness": 0.9851,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 39.04,
+          "width_us": 1.25,
+          "peak_snr_db": "9.7"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:21:52.888656+00:00"
+    },
+    {
+      "freq_mhz": 1614.0,
+      "kurtosis": 10.4574,
+      "papr_db": 11.04,
+      "mean_pwr_db": -44.3,
+      "spectral_flatness": 0.9851,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 25.462,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:21:54.373979+00:00"
+    },
+    {
+      "freq_mhz": 1618.0,
+      "kurtosis": 10.536,
+      "papr_db": 10.75,
+      "mean_pwr_db": -44.32,
+      "spectral_flatness": 0.9852,
+      "pulse_count": 3,
+      "pulses": [
+        {
+          "offset_ms": 91.856,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 95.683,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 187.674,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "3 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:21:57.339175+00:00"
+    },
+    {
+      "freq_mhz": 1620.0,
+      "kurtosis": 10.4934,
+      "papr_db": 10.61,
+      "mean_pwr_db": -44.31,
+      "spectral_flatness": 0.9852,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 48.208,
+          "width_us": 1.25,
+          "peak_snr_db": "9.1"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:21:58.817879+00:00"
+    },
+    {
+      "freq_mhz": 1622.0,
+      "kurtosis": 10.5238,
+      "papr_db": 11.07,
+      "mean_pwr_db": -44.31,
+      "spectral_flatness": 0.9853,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 117.262,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:00.300721+00:00"
+    },
+    {
+      "freq_mhz": 1624.0,
+      "kurtosis": 10.5187,
+      "papr_db": 11.63,
+      "mean_pwr_db": -44.31,
+      "spectral_flatness": 0.9848,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 4.717,
+          "width_us": 1.67,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:01.779857+00:00"
+    },
+    {
+      "freq_mhz": 1626.0,
+      "kurtosis": 10.3961,
+      "papr_db": 10.1,
+      "mean_pwr_db": -44.31,
+      "spectral_flatness": 0.9848,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 124.077,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:03.262724+00:00"
+    },
+    {
+      "freq_mhz": 1628.0,
+      "kurtosis": 10.5546,
+      "papr_db": 10.64,
+      "mean_pwr_db": -44.33,
+      "spectral_flatness": 0.9853,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 72.706,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:04.746425+00:00"
+    },
+    {
+      "freq_mhz": 1630.0,
+      "kurtosis": 10.3164,
+      "papr_db": 11.05,
+      "mean_pwr_db": -44.32,
+      "spectral_flatness": 0.9851,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 138.686,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:06.224783+00:00"
+    },
+    {
+      "freq_mhz": 1634.0,
+      "kurtosis": 10.5395,
+      "papr_db": 10.62,
+      "mean_pwr_db": -44.32,
+      "spectral_flatness": 0.9853,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 118.672,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:09.202711+00:00"
+    },
+    {
+      "freq_mhz": 1636.0,
+      "kurtosis": 10.3785,
+      "papr_db": 10.75,
+      "mean_pwr_db": -44.32,
+      "spectral_flatness": 0.9851,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 45.53,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:10.696819+00:00"
+    },
+    {
+      "freq_mhz": 1640.0,
+      "kurtosis": 10.4228,
+      "papr_db": 10.76,
+      "mean_pwr_db": -44.32,
+      "spectral_flatness": 0.9853,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 14.995,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:13.683315+00:00"
+    },
+    {
+      "freq_mhz": 1644.0,
+      "kurtosis": 10.3639,
+      "papr_db": 10.61,
+      "mean_pwr_db": -44.31,
+      "spectral_flatness": 0.9854,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 1.542,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:16.656900+00:00"
+    },
+    {
+      "freq_mhz": 1646.0,
+      "kurtosis": 10.0057,
+      "papr_db": 10.68,
+      "mean_pwr_db": -44.26,
+      "spectral_flatness": 0.9852,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 76.521,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:18.142846+00:00"
+    },
+    {
+      "freq_mhz": 1648.0,
+      "kurtosis": 10.202,
+      "papr_db": 10.69,
+      "mean_pwr_db": -44.27,
+      "spectral_flatness": 0.9847,
+      "pulse_count": 2,
+      "pulses": [
+        {
+          "offset_ms": 14.96,
+          "width_us": 1.25,
+          "peak_snr_db": "8.5"
+        },
+        {
+          "offset_ms": 211.18,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "2 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:19.631075+00:00"
+    },
+    {
+      "freq_mhz": 1650.0,
+      "kurtosis": 10.0177,
+      "papr_db": 11.0,
+      "mean_pwr_db": -44.25,
+      "spectral_flatness": 0.9848,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 53.67,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:21.114352+00:00"
+    },
+    {
+      "freq_mhz": 1652.0,
+      "kurtosis": 10.0232,
+      "papr_db": 11.33,
+      "mean_pwr_db": -44.24,
+      "spectral_flatness": 0.9847,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 113.185,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:22.597454+00:00"
+    },
+    {
+      "freq_mhz": 1654.0,
+      "kurtosis": 9.8978,
+      "papr_db": 10.99,
+      "mean_pwr_db": -44.23,
+      "spectral_flatness": 0.9852,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 33.515,
+          "width_us": 1.25,
+          "peak_snr_db": "9.1"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:24.074691+00:00"
+    },
+    {
+      "freq_mhz": 1658.0,
+      "kurtosis": 9.9528,
+      "papr_db": 11.33,
+      "mean_pwr_db": -44.23,
+      "spectral_flatness": 0.9839,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 135.11,
+          "width_us": 1.25,
+          "peak_snr_db": "7.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:27.075402+00:00"
+    },
+    {
+      "freq_mhz": 1666.0,
+      "kurtosis": 10.2044,
+      "papr_db": 11.38,
+      "mean_pwr_db": -44.28,
+      "spectral_flatness": 0.9851,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 107.507,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:33.012357+00:00"
+    },
+    {
+      "freq_mhz": 1668.0,
+      "kurtosis": 10.2576,
+      "papr_db": 11.05,
+      "mean_pwr_db": -44.3,
+      "spectral_flatness": 0.9845,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 135.546,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:34.491457+00:00"
+    },
+    {
+      "freq_mhz": 1672.0,
+      "kurtosis": 10.4701,
+      "papr_db": 10.75,
+      "mean_pwr_db": -44.32,
+      "spectral_flatness": 0.9851,
+      "pulse_count": 4,
+      "pulses": [
+        {
+          "offset_ms": 17.899,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 153.6,
+          "width_us": 1.25,
+          "peak_snr_db": "8.5"
+        },
+        {
+          "offset_ms": 188.572,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 200.161,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "4 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:37.450012+00:00"
+    },
+    {
+      "freq_mhz": 1674.0,
+      "kurtosis": 10.3389,
+      "papr_db": 11.04,
+      "mean_pwr_db": -44.32,
+      "spectral_flatness": 0.9855,
+      "pulse_count": 2,
+      "pulses": [
+        {
+          "offset_ms": 127.045,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 130.065,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "2 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:38.940734+00:00"
+    },
+    {
+      "freq_mhz": 1676.0,
+      "kurtosis": 10.5558,
+      "papr_db": 10.62,
+      "mean_pwr_db": -44.33,
+      "spectral_flatness": 0.9854,
+      "pulse_count": 2,
+      "pulses": [
+        {
+          "offset_ms": 93.195,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 227.884,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "2 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:40.412189+00:00"
+    },
+    {
+      "freq_mhz": 1678.0,
+      "kurtosis": 10.3818,
+      "papr_db": 11.05,
+      "mean_pwr_db": -44.32,
+      "spectral_flatness": 0.9853,
+      "pulse_count": 2,
+      "pulses": [
+        {
+          "offset_ms": 53.525,
+          "width_us": 1.25,
+          "peak_snr_db": "7.0"
+        },
+        {
+          "offset_ms": 67.208,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "2 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:41.891291+00:00"
+    },
+    {
+      "freq_mhz": 1680.0,
+      "kurtosis": 10.6443,
+      "papr_db": 10.6,
+      "mean_pwr_db": -44.33,
+      "spectral_flatness": 0.9853,
+      "pulse_count": 4,
+      "pulses": [
+        {
+          "offset_ms": 26.438,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 26.635,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 73.809,
+          "width_us": 1.67,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 193.786,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "4 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:43.367755+00:00"
+    },
+    {
+      "freq_mhz": 1682.0,
+      "kurtosis": 10.5681,
+      "papr_db": 10.77,
+      "mean_pwr_db": -44.33,
+      "spectral_flatness": 0.985,
+      "pulse_count": 3,
+      "pulses": [
+        {
+          "offset_ms": 30.155,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 150.107,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 185.375,
+          "width_us": 1.25,
+          "peak_snr_db": "9.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "3 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:44.857263+00:00"
+    },
+    {
+      "freq_mhz": 1684.0,
+      "kurtosis": 10.4643,
+      "papr_db": 11.61,
+      "mean_pwr_db": -44.33,
+      "spectral_flatness": 0.9853,
+      "pulse_count": 4,
+      "pulses": [
+        {
+          "offset_ms": 63.622,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 111.479,
+          "width_us": 1.25,
+          "peak_snr_db": "7.0"
+        },
+        {
+          "offset_ms": 126.349,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 212.588,
+          "width_us": 1.25,
+          "peak_snr_db": "7.0"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "4 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:46.355560+00:00"
+    },
+    {
+      "freq_mhz": 1688.0,
+      "kurtosis": 10.5407,
+      "papr_db": 11.42,
+      "mean_pwr_db": -44.32,
+      "spectral_flatness": 0.9849,
+      "pulse_count": 3,
+      "pulses": [
+        {
+          "offset_ms": 0.727,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 126.154,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 170.347,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "3 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:49.355635+00:00"
+    },
+    {
+      "freq_mhz": 1690.0,
+      "kurtosis": 10.5687,
+      "papr_db": 10.62,
+      "mean_pwr_db": -44.32,
+      "spectral_flatness": 0.9853,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 130.169,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:50.836340+00:00"
+    },
+    {
+      "freq_mhz": 1692.0,
+      "kurtosis": 10.4877,
+      "papr_db": 11.06,
+      "mean_pwr_db": -44.33,
+      "spectral_flatness": 0.9851,
+      "pulse_count": 3,
+      "pulses": [
+        {
+          "offset_ms": 15.82,
+          "width_us": 1.25,
+          "peak_snr_db": "8.5"
+        },
+        {
+          "offset_ms": 38.988,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 148.875,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "3 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:52.313039+00:00"
+    },
+    {
+      "freq_mhz": 1694.0,
+      "kurtosis": 10.405,
+      "papr_db": 10.77,
+      "mean_pwr_db": -44.32,
+      "spectral_flatness": 0.9852,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 11.812,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:53.801091+00:00"
+    },
+    {
+      "freq_mhz": 1696.0,
+      "kurtosis": 10.5433,
+      "papr_db": 11.42,
+      "mean_pwr_db": -44.33,
+      "spectral_flatness": 0.9851,
+      "pulse_count": 5,
+      "pulses": [
+        {
+          "offset_ms": 20.55,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 99.319,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 140.15,
+          "width_us": 1.25,
+          "peak_snr_db": "9.1"
+        },
+        {
+          "offset_ms": 172.73,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 195.938,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "5 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:55.285047+00:00"
+    },
+    {
+      "freq_mhz": 1700.0,
+      "kurtosis": 10.4945,
+      "papr_db": 10.61,
+      "mean_pwr_db": -44.32,
+      "spectral_flatness": 0.9853,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 16.442,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:58.247735+00:00"
+    },
+    {
+      "freq_mhz": 1702.0,
+      "kurtosis": 10.4987,
+      "papr_db": 10.64,
+      "mean_pwr_db": -44.33,
+      "spectral_flatness": 0.9854,
+      "pulse_count": 3,
+      "pulses": [
+        {
+          "offset_ms": 40.715,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 134.622,
+          "width_us": 1.25,
+          "peak_snr_db": "9.2"
+        },
+        {
+          "offset_ms": 151.315,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "3 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:22:59.734737+00:00"
+    },
+    {
+      "freq_mhz": 1704.0,
+      "kurtosis": 10.513,
+      "papr_db": 10.09,
+      "mean_pwr_db": -44.32,
+      "spectral_flatness": 0.9857,
+      "pulse_count": 3,
+      "pulses": [
+        {
+          "offset_ms": 41.224,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 187.307,
+          "width_us": 1.25,
+          "peak_snr_db": "7.0"
+        },
+        {
+          "offset_ms": 211.498,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "3 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:01.228307+00:00"
+    },
+    {
+      "freq_mhz": 1706.0,
+      "kurtosis": 10.3946,
+      "papr_db": 10.77,
+      "mean_pwr_db": -44.32,
+      "spectral_flatness": 0.9852,
+      "pulse_count": 2,
+      "pulses": [
+        {
+          "offset_ms": 78.718,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 182.956,
+          "width_us": 1.25,
+          "peak_snr_db": "7.0"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "2 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:02.711308+00:00"
+    },
+    {
+      "freq_mhz": 1708.0,
+      "kurtosis": 10.4052,
+      "papr_db": 11.04,
+      "mean_pwr_db": -44.31,
+      "spectral_flatness": 0.9853,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 194.912,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:04.186693+00:00"
+    },
+    {
+      "freq_mhz": 1716.0,
+      "kurtosis": 10.5931,
+      "papr_db": 11.09,
+      "mean_pwr_db": -44.32,
+      "spectral_flatness": 0.985,
+      "pulse_count": 4,
+      "pulses": [
+        {
+          "offset_ms": 101.464,
+          "width_us": 1.25,
+          "peak_snr_db": "8.5"
+        },
+        {
+          "offset_ms": 143.67,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 176.035,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 198.629,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "4 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:10.114250+00:00"
+    },
+    {
+      "freq_mhz": 1718.0,
+      "kurtosis": 10.3853,
+      "papr_db": 10.06,
+      "mean_pwr_db": -44.31,
+      "spectral_flatness": 0.9851,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 150.009,
+          "width_us": 1.25,
+          "peak_snr_db": "9.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:11.638270+00:00"
+    },
+    {
+      "freq_mhz": 1720.0,
+      "kurtosis": 10.5373,
+      "papr_db": 10.77,
+      "mean_pwr_db": -44.33,
+      "spectral_flatness": 0.985,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 108.413,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:13.122285+00:00"
+    },
+    {
+      "freq_mhz": 1722.0,
+      "kurtosis": 10.6081,
+      "papr_db": 10.75,
+      "mean_pwr_db": -44.32,
+      "spectral_flatness": 0.9852,
+      "pulse_count": 4,
+      "pulses": [
+        {
+          "offset_ms": 110.047,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 124.757,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 140.802,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 166.096,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "4 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:14.604361+00:00"
+    },
+    {
+      "freq_mhz": 1724.0,
+      "kurtosis": 10.5504,
+      "papr_db": 10.64,
+      "mean_pwr_db": -44.33,
+      "spectral_flatness": 0.9853,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 191.717,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:16.095316+00:00"
+    },
+    {
+      "freq_mhz": 1728.0,
+      "kurtosis": 10.5968,
+      "papr_db": 11.44,
+      "mean_pwr_db": -44.33,
+      "spectral_flatness": 0.9855,
+      "pulse_count": 6,
+      "pulses": [
+        {
+          "offset_ms": 10.465,
+          "width_us": 1.25,
+          "peak_snr_db": "7.0"
+        },
+        {
+          "offset_ms": 25.57,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 74.383,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 85.806,
+          "width_us": 1.25,
+          "peak_snr_db": "8.5"
+        },
+        {
+          "offset_ms": 126.571,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 186.006,
+          "width_us": 1.25,
+          "peak_snr_db": "8.5"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "6 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:19.050106+00:00"
+    },
+    {
+      "freq_mhz": 1730.0,
+      "kurtosis": 10.6316,
+      "papr_db": 10.78,
+      "mean_pwr_db": -44.34,
+      "spectral_flatness": 0.9852,
+      "pulse_count": 5,
+      "pulses": [
+        {
+          "offset_ms": 100.69,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 118.319,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 121.404,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 159.834,
+          "width_us": 1.25,
+          "peak_snr_db": "8.5"
+        },
+        {
+          "offset_ms": 228.953,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "5 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:20.529427+00:00"
+    },
+    {
+      "freq_mhz": 1732.0,
+      "kurtosis": 10.6351,
+      "papr_db": 11.09,
+      "mean_pwr_db": -44.34,
+      "spectral_flatness": 0.9856,
+      "pulse_count": 6,
+      "pulses": [
+        {
+          "offset_ms": 37.212,
+          "width_us": 1.25,
+          "peak_snr_db": "8.5"
+        },
+        {
+          "offset_ms": 74.876,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 95.101,
+          "width_us": 1.25,
+          "peak_snr_db": "7.0"
+        },
+        {
+          "offset_ms": 124.146,
+          "width_us": 1.25,
+          "peak_snr_db": "9.2"
+        },
+        {
+          "offset_ms": 170.593,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 203.336,
+          "width_us": 1.25,
+          "peak_snr_db": "9.2"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "6 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:22.009939+00:00"
+    },
+    {
+      "freq_mhz": 1734.0,
+      "kurtosis": 10.6025,
+      "papr_db": 10.09,
+      "mean_pwr_db": -44.34,
+      "spectral_flatness": 0.9857,
+      "pulse_count": 3,
+      "pulses": [
+        {
+          "offset_ms": 6.19,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 60.713,
+          "width_us": 1.25,
+          "peak_snr_db": "7.0"
+        },
+        {
+          "offset_ms": 221.958,
+          "width_us": 1.67,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "3 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:23.495731+00:00"
+    },
+    {
+      "freq_mhz": 1736.0,
+      "kurtosis": 10.5586,
+      "papr_db": 10.63,
+      "mean_pwr_db": -44.33,
+      "spectral_flatness": 0.9856,
+      "pulse_count": 2,
+      "pulses": [
+        {
+          "offset_ms": 56.248,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 224.798,
+          "width_us": 1.25,
+          "peak_snr_db": "7.0"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "2 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:25.093878+00:00"
+    },
+    {
+      "freq_mhz": 1738.0,
+      "kurtosis": 10.659,
+      "papr_db": 11.41,
+      "mean_pwr_db": -44.33,
+      "spectral_flatness": 0.985,
+      "pulse_count": 2,
+      "pulses": [
+        {
+          "offset_ms": 50.949,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 203.588,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "2 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:26.570991+00:00"
+    },
+    {
+      "freq_mhz": 1740.0,
+      "kurtosis": 10.5564,
+      "papr_db": 10.63,
+      "mean_pwr_db": -44.32,
+      "spectral_flatness": 0.9849,
+      "pulse_count": 2,
+      "pulses": [
+        {
+          "offset_ms": 163.609,
+          "width_us": 1.25,
+          "peak_snr_db": "7.0"
+        },
+        {
+          "offset_ms": 167.43,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "2 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:28.043773+00:00"
+    },
+    {
+      "freq_mhz": 1742.0,
+      "kurtosis": 10.587,
+      "papr_db": 11.42,
+      "mean_pwr_db": -44.33,
+      "spectral_flatness": 0.9854,
+      "pulse_count": 4,
+      "pulses": [
+        {
+          "offset_ms": 3.504,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 24.499,
+          "width_us": 1.25,
+          "peak_snr_db": "8.5"
+        },
+        {
+          "offset_ms": 52.06,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 140.789,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "4 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:29.523310+00:00"
+    },
+    {
+      "freq_mhz": 1744.0,
+      "kurtosis": 10.5544,
+      "papr_db": 10.77,
+      "mean_pwr_db": -44.34,
+      "spectral_flatness": 0.985,
+      "pulse_count": 7,
+      "pulses": [
+        {
+          "offset_ms": 8.01,
+          "width_us": 1.25,
+          "peak_snr_db": "8.5"
+        },
+        {
+          "offset_ms": 133.873,
+          "width_us": 1.25,
+          "peak_snr_db": "8.5"
+        },
+        {
+          "offset_ms": 138.983,
+          "width_us": 1.25,
+          "peak_snr_db": "8.5"
+        },
+        {
+          "offset_ms": 144.203,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 196.438,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 201.041,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 205.406,
+          "width_us": 1.25,
+          "peak_snr_db": "8.6"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "7 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:30.993439+00:00"
+    },
+    {
+      "freq_mhz": 1746.0,
+      "kurtosis": 10.6746,
+      "papr_db": 10.1,
+      "mean_pwr_db": -44.34,
+      "spectral_flatness": 0.9853,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 69.526,
+          "width_us": 1.25,
+          "peak_snr_db": "7.0"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:32.462753+00:00"
+    },
+    {
+      "freq_mhz": 1750.0,
+      "kurtosis": 10.5945,
+      "papr_db": 11.07,
+      "mean_pwr_db": -44.33,
+      "spectral_flatness": 0.9851,
+      "pulse_count": 5,
+      "pulses": [
+        {
+          "offset_ms": 27.633,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 87.531,
+          "width_us": 1.25,
+          "peak_snr_db": "7.0"
+        },
+        {
+          "offset_ms": 106.143,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 123.944,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 135.142,
+          "width_us": 1.25,
+          "peak_snr_db": "7.0"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "5 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:35.418310+00:00"
+    },
+    {
+      "freq_mhz": 1752.0,
+      "kurtosis": 10.6156,
+      "papr_db": 10.77,
+      "mean_pwr_db": -44.34,
+      "spectral_flatness": 0.9856,
+      "pulse_count": 2,
+      "pulses": [
+        {
+          "offset_ms": 129.4,
+          "width_us": 1.25,
+          "peak_snr_db": "7.0"
+        },
+        {
+          "offset_ms": 225.476,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "2 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:36.892796+00:00"
+    },
+    {
+      "freq_mhz": 1754.0,
+      "kurtosis": 10.6647,
+      "papr_db": 10.76,
+      "mean_pwr_db": -44.33,
+      "spectral_flatness": 0.9848,
+      "pulse_count": 3,
+      "pulses": [
+        {
+          "offset_ms": 80.512,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 173.14,
+          "width_us": 1.25,
+          "peak_snr_db": "9.2"
+        },
+        {
+          "offset_ms": 223.63,
+          "width_us": 1.67,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "3 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:38.371867+00:00"
+    },
+    {
+      "freq_mhz": 1756.0,
+      "kurtosis": 10.5328,
+      "papr_db": 10.1,
+      "mean_pwr_db": -44.33,
+      "spectral_flatness": 0.9848,
+      "pulse_count": 3,
+      "pulses": [
+        {
+          "offset_ms": 107.911,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 146.367,
+          "width_us": 1.25,
+          "peak_snr_db": "8.5"
+        },
+        {
+          "offset_ms": 163.594,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "3 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:39.841968+00:00"
+    },
+    {
+      "freq_mhz": 1758.0,
+      "kurtosis": 10.7075,
+      "papr_db": 11.1,
+      "mean_pwr_db": -44.34,
+      "spectral_flatness": 0.9851,
+      "pulse_count": 3,
+      "pulses": [
+        {
+          "offset_ms": 0.891,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 2.665,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 55.244,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "3 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:41.315779+00:00"
+    },
+    {
+      "freq_mhz": 1760.0,
+      "kurtosis": 10.6923,
+      "papr_db": 11.65,
+      "mean_pwr_db": -44.34,
+      "spectral_flatness": 0.9852,
+      "pulse_count": 5,
+      "pulses": [
+        {
+          "offset_ms": 15.133,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 15.392,
+          "width_us": 1.25,
+          "peak_snr_db": "10.3"
+        },
+        {
+          "offset_ms": 37.573,
+          "width_us": 1.25,
+          "peak_snr_db": "9.7"
+        },
+        {
+          "offset_ms": 72.583,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 134.671,
+          "width_us": 1.25,
+          "peak_snr_db": "7.4"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "5 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:42.782090+00:00"
+    },
+    {
+      "freq_mhz": 1762.0,
+      "kurtosis": 10.6396,
+      "papr_db": 10.65,
+      "mean_pwr_db": -44.34,
+      "spectral_flatness": 0.9854,
+      "pulse_count": 2,
+      "pulses": [
+        {
+          "offset_ms": 122.713,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 210.291,
+          "width_us": 1.25,
+          "peak_snr_db": "7.0"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "2 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:44.254167+00:00"
+    },
+    {
+      "freq_mhz": 1764.0,
+      "kurtosis": 10.6353,
+      "papr_db": 11.1,
+      "mean_pwr_db": -44.34,
+      "spectral_flatness": 0.9852,
+      "pulse_count": 2,
+      "pulses": [
+        {
+          "offset_ms": 115.435,
+          "width_us": 1.25,
+          "peak_snr_db": "7.3"
+        },
+        {
+          "offset_ms": 197.811,
+          "width_us": 1.25,
+          "peak_snr_db": "7.0"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "2 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:45.728812+00:00"
+    },
+    {
+      "freq_mhz": 1766.0,
+      "kurtosis": 10.577,
+      "papr_db": 10.8,
+      "mean_pwr_db": -44.34,
+      "spectral_flatness": 0.9853,
+      "pulse_count": 1,
+      "pulses": [
+        {
+          "offset_ms": 225.185,
+          "width_us": 1.67,
+          "peak_snr_db": "7.3"
+        }
+      ],
+      "n_samples": 552000,
+      "flagged": true,
+      "flag_reasons": [
+        "1 pulses (\u22653 samples)"
+      ],
+      "timestamp": "2026-03-12T06:23:47.203860+00:00"
+    }
+  ]
+}
