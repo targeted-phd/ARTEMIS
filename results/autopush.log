@@ -5,3 +5,11 @@ Locking support detected on remote "origin". Consider enabling it with:
   $ git config lfs.https://github-artemis/targeted-phd/ARTEMIS.git/info/lfs.locksverify true
 To github-artemis:targeted-phd/ARTEMIS.git
    76f8846..e36127c  main -> main
+[main feeeb1d] auto: 2026-03-13 16:00 snapshot
+ 7 files changed, 1020 insertions(+), 1 deletion(-)
+ create mode 100644 captures/sentinel_828MHz_150047.iq
+ create mode 100644 results/sentinel_20260313_15.jsonl
+Locking support detected on remote "origin". Consider enabling it with:
+  $ git config lfs.https://github-artemis/targeted-phd/ARTEMIS.git/info/lfs.locksverify true
+To github-artemis:targeted-phd/ARTEMIS.git
+   e36127c..feeeb1d  main -> main
