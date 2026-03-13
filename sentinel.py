@@ -47,6 +47,45 @@ _stop = False
 
 # ── IO helpers ──────────────────────────────────────────────────────────────
 
+def _generate_tone(freq_hz=800, duration_ms=200, sample_rate=44100):
+    """Generate a raw PCM tone as bytes (signed 16-bit LE, mono)."""
+    n_samples = int(sample_rate * duration_ms / 1000)
+    t = np.arange(n_samples) / sample_rate
+    # Apply envelope to avoid click
+    tone = np.sin(2 * np.pi * freq_hz * t)
+    env = np.ones(n_samples)
+    fade = min(500, n_samples // 4)
+    env[:fade] = np.linspace(0, 1, fade)
+    env[-fade:] = np.linspace(1, 0, fade)
+    pcm = (tone * env * 30000).astype(np.int16)
+    return pcm.tobytes()
+
+
+def alert_sound(level="detect"):
+    """Play audible alert via paplay raw PCM. Levels: detect, high, critical."""
+    try:
+        if level == "detect":
+            pcm = _generate_tone(660, 150)
+        elif level == "high":
+            pcm = _generate_tone(880, 150) + _generate_tone(880, 150) + _generate_tone(880, 150)
+        elif level == "critical":
+            # Rising siren
+            pcm = b""
+            for f in [600, 800, 1000, 1200, 1000, 800]:
+                pcm += _generate_tone(f, 100)
+        else:
+            return
+        p = subprocess.Popen(
+            ["paplay", "--raw", "--format=s16le", "--rate=44100", "--channels=1"],
+            stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        p.stdin.write(pcm)
+        p.stdin.close()
+    except (FileNotFoundError, BrokenPipeError, OSError):
+        # Fall back to terminal bell
+        sys.stdout.write("\a")
+        sys.stdout.flush()
+
+
 def write_flush(filepath, line):
     """Append line and force to disk."""
     with open(filepath, "a") as f:
@@ -158,6 +197,13 @@ def hash_data(data_str):
 
 
 # ── Main sentinel ───────────────────────────────────────────────────────────
+
+def jitter_freq(freq_hz, max_offset_mhz=1.5):
+    """Add random frequency offset for wobble around target.
+    Offset is uniform in [-max_offset, +max_offset] MHz."""
+    offset = np.random.uniform(-max_offset_mhz, max_offset_mhz) * 1e6
+    return int(freq_hz + offset)
+
 
 def run_sentinel(target_freqs_mhz, sweep_start, sweep_stop, sweep_step,
                  gain, stare_dwell_ms, sweep_dwell_ms,
@@ -313,33 +359,44 @@ def run_sentinel(target_freqs_mhz, sweep_start, sweep_stop, sweep_step,
             print(f"\n  [CRIT] Disk critically low ({free_mb:.0f} MB). Stopping.")
             break
 
-        # ── STARE PHASE ──
+        # ── STARE PHASE (interleaved Zone A + B with jitter) ──
         stare_results = {f: [] for f in target_freqs_mhz}
+
+        # Shuffle target order each cycle to avoid bias
+        cycle_targets = list(target_freqs_hz)
+        np.random.shuffle(cycle_targets)
 
         for pair_i in range(stare_pairs_per_cycle):
             if _stop:
                 break
-            for freq_hz in target_freqs_hz:
+            for freq_hz in cycle_targets:
+                # Apply frequency jitter (wobble ±1.5 MHz)
+                jittered = jitter_freq(freq_hz)
                 try:
-                    iq, raw = capture_iq(freq_hz, stare_dwell_ms, gain)
+                    iq, raw = capture_iq(jittered, stare_dwell_ms, gain)
                 except Exception as e:
                     hourly_errors += 1
                     continue
                 if iq is None:
                     hourly_errors += 1
                     continue
-                r = analyze_iq(iq, freq_hz)
+                # Analyze at jittered freq but bucket under nominal target
+                r = analyze_iq(iq, jittered)
+                r["nominal_freq_mhz"] = round(freq_hz / 1e6, 3)
+                r["jitter_mhz"] = round((jittered - freq_hz) / 1e6, 2)
                 r["wall_time"] = time.time()
                 r["elapsed_s"] = round(time.time() - start_epoch, 2)
-                stare_results[r["freq_mhz"]].append(r)
+                # Bucket under nominal frequency for aggregation
+                nominal_mhz = round(freq_hz / 1e6, 1)
+                stare_results.setdefault(nominal_mhz, []).append(r)
 
                 # Track hourly stats
                 hourly_stare_kurts.setdefault(r["freq_mhz"], []).append(r["kurtosis"])
                 hourly_stare_pulses[r["freq_mhz"]] = \
                     hourly_stare_pulses.get(r["freq_mhz"], 0) + r["pulse_count"]
 
-                # Save IQ if high kurtosis and within budget
-                if r["kurtosis"] > 50 and iq_dir_size_mb() < iq_budget_mb:
+                # Save IQ if elevated kurtosis and within budget
+                if r["kurtosis"] > 25 and iq_dir_size_mb() < iq_budget_mb:
                     ts = datetime.now().strftime("%H%M%S")
                     iq_f = f"{IQ_DUMP_DIR}/sentinel_{r['freq_mhz']:.0f}MHz_{ts}.iq"
                     with open(iq_f, "wb") as f:
@@ -370,6 +427,34 @@ def run_sentinel(target_freqs_mhz, sweep_start, sweep_stop, sweep_step,
                 if np.mean(kurts) < bl_median + bl_sigma:
                     print(f"  │  >>> TARGET DROPPED: {freq_mhz:.0f} MHz "
                           f"went from kurt={init_k:.1f} to {np.mean(kurts):.1f}")
+
+        # ── AUDIBLE ALERT ──
+        # Collect all kurtosis from this cycle across all frequencies
+        all_cycle_kurts = []
+        for results in stare_results.values():
+            all_cycle_kurts.extend(r["kurtosis"] for r in results)
+        if all_cycle_kurts:
+            max_kurt = max(all_cycle_kurts)
+            active_count = sum(1 for k in all_cycle_kurts if k > 20)
+            # Count how many distinct nominal frequencies are active
+            active_freqs = set()
+            for fmhz, results in stare_results.items():
+                if any(r["kurtosis"] > 20 for r in results):
+                    active_freqs.add(fmhz)
+            n_active_freqs = len(active_freqs)
+
+            if max_kurt > 200 or n_active_freqs >= 6:
+                alert_sound("critical")
+                print(f"  │  🔴 CRITICAL: max_kurt={max_kurt:.0f} "
+                      f"active_freqs={n_active_freqs}")
+            elif max_kurt > 80 or n_active_freqs >= 4:
+                alert_sound("high")
+                print(f"  │  🟡 HIGH: max_kurt={max_kurt:.0f} "
+                      f"active_freqs={n_active_freqs}")
+            elif max_kurt > 30 or n_active_freqs >= 2:
+                alert_sound("detect")
+                print(f"  │  🟢 DETECT: max_kurt={max_kurt:.0f} "
+                      f"active_freqs={n_active_freqs}")
 
         # ── SWEEP PHASE ──
         print(f"  ├─ SWEEP: ", end="", flush=True)
@@ -512,9 +597,10 @@ Examples:
   python sentinel.py --duration 86400
         """
     )
-    parser.add_argument("--targets", type=str, default="826,828,830,832,834,878",
-                        help="Comma-separated target freqs MHz")
-    parser.add_argument("--sweep-start", type=float, default=400)
+    parser.add_argument("--targets", type=str,
+                        default="622,624,628,630,632,634,636,826,828,830,832,834,878",
+                        help="Comma-separated target freqs MHz (Zone A + Zone B)")
+    parser.add_argument("--sweep-start", type=float, default=50)
     parser.add_argument("--sweep-stop", type=float, default=1000)
     parser.add_argument("--sweep-step", type=float, default=6)
     parser.add_argument("--gain", type=float, default=28.0)
