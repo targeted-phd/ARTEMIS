@@ -438,3 +438,35 @@ Traceback (most recent call last):
   File "/home/tyler/projects/rf-monitor/sentinel.py", line 31, in <module>
     from scipy import stats as sp_stats
 ModuleNotFoundError: No module named 'scipy'
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 31, in <module>
+    from scipy import stats as sp_stats
+ModuleNotFoundError: No module named 'scipy'
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 31, in <module>
+    from scipy import stats as sp_stats
+ModuleNotFoundError: No module named 'scipy'
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 31, in <module>
+    from scipy import stats as sp_stats
+ModuleNotFoundError: No module named 'scipy'
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 31, in <module>
+    from scipy import stats as sp_stats
+ModuleNotFoundError: No module named 'scipy'
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 31, in <module>
+    from scipy import stats as sp_stats
+ModuleNotFoundError: No module named 'scipy'
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 31, in <module>
+    from scipy import stats as sp_stats
+ModuleNotFoundError: No module named 'scipy'
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 31, in <module>
+    from scipy import stats as sp_stats
+ModuleNotFoundError: No module named 'scipy'
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 31, in <module>
+    from scipy import stats as sp_stats
+ModuleNotFoundError: No module named 'scipy'
