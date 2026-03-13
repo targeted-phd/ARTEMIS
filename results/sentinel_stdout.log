@@ -15870,3 +15870,56 @@
   │  834 MHz: kurt=20.9 (range 8.5–38.3)  total_pulses=1751
   │  878 MHz: kurt=12.8 (range 6.7–21.4)  total_pulses=2032
   ├─ SWEEP: 
+========================================================================
+  RF SENTINEL — 24h Hardened Run
+  Targets: 826, 828, 830, 832, 834, 878 MHz
+  Sweep: 400–1000 MHz (101 ch)
+  Stare: 5 pairs/cycle @ 200ms
+  Duration: 277777.8h  |  Gain: 28.0dB
+  IQ budget: 2000 MB  |  Disk free: 27302 MB
+  Log: results/sentinel_20260313_17.jsonl (rotates hourly)
+  Checkpoint: results/sentinel_checkpoint.json
+  Started: 2026-03-13 17:00:02
+========================================================================
+
+  [RESUME] Found checkpoint, loading baseline...
+  [RESUME] Baseline loaded (101 channels), resuming from cycle 1255
+  [INIT] Target baseline kurtosis:
+    826 MHz: baseline=52.83
+    828 MHz: no data
+    830 MHz: no data
+    832 MHz: baseline=16.45  initial=75.16
+    834 MHz: no data
+    878 MHz: no data
+
+  [17:00:46] CYCLE 1256  (0.00h / 277778h)
+  ├─ STARE:
+  │  826 MHz: kurt=30.9 (range 5.7–59.0)  total_pulses=1100
+  │  828 MHz: kurt=23.0 (range 8.2–48.0)  total_pulses=608
+  │  830 MHz: kurt=11.2 (range 8.3–15.5)  total_pulses=319
+  │  832 MHz: kurt=14.1 (range 8.0–27.2)  total_pulses=1036
+  │  834 MHz: kurt=28.3 (range 13.5–64.4)  total_pulses=4644
+  │  878 MHz: kurt=8.9 (range 3.3–12.0)  total_pulses=726
+  ├─ SWEEP: 34 channels scanned
+  └─ cycle time: 81.1s
+
+  [17:02:03] CYCLE 1257  (0.02h / 277778h)
+  ├─ STARE:
+  │  826 MHz: kurt=30.8 (range 8.5–113.5)  total_pulses=478
+  │  828 MHz: kurt=8.5 (range 8.4–8.7)  total_pulses=0
+  │  830 MHz: kurt=9.1 (range 8.5–10.0)  total_pulses=105
+  │  832 MHz: kurt=12.6 (range 8.5–28.8)  total_pulses=525
+  │  834 MHz: kurt=23.1 (range 8.3–50.4)  total_pulses=861
+  │  878 MHz: kurt=15.4 (range 6.0–22.2)  total_pulses=2221
+  ├─ SWEEP: 34 channels scanned
+  └─ cycle time: 80.0s
+
+  [17:03:25] CYCLE 1258  (0.04h / 277778h)
+  ├─ STARE:
+  │  826 MHz: kurt=28.9 (range 11.9–48.0)  total_pulses=943
+  │  828 MHz: kurt=8.4 (range 8.0–8.6)  total_pulses=35
+  │  830 MHz: kurt=33.4 (range 8.1–90.5)  total_pulses=771
+  │  832 MHz: kurt=49.5 (range 20.6–84.6)  total_pulses=1504
+  │  834 MHz: kurt=59.8 (range 16.1–129.1)  total_pulses=2198
+  │  878 MHz: kurt=10.8 (range 7.7–13.5)  total_pulses=883
+  ├─ SWEEP: 
