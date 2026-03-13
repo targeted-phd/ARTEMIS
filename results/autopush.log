@@ -13,3 +13,24 @@ Locking support detected on remote "origin". Consider enabling it with:
   $ git config lfs.https://github-artemis/targeted-phd/ARTEMIS.git/info/lfs.locksverify true
 To github-artemis:targeted-phd/ARTEMIS.git
    e36127c..feeeb1d  main -> main
+[main 29b04f7] auto: 2026-03-13 17:00 snapshot
+ 18 files changed, 135 insertions(+), 1 deletion(-)
+ create mode 100644 captures/live_826MHz_165411.iq
+ create mode 100644 captures/live_826MHz_165433.iq
+ create mode 100644 captures/live_826MHz_165435.iq
+ create mode 100644 captures/live_826MHz_165437.iq
+ create mode 100644 captures/live_828MHz_165414.iq
+ create mode 100644 captures/live_830MHz_165416.iq
+ create mode 100644 captures/live_830MHz_165426.iq
+ create mode 100644 captures/live_830MHz_165428.iq
+ create mode 100644 captures/live_830MHz_165431.iq
+ create mode 100644 captures/live_832MHz_165419.iq
+ create mode 100644 captures/live_832MHz_165440.iq
+ create mode 100644 captures/live_832MHz_165442.iq
+ create mode 100644 captures/live_832MHz_165444.iq
+ create mode 100644 captures/live_834MHz_165421.iq
+ create mode 100644 captures/live_878MHz_165423.iq
+Locking support detected on remote "origin". Consider enabling it with:
+  $ git config lfs.https://github-artemis/targeted-phd/ARTEMIS.git/info/lfs.locksverify true
+To github-artemis:targeted-phd/ARTEMIS.git
+   8c76f91..29b04f7  main -> main
