@@ -31638,4 +31638,173 @@
   │  832 MHz: no data
   │  834 MHz: no data
   │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 5.1s
+
+────────────────────────────────────────────────────────────────────────
+  HOURLY SUMMARY — hour ending 15:00
+  Cycles: 19  |  Errors: 526
+    826 MHz: kurt mean=32.0 range=21.4–38.3 pulses=1896
+    828 MHz: kurt mean=48.9 range=48.9–48.9 pulses=888
+    830 MHz: kurt mean=14.2 range=14.2–14.2 pulses=199
+    832 MHz: kurt mean=31.6 range=29.8–33.3 pulses=1191
+    834 MHz: kurt mean=14.8 range=14.8–14.8 pulses=407
+    878 MHz: kurt mean=15.3 range=4.3–26.7 pulses=2732
+  IQ captures: 2937 MB / 10000 MB budget
+  Disk free: 24638 MB
+────────────────────────────────────────────────────────────────────────
+
+  [LOG] Rotated to results/sentinel_20260313_15.jsonl
+
+  [15:00:02] CYCLE 1198  (0.02h / 720h)
+  ├─ STARE:
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 3.5s
+
+  [15:00:07] CYCLE 1199  (0.02h / 720h)
+  ├─ STARE:
+  │  826 MHz: no data
+  │  828 MHz: kurt=30.0 (range 30.0–30.0)  total_pulses=687
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 0 channels scanned
+  └─ cycle time: 3.9s
+
+  [15:00:11] CYCLE 1200  (0.02h / 720h)
+  ├─ STARE:
+  │  826 MHz: no data
+  │  828 MHz: kurt=32.0 (range 32.0–32.0)  total_pulses=600
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 5.3s
+
+  [15:00:15] CYCLE 1201  (0.03h / 720h)
+  ├─ STARE:
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 4.1s
+
+  [15:00:21] CYCLE 1202  (0.03h / 720h)
+  ├─ STARE:
+  │  826 MHz: no data
+  │  828 MHz: kurt=10.9 (range 10.9–10.9)  total_pulses=44
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 0 channels scanned
+  └─ cycle time: 3.8s
+
+  [15:00:25] CYCLE 1203  (0.03h / 720h)
+  ├─ STARE:
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: kurt=41.4 (range 41.4–41.4)  total_pulses=796
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.3s
+
+  [15:00:32] CYCLE 1204  (0.03h / 720h)
+  ├─ STARE:
+  │  826 MHz: no data
+  │  828 MHz: kurt=12.5 (range 12.5–12.5)  total_pulses=178
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 0 channels scanned
+  └─ cycle time: 4.2s
+
+  [15:00:36] CYCLE 1205  (0.03h / 720h)
+  ├─ STARE:
+  │  826 MHz: no data
+  │  828 MHz: kurt=29.9 (range 29.9–29.9)  total_pulses=536
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 0 channels scanned
+  └─ cycle time: 3.5s
+
+  [15:00:39] CYCLE 1206  (0.03h / 720h)
+  ├─ STARE:
+  │  826 MHz: kurt=16.8 (range 16.8–16.8)  total_pulses=292
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 5.2s
+
+  [15:00:43] CYCLE 1207  (0.03h / 720h)
+  ├─ STARE:
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 3.4s
+
+  [15:00:48] CYCLE 1208  (0.03h / 720h)
+  ├─ STARE:
+  │  826 MHz: no data
+  │  828 MHz: kurt=52.5 (range 52.5–52.5)  total_pulses=1049
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 0 channels scanned
+  └─ cycle time: 3.4s
+
+  [15:00:51] CYCLE 1209  (0.03h / 720h)
+  ├─ STARE:
+  │  826 MHz: no data
+  │  828 MHz: kurt=44.0 (range 44.0–44.0)  total_pulses=708
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 0 channels scanned
+  └─ cycle time: 3.4s
+
+  [15:00:55] CYCLE 1210  (0.04h / 720h)
+  ├─ STARE:
+  │  826 MHz: no data
+  │  828 MHz: kurt=24.6 (range 24.6–24.6)  total_pulses=531
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 5.1s
+
+  [15:01:00] CYCLE 1211  (0.04h / 720h)
+  ├─ STARE:
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: kurt=28.0 (range 28.0–28.0)  total_pulses=498
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
   ├─ SWEEP: 
