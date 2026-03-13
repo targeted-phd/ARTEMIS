@@ -1,0 +1,46 @@
+# RF Monitor — Docker dependencies
+# torch installed separately in Dockerfile for layer caching
+
+# Core scientific
+numpy
+scipy
+matplotlib
+scikit-learn
+pandas
+
+# Neo4j knowledge graph
+neo4j
+
+# HTTP / API
+requests
+beautifulsoup4
+
+# PDF extraction
+grobid-client-python
+PyMuPDF
+pypdfium2
+pytesseract
+
+# NLP / ML (torch installed in Dockerfile)
+transformers
+tokenizers
+accelerate
+safetensors
+
+# Document processing
+lxml
+jsonlines
+
+# Utilities
+tqdm
+rich
+pydantic
+pydantic-settings
+python-dateutil
+python-dotenv
+PyYAML
+psutil
+tabulate
+dateparser
+regex
+typer

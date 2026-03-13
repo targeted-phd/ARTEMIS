@@ -34,9 +34,10 @@ SAMPLE_RATE = 2_400_000
 SETTLE_SAMPLES = 48_000
 DC_NOTCH_BINS = 32
 MIN_PULSE_SAMPLES = 3
-RESULTS_DIR = "results"
-IQ_DUMP_DIR = "captures"
-CHECKPOINT_FILE = "results/sentinel_checkpoint.json"
+RESULTS_DIR = os.environ.get("RESULTS_DIR", "results")
+IQ_DUMP_DIR = os.environ.get("IQ_DUMP_DIR", "captures")
+CHECKPOINT_FILE = os.environ.get("CHECKPOINT_FILE",
+                                 os.path.join(RESULTS_DIR, "sentinel_checkpoint.json"))
 
 Path(RESULTS_DIR).mkdir(exist_ok=True)
 Path(IQ_DUMP_DIR).mkdir(exist_ok=True)

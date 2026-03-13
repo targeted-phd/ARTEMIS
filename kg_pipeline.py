@@ -41,12 +41,13 @@ import requests
 
 # ─── Config ───────────────────────────────────────────────────────────────────
 
-PDF_ROOT = os.path.expanduser("~/projects/targeted-knowledge-graph")
-OUTPUT_DIR = "results/knowledge_graph_v2"
-GROBID_URL = "http://localhost:8070"
-NEO4J_URL = "bolt://localhost:7687"
-NEO4J_AUTH = ("neo4j", "rfmonitor2026")
-OLLAMA_URL = "http://localhost:11434"
+PDF_ROOT = os.environ.get("PDF_ROOT", os.path.expanduser("~/projects/targeted-knowledge-graph"))
+OUTPUT_DIR = os.environ.get("KG_OUTPUT_DIR", "results/knowledge_graph_v2")
+GROBID_URL = os.environ.get("GROBID_URL", "http://localhost:8070")
+NEO4J_URL = os.environ.get("NEO4J_URI", "bolt://localhost:7687")
+NEO4J_AUTH = (os.environ.get("NEO4J_USER", "neo4j"),
+              os.environ.get("NEO4J_PASSWORD", "rfmonitor2026"))
+OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
 # Embedding model priority: qwen3-embedding (2048d) > mxbai-embed-large (1024d) > nomic-embed-text (768d)
 EMBED_MODEL = "mxbai-embed-large"     # Upgrade to qwen3-embedding when available
 EMBED_DIM = 1024                       # Must match model output dimensions

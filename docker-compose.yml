@@ -1,0 +1,135 @@
+version: "3.8"
+
+services:
+  # ── RF Sentinel (SDR monitor) ───────────────────────────────────────
+  # Always-on, auto-restarts, USB passthrough for RTL-SDR
+  sentinel:
+    build: .
+    container_name: rf-sentinel
+    restart: always
+    privileged: true
+    command: >
+      sentinel.py
+        --targets ${SENTINEL_TARGETS:-826,828,830,832,834,878}
+        --sweep-start ${SENTINEL_SWEEP_START:-400}
+        --sweep-stop ${SENTINEL_SWEEP_STOP:-1000}
+        --sweep-step ${SENTINEL_SWEEP_STEP:-6}
+        --gain ${SENTINEL_GAIN:-28.0}
+        --stare-dwell ${SENTINEL_STARE_DWELL:-200}
+        --sweep-dwell ${SENTINEL_SWEEP_DWELL:-100}
+        --stare-pairs ${SENTINEL_STARE_PAIRS:-5}
+        --duration ${SENTINEL_DURATION:-2592000}
+        --iq-budget-mb ${SENTINEL_IQ_BUDGET_MB:-10000}
+    working_dir: /data
+    volumes:
+      - ./results:/data/results
+      - ./captures:/data/captures
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
+    env_file: .env
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "10"
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+
+  # ── Neo4j Knowledge Graph ───────────────────────────────────────────
+  neo4j:
+    image: neo4j:community
+    container_name: rf-neo4j
+    restart: always
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      NEO4J_AUTH: "${NEO4J_USER:-neo4j}/${NEO4J_PASSWORD:-rfmonitor2026}"
+      NEO4J_PLUGINS: '[]'
+      NEO4J_server_memory_heap_initial__size: "512m"
+      NEO4J_server_memory_heap_max__size: "2g"
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+    healthcheck:
+      test: ["CMD-SHELL", "cypher-shell -u neo4j -p ${NEO4J_PASSWORD:-rfmonitor2026} 'RETURN 1' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # ── GROBID (PDF extraction) ─────────────────────────────────────────
+  grobid:
+    image: lfoppiano/grobid:0.8.2
+    container_name: rf-grobid
+    restart: unless-stopped
+    ports:
+      - "8070:8070"
+    environment:
+      JAVA_OPTS: "-Xms2g -Xmx8g"
+    deploy:
+      resources:
+        limits:
+          memory: 10G
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8070/api/isalive"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+
+  # ── KG Pipeline (on-demand: docker compose --profile kg up kg-pipeline) ─
+  kg-pipeline:
+    build: .
+    container_name: rf-kg-pipeline
+    profiles: ["kg"]
+    command: kg_pipeline.py
+    working_dir: /data
+    volumes:
+      - ./results:/data/results
+      - kg_output:/data/results/knowledge_graph_v2
+      - ${HOME}/projects/targeted-knowledge-graph:/data/papers:ro
+    env_file: .env
+    depends_on:
+      neo4j:
+        condition: service_healthy
+      grobid:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+
+  # ── Analysis tools (on-demand: docker compose run analyze <script.py>) ─
+  analyze:
+    build: .
+    container_name: rf-analyze
+    profiles: ["analyze"]
+    command: generate_report.py
+    working_dir: /data
+    volumes:
+      - ./results:/data/results:ro
+      - ./captures:/data/captures:ro
+    env_file: .env
+
+  # ── Integrity verifier (docker compose --profile hash up hasher) ────
+  hasher:
+    build: .
+    container_name: rf-hasher
+    profiles: ["hash"]
+    entrypoint: ["python"]
+    command: ["/app/verify_integrity.py", "--results-dir", "/data/results", "--generate-manifest"]
+    volumes:
+      - ./results:/data/results
+    env_file: .env
+
+volumes:
+  neo4j_data:
+  neo4j_logs:
+  kg_output:
