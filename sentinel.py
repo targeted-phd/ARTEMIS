@@ -38,6 +38,8 @@ RESULTS_DIR = os.environ.get("RESULTS_DIR", "results")
 IQ_DUMP_DIR = os.environ.get("IQ_DUMP_DIR", "captures")
 CHECKPOINT_FILE = os.environ.get("CHECKPOINT_FILE",
                                  os.path.join(RESULTS_DIR, "sentinel_checkpoint.json"))
+NTFY_URL = os.environ.get("NTFY_URL", "http://100.96.113.92:8090/artemis-alerts")
+TAG_URL = os.environ.get("TAG_URL", "http://100.96.113.92:8091/tag")
 
 Path(RESULTS_DIR).mkdir(exist_ok=True)
 Path(IQ_DUMP_DIR).mkdir(exist_ok=True)
@@ -46,6 +48,35 @@ _stop = False
 
 
 # ── IO helpers ──────────────────────────────────────────────────────────────
+
+def ntfy_push(level, max_kurt, active_freqs, cycle_num):
+    """Push alert to ntfy with symptom tagging action buttons."""
+    try:
+        icons = {"detect": "🟢", "high": "🟡", "critical": "🔴"}
+        priorities = {"detect": "default", "high": "high", "critical": "urgent"}
+        icon = icons.get(level, "⚪")
+        freq_str = ", ".join(f"{f:.0f}" for f in sorted(active_freqs)[:6])
+        title = f"{icon} {level.upper()} — {len(active_freqs)} freqs active"
+        body = (f"max_kurt={max_kurt:.0f} | freqs: {freq_str}\n"
+                f"cycle {cycle_num} @ {datetime.now().strftime('%H:%M:%S')}")
+
+        # ntfy action buttons for symptom tagging
+        actions = (
+            f"http, 🗣️ Speech, {TAG_URL}?s=speech, method=POST, clear=true; "
+            f"http, ⚡ Paresthesia, {TAG_URL}?s=paresthesia, method=POST, clear=true; "
+            f"http, 🤕 Headache, {TAG_URL}?s=headache, method=POST, clear=true; "
+            f"http, ✅ Clear, {TAG_URL}?s=clear, method=POST, clear=true"
+        )
+
+        requests.post(NTFY_URL, data=body.encode(), headers={
+            "Title": title,
+            "Priority": priorities.get(level, "default"),
+            "Tags": f"artemis,{level}",
+            "Actions": actions,
+        }, timeout=3)
+    except Exception:
+        pass  # never let ntfy failure block sentinel
+
 
 def _generate_tone(freq_hz=800, duration_ms=200, sample_rate=44100):
     """Generate a raw PCM tone as bytes (signed 16-bit LE, mono)."""
@@ -445,14 +476,17 @@ def run_sentinel(target_freqs_mhz, sweep_start, sweep_stop, sweep_step,
 
             if max_kurt > 200 or n_active_freqs >= 6:
                 alert_sound("critical")
+                ntfy_push("critical", max_kurt, active_freqs, cycle + cycle_offset)
                 print(f"  │  🔴 CRITICAL: max_kurt={max_kurt:.0f} "
                       f"active_freqs={n_active_freqs}")
             elif max_kurt > 80 or n_active_freqs >= 4:
                 alert_sound("high")
+                ntfy_push("high", max_kurt, active_freqs, cycle + cycle_offset)
                 print(f"  │  🟡 HIGH: max_kurt={max_kurt:.0f} "
                       f"active_freqs={n_active_freqs}")
             elif max_kurt > 30 or n_active_freqs >= 2:
                 alert_sound("detect")
+                ntfy_push("detect", max_kurt, active_freqs, cycle + cycle_offset)
                 print(f"  │  🟢 DETECT: max_kurt={max_kurt:.0f} "
                       f"active_freqs={n_active_freqs}")
 
