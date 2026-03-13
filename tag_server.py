@@ -15,6 +15,7 @@ import json
 import os
 import subprocess
 import sys
+import time
 from datetime import datetime, timezone
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
@@ -46,14 +47,75 @@ def get_tailscale_ip():
     return "127.0.0.1"
 
 
+def get_latest_sentinel_context():
+    """Read the most recent sentinel cycle and extract RF context for correlation."""
+    try:
+        # Find latest sentinel log
+        import glob
+        logs = sorted(glob.glob(f"{RESULTS_DIR}/sentinel_*.jsonl"))
+        if not logs:
+            return None
+        with open(logs[-1]) as f:
+            lines = f.readlines()
+        if not lines:
+            return None
+        cycle = json.loads(lines[-1])
+
+        # Extract per-frequency summary
+        freq_summary = {}
+        max_kurt = 0
+        active_freqs = []
+        for freq_str, readings in cycle.get("stare", {}).items():
+            for r in readings:
+                k = r.get("kurtosis", 0)
+                if k > max_kurt:
+                    max_kurt = k
+                fmhz = r.get("freq_mhz", r.get("nominal_freq_mhz", freq_str))
+                key = str(fmhz)
+                if key not in freq_summary or r.get("kurtosis", 0) > freq_summary[key].get("max_kurt", 0):
+                    freq_summary[key] = {
+                        "max_kurt": round(r.get("kurtosis", 0), 1),
+                        "pulses": r.get("pulse_count", 0),
+                        "pwr_db": r.get("mean_pwr_db", 0),
+                        "papr_db": r.get("papr_db", 0),
+                    }
+                if k > 20 and fmhz not in active_freqs:
+                    active_freqs.append(fmhz)
+
+        return {
+            "cycle": cycle.get("cycle"),
+            "cycle_ts": cycle.get("timestamp"),
+            "max_kurt": round(max_kurt, 1),
+            "active_freqs": sorted(active_freqs),
+            "n_active": len(active_freqs),
+            "freq_summary": freq_summary,
+        }
+    except Exception:
+        return None
+
+
+_last_tag = {"symptom": None, "time": 0}
+DEDUP_WINDOW_S = 30  # ignore same symptom within 30 seconds
+
+
 def log_symptom(symptom, note="", alert_data=None):
-    """Append symptom entry to JSONL log."""
+    """Append symptom entry with RF context to JSONL log.
+    Deduplicates: same symptom within 30s is ignored."""
+    now = time.time()
+    if symptom == _last_tag["symptom"] and (now - _last_tag["time"]) < DEDUP_WINDOW_S:
+        return None  # duplicate, skip
+    _last_tag["symptom"] = symptom
+    _last_tag["time"] = now
+
+    rf_context = get_latest_sentinel_context()
     entry = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "symptom": symptom,
         "note": note,
         "reporter": "subject",
     }
+    if rf_context:
+        entry["rf_context"] = rf_context
     if alert_data:
         entry["alert_data"] = alert_data
     line = json.dumps(entry)
@@ -93,6 +155,13 @@ class TagHandler(BaseHTTPRequestHandler):
                 return
 
             entry = log_symptom(symptom, note)
+            if entry is None:
+                # Duplicate within dedup window
+                self.send_response(200)
+                self.send_header("Access-Control-Allow-Origin", "*")
+                self.end_headers()
+                self.wfile.write(b'{"status":"dedup"}')
+                return
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.send_header("Access-Control-Allow-Origin", "*")

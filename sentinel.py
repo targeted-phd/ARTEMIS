@@ -50,30 +50,28 @@ _stop = False
 # ── IO helpers ──────────────────────────────────────────────────────────────
 
 def ntfy_push(level, max_kurt, active_freqs, cycle_num):
-    """Push alert to ntfy with symptom tagging action buttons."""
+    """Push alert to ntfy with symptom tagging action buttons.
+    Uses subprocess curl because requests lib can't handle emoji in headers."""
     try:
-        icons = {"detect": "🟢", "high": "🟡", "critical": "🔴"}
         priorities = {"detect": "default", "high": "high", "critical": "urgent"}
-        icon = icons.get(level, "⚪")
+        labels = {"detect": "DETECT", "high": "HIGH", "critical": "CRITICAL"}
         freq_str = ", ".join(f"{f:.0f}" for f in sorted(active_freqs)[:6])
-        title = f"{icon} {level.upper()} — {len(active_freqs)} freqs active"
+        title = f"{labels.get(level, level)} — {len(active_freqs)} freqs active"
         body = (f"max_kurt={max_kurt:.0f} | freqs: {freq_str}\n"
                 f"cycle {cycle_num} @ {datetime.now().strftime('%H:%M:%S')}")
-
-        # ntfy action buttons for symptom tagging
         actions = (
-            f"http, 🗣️ Speech, {TAG_URL}?s=speech, method=POST, clear=true; "
-            f"http, ⚡ Paresthesia, {TAG_URL}?s=paresthesia, method=POST, clear=true; "
-            f"http, 🤕 Headache, {TAG_URL}?s=headache, method=POST, clear=true; "
-            f"http, ✅ Clear, {TAG_URL}?s=clear, method=POST, clear=true"
+            f"http, Speech, {TAG_URL}?s=speech, method=POST, clear=true; "
+            f"http, Paresthesia, {TAG_URL}?s=paresthesia, method=POST, clear=true; "
+            f"http, Headache, {TAG_URL}?s=headache, method=POST, clear=true"
         )
-
-        requests.post(NTFY_URL, data=body.encode(), headers={
-            "Title": title,
-            "Priority": priorities.get(level, "default"),
-            "Tags": f"artemis,{level}",
-            "Actions": actions,
-        }, timeout=3)
+        subprocess.Popen([
+            "curl", "-s", "-X", "POST", NTFY_URL,
+            "-H", f"Title: {title}",
+            "-H", f"Priority: {priorities.get(level, 'default')}",
+            "-H", f"Tags: artemis,{level}",
+            "-H", f"Actions: {actions}",
+            "-d", body,
+        ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     except Exception:
         pass  # never let ntfy failure block sentinel
 
