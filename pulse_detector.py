@@ -43,6 +43,33 @@ IQ_DUMP_DIR = "captures"
 RESULTS_DIR = "results"
 LOG_FILE = "pulse_scan.jsonl"
 
+# ── STA/LTA parameters (from KG: infrasound array detection literature) ────
+# Brown et al. (2008) Hough transform infrasound detection
+# Cansi et al. PMCC algorithm — detection threshold SNR 0.15-0.5
+STA_WINDOW_MS = 1.0               # Short-term average window (1 ms = 2400 samples)
+LTA_WINDOW_MS = 50.0              # Long-term average window (50 ms = 120000 samples)
+STA_LTA_TRIGGER = 3.0             # Trigger threshold (ratio > 3 = signal onset)
+STA_LTA_DETRIGGER = 1.5           # Detrigger threshold
+
+# ── Infrasound / acoustic detection thresholds (from KG literature) ────────
+# Phase 4 microphone array baseline — values from KG papers
+INFRASOUND_THRESHOLDS = {
+    # From "Detection Thresholds for Combined IS and AS Stimuli"
+    # and "Activation in human auditory cortex..." (2020)
+    "8_hz_dB_SPL": 104,           # Detection threshold at 8 Hz
+    "32_hz_dB_SPL": 72,           # Detection threshold at 32 Hz
+    # From "Analyzing detection capability of infrasound arrays"
+    # E_min = 8.19e8 × P_threshold^1.42 × R² × 10^(0.026×V_s)
+    "pmcc_snr_min": 0.15,         # PMCC minimum detectable SNR
+    "pmcc_snr_reliable": 0.5,     # PMCC reliable detection SNR
+    # From KG MAE papers — RF perception thresholds
+    "mae_sar_threshold_kW_kg": 1.6,        # Single pulse perception
+    "mae_energy_density_J_m2": (0.02, 0.4), # Energy density range
+    "mae_optimal_pulse_us": 50,             # Optimal pulse width
+    "mae_freq_range_mhz": (450, 3000),      # Effective frequency range
+    "skull_resonance_hz": (7000, 10000),     # Skull acoustic resonance
+}
+
 
 class PulseDetector:
     def __init__(self, sample_rate=SAMPLE_RATE, gain=GAIN, dwell_ms=DWELL_MS,
@@ -108,6 +135,55 @@ class PulseDetector:
 
     # ── Analysis ────────────────────────────────────────────────────────────
 
+    def _compute_sta_lta(self, pwr):
+        """
+        STA/LTA ratio — Short-Term-Average / Long-Term-Average energy detector.
+
+        From KG literature (Brown et al. 2008, PMCC algorithm):
+        Signal onset triggers when STA/LTA > threshold.
+        Standard technique in seismology and infrasound detection.
+
+        Returns: max STA/LTA ratio, number of triggers, trigger sample indices.
+        """
+        sta_len = max(1, int(self.sample_rate * STA_WINDOW_MS / 1000))
+        lta_len = max(sta_len + 1, int(self.sample_rate * LTA_WINDOW_MS / 1000))
+
+        if len(pwr) < lta_len + sta_len:
+            return 0.0, 0, []
+
+        # Cumulative sum for efficient windowed averages
+        cumsum = np.cumsum(pwr)
+        cumsum = np.insert(cumsum, 0, 0)
+
+        # STA and LTA as sliding window averages
+        n = len(pwr)
+        sta_start = lta_len
+        n_points = n - sta_start - sta_len + 1
+        if n_points <= 0:
+            return 0.0, 0, []
+
+        idx = np.arange(sta_start, sta_start + n_points)
+        sta = (cumsum[idx + sta_len] - cumsum[idx]) / sta_len
+        lta = (cumsum[idx] - cumsum[idx - lta_len]) / lta_len
+
+        # Avoid division by zero
+        lta_safe = np.maximum(lta, 1e-20)
+        ratio = sta / lta_safe
+
+        max_ratio = float(np.max(ratio))
+
+        # Find triggers (crossings above threshold)
+        triggers = []
+        triggered = False
+        for i in range(len(ratio)):
+            if not triggered and ratio[i] > STA_LTA_TRIGGER:
+                triggered = True
+                triggers.append(int(idx[i]))
+            elif triggered and ratio[i] < STA_LTA_DETRIGGER:
+                triggered = False
+
+        return max_ratio, len(triggers), triggers
+
     def _analyze(self, iq, freq_hz):
         """Compute statistical measures on IQ capture."""
         amp = np.abs(iq)
@@ -123,6 +199,9 @@ class PulseDetector:
 
         # Mean power (relative dB)
         mean_pwr_db = float(10 * np.log10(avg_pwr)) if avg_pwr > 0 else -999.0
+
+        # STA/LTA ratio (from KG: infrasound array literature)
+        sta_lta_max, sta_lta_triggers, trigger_offsets = self._compute_sta_lta(pwr)
 
         # Pulse detection: contiguous runs of samples > threshold
         sigma = np.std(amp)
@@ -166,6 +245,8 @@ class PulseDetector:
             "papr_db": round(papr_db, 2),
             "mean_pwr_db": round(mean_pwr_db, 2),
             "spectral_flatness": round(spectral_flatness, 4),
+            "sta_lta_max": round(sta_lta_max, 3),
+            "sta_lta_triggers": sta_lta_triggers,
             "pulse_count": len(pulses),
             "pulses": pulses[:25],
             "n_samples": len(iq),
@@ -182,6 +263,7 @@ class PulseDetector:
         kurtosis_vals = []
         papr_vals = []
         flatness_vals = []
+        sta_lta_vals = []
 
         for i, freq in enumerate(freqs):
             if self._stop:
@@ -198,6 +280,7 @@ class PulseDetector:
             kurtosis_vals.append(r["kurtosis"])
             papr_vals.append(r["papr_db"])
             flatness_vals.append(r["spectral_flatness"])
+            sta_lta_vals.append(r["sta_lta_max"])
 
         if len(kurtosis_vals) < 3:
             print("\n  [!] Not enough data to calibrate. Aborting.")
@@ -207,6 +290,7 @@ class PulseDetector:
         k_arr = np.array(kurtosis_vals)
         p_arr = np.array(papr_vals)
         f_arr = np.array(flatness_vals)
+        sl_arr = np.array(sta_lta_vals)
 
         k_med = float(np.median(k_arr))
         k_mad = float(np.median(np.abs(k_arr - k_med)))
@@ -220,6 +304,10 @@ class PulseDetector:
         f_mad = float(np.median(np.abs(f_arr - f_med)))
         f_sigma = f_mad * 1.4826
 
+        sl_med = float(np.median(sl_arr))
+        sl_mad = float(np.median(np.abs(sl_arr - sl_med)))
+        sl_sigma = sl_mad * 1.4826
+
         self._baseline = {
             "kurtosis_median": k_med,
             "kurtosis_sigma": max(k_sigma, 0.01),  # floor to prevent div/0
@@ -227,6 +315,8 @@ class PulseDetector:
             "papr_sigma": max(p_sigma, 0.01),
             "flatness_median": f_med,
             "flatness_sigma": max(f_sigma, 0.001),
+            "sta_lta_median": sl_med,
+            "sta_lta_sigma": max(sl_sigma, 0.01),
             "n_channels": len(kurtosis_vals),
         }
 
@@ -237,6 +327,8 @@ class PulseDetector:
               f"  (flag > {p_med + self.outlier_sigma * p_sigma:.2f}dB)")
         print(f"    Flatness:  median={f_med:.4f}  σ={f_sigma:.4f}"
               f"  (flag < {f_med - self.outlier_sigma * f_sigma:.4f})")
+        print(f"    STA/LTA:   median={sl_med:.3f}  σ={sl_sigma:.3f}"
+              f"  (flag > {sl_med + self.outlier_sigma * sl_sigma:.3f})")
         print()
 
         return self._baseline
@@ -266,13 +358,19 @@ class PulseDetector:
         if f_z > self.outlier_sigma:
             reasons.append(f"flatness -{f_z:.1f}σ ({result['spectral_flatness']:.4f})")
 
+        # STA/LTA trigger (signal onset detection — from KG infrasound literature)
+        sta_lta = result.get("sta_lta_max", 0)
+        sta_lta_sigma = b.get("sta_lta_sigma", 1.0)
+        sta_lta_median = b.get("sta_lta_median", 1.0)
+        if sta_lta_sigma > 0:
+            sl_z = (sta_lta - sta_lta_median) / sta_lta_sigma
+            if sl_z > self.outlier_sigma:
+                reasons.append(f"STA/LTA +{sl_z:.1f}σ ({sta_lta:.2f}, "
+                             f"{result.get('sta_lta_triggers', 0)} triggers)")
+
         # real multi-sample pulses detected
         if result["pulse_count"] > 0:
             reasons.append(f"{result['pulse_count']} pulses (≥{self.min_pulse_samples} samples)")
-
-        # elevated mean power vs band median (strong signal)
-        # We check this relative to neighbors, but a rough +10dB flag is useful
-        # (this is supplementary, not primary)
 
         return len(reasons) > 0, reasons
 
@@ -367,7 +465,8 @@ class PulseDetector:
                     f"kurt={result['kurtosis']:.2f}  "
                     f"papr={result['papr_db']:.1f}dB  "
                     f"pwr={result['mean_pwr_db']:.1f}dB  "
-                    f"flat={result['spectral_flatness']:.3f}"
+                    f"flat={result['spectral_flatness']:.3f}  "
+                    f"sl={result['sta_lta_max']:.1f}"
                 )
             print()
 

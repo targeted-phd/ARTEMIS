@@ -274,10 +274,10 @@ def plot_kurtosis_heatmap(stare_data: dict, output_dir: Path):
     vmax_data = np.nanpercentile(grid, 98) if not np.all(np.isnan(grid)) else 100
     vmax = max(vmax_data, vmin + 10)
 
-    im = ax.pcolormesh(bin_centers,
+    im = ax.pcolormesh(bin_edges,
                        np.arange(len(TARGET_FREQS) + 1) - 0.5,
                        grid,
-                       cmap="inferno", vmin=vmin, vmax=vmax, shading="auto")
+                       cmap="inferno", vmin=vmin, vmax=vmax, shading="flat")
 
     ax.set_yticks(range(len(TARGET_FREQS)))
     ax.set_yticklabels([f"{f:.0f}" for f in TARGET_FREQS], fontsize=9)

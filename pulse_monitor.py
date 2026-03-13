@@ -22,6 +22,7 @@ from pathlib import Path
 
 import numpy as np
 from scipy import stats as sp_stats
+from scipy.signal import coherence as sp_coherence, welch, correlate as sp_correlate
 
 SAMPLE_RATE = 2_400_000
 SETTLE_SAMPLES = 48_000       # 20ms settle
@@ -29,6 +30,14 @@ DC_NOTCH_BINS = 32
 MIN_PULSE_SAMPLES = 3
 RESULTS_DIR = "results"
 IQ_DUMP_DIR = "captures"
+
+# ── PMCC parameters (from KG: infrasound array detection literature) ───────
+# Cansi (1995) Progressive Multi-Channel Correlation
+# Brown et al. (2008) Hough transform detection
+COHERENCE_NPERSEG = 4096          # FFT segment length for coherence
+COHERENCE_THRESHOLD = 0.5         # Significant coherence level
+PMCC_WINDOW_S = 0.01             # 10 ms correlation window (sliding)
+PMCC_OVERLAP = 0.5               # 50% overlap between windows
 
 Path(RESULTS_DIR).mkdir(exist_ok=True)
 Path(IQ_DUMP_DIR).mkdir(exist_ok=True)
@@ -228,10 +237,121 @@ def watch(freq_mhz, duration_s, gain, dwell_ms):
     print()
 
 
+# ── PMCC-style coherence analysis (from KG literature) ─────────────────────
+
+def compute_envelope_coherence(iq_a, iq_b, sample_rate=SAMPLE_RATE):
+    """
+    PMCC-inspired coherence analysis between two frequency channels.
+
+    From KG: Cansi (1995) PMCC algorithm, Brown et al. (2008) Hough transform.
+    Adapted for RF: instead of microphone array elements, we use
+    amplitude envelopes from two RF frequency channels.
+
+    Returns coherence metrics: mean coherence, peak coherence,
+    phase consistency, and cross-correlation lag.
+    """
+    amp_a = np.abs(iq_a).astype(np.float64)
+    amp_b = np.abs(iq_b).astype(np.float64)
+
+    # Match lengths
+    n = min(len(amp_a), len(amp_b))
+    amp_a, amp_b = amp_a[:n], amp_b[:n]
+
+    if n < COHERENCE_NPERSEG * 2:
+        return {"mean_coherence": 0.0, "peak_coherence": 0.0,
+                "peak_coherence_hz": 0.0, "xcorr_peak": 0.0,
+                "xcorr_lag_us": 0.0, "phase_consistency": 0.0,
+                "coherent_bw_frac": 0.0}
+
+    # 1. Magnitude-squared coherence (frequency domain)
+    #    C_xy(f) = |P_xy(f)|² / (P_xx(f) · P_yy(f))
+    #    Values near 1.0 = linear relationship at that frequency
+    f_coh, coh = sp_coherence(amp_a, amp_b, fs=sample_rate,
+                               nperseg=COHERENCE_NPERSEG)
+
+    # Skip DC and very low frequencies
+    valid = f_coh > 100  # above 100 Hz
+    if not np.any(valid):
+        valid = f_coh > 0
+
+    coh_valid = coh[valid]
+    f_valid = f_coh[valid]
+
+    mean_coh = float(np.mean(coh_valid))
+    peak_idx = np.argmax(coh_valid)
+    peak_coh = float(coh_valid[peak_idx])
+    peak_coh_hz = float(f_valid[peak_idx])
+
+    # Fraction of bandwidth with significant coherence
+    coherent_bw = float(np.mean(coh_valid > COHERENCE_THRESHOLD))
+
+    # 2. Cross-correlation of envelopes (time domain)
+    #    Measures timing relationship between channels
+    a_norm = (amp_a - np.mean(amp_a)) / (np.std(amp_a) + 1e-10)
+    b_norm = (amp_b - np.mean(amp_b)) / (np.std(amp_b) + 1e-10)
+
+    # Use a window around zero lag (±1 ms)
+    max_lag = int(sample_rate * 0.001)  # 1 ms
+    if max_lag > n // 2:
+        max_lag = n // 2
+
+    xcorr = np.correlate(a_norm[:max_lag * 4], b_norm[:max_lag * 4], mode='full')
+    xcorr /= (len(a_norm[:max_lag * 4]) + 1e-10)
+    mid = len(xcorr) // 2
+    lag_range = xcorr[max(0, mid - max_lag):mid + max_lag + 1]
+
+    if len(lag_range) > 0:
+        peak_xcorr_idx = np.argmax(np.abs(lag_range))
+        xcorr_peak = float(lag_range[peak_xcorr_idx])
+        xcorr_lag_samples = peak_xcorr_idx - len(lag_range) // 2
+        xcorr_lag_us = round(xcorr_lag_samples / sample_rate * 1e6, 2)
+    else:
+        xcorr_peak = 0.0
+        xcorr_lag_us = 0.0
+
+    # 3. Phase consistency (PMCC-style)
+    #    Windowed cross-spectral phase variance
+    win_len = int(PMCC_WINDOW_S * sample_rate)
+    hop = int(win_len * (1 - PMCC_OVERLAP))
+    phases = []
+
+    for start in range(0, n - win_len, hop):
+        seg_a = amp_a[start:start + win_len]
+        seg_b = amp_b[start:start + win_len]
+        # Cross-spectral phase at dominant frequency
+        fft_a = np.fft.rfft(seg_a)
+        fft_b = np.fft.rfft(seg_b)
+        cross = fft_a * np.conj(fft_b)
+        # Phase at peak power frequency
+        power = np.abs(cross)
+        if np.max(power) > 0:
+            dominant_idx = np.argmax(power[1:]) + 1  # skip DC
+            phase = np.angle(cross[dominant_idx])
+            phases.append(phase)
+
+    if len(phases) > 2:
+        # Phase consistency = mean resultant length (0=random, 1=locked)
+        phase_arr = np.array(phases)
+        phase_consistency = float(np.abs(np.mean(np.exp(1j * phase_arr))))
+    else:
+        phase_consistency = 0.0
+
+    return {
+        "mean_coherence": round(mean_coh, 4),
+        "peak_coherence": round(peak_coh, 4),
+        "peak_coherence_hz": round(peak_coh_hz, 1),
+        "xcorr_peak": round(xcorr_peak, 4),
+        "xcorr_lag_us": xcorr_lag_us,
+        "phase_consistency": round(phase_consistency, 4),
+        "coherent_bw_frac": round(coherent_bw, 4),
+    }
+
+
 # ── Correlate mode ──────────────────────────────────────────────────────────
 
 def correlate(freq_a_mhz, freq_b_mhz, duration_s, gain, dwell_ms):
-    """Rapidly alternate between two frequencies, look for coincident pulses."""
+    """Rapidly alternate between two frequencies, look for coincident pulses.
+    Includes PMCC-style coherence analysis from KG literature."""
     freq_a_hz = int(freq_a_mhz * 1e6)
     freq_b_hz = int(freq_b_mhz * 1e6)
     num_samples = int(SAMPLE_RATE * dwell_ms / 1000)
@@ -242,7 +362,7 @@ def correlate(freq_a_mhz, freq_b_mhz, duration_s, gain, dwell_ms):
                 f"_{ts_start.strftime('%Y%m%d_%H%M%S')}.jsonl")
 
     print(f"\n{'='*72}")
-    print(f"  CROSS-BAND CORRELATOR")
+    print(f"  CROSS-BAND CORRELATOR + PMCC COHERENCE")
     print(f"  Freq A: {freq_a_mhz:.3f} MHz  |  Freq B: {freq_b_mhz:.3f} MHz")
     print(f"  Duration: {duration_s}s  |  Dwell: {dwell_ms}ms each  |  Gain: {gain}dB")
     print(f"  Pairs: {n_pairs}  |  Log: {log_file}")
@@ -254,6 +374,7 @@ def correlate(freq_a_mhz, freq_b_mhz, duration_s, gain, dwell_ms):
     a_only = 0
     b_only = 0
     neither = 0
+    coherence_history = []
 
     for i in range(n_pairs):
         if _stop:
@@ -291,6 +412,10 @@ def correlate(freq_a_mhz, freq_b_mhz, duration_s, gain, dwell_ms):
         else:
             neither += 1
 
+        # PMCC-style coherence analysis
+        coh = compute_envelope_coherence(iq_a, iq_b)
+        coherence_history.append(coh)
+
         entry = {
             "pair": i,
             "elapsed_s": round(elapsed, 2),
@@ -301,6 +426,7 @@ def correlate(freq_a_mhz, freq_b_mhz, duration_s, gain, dwell_ms):
             "pulses_a": len(pulses_a),
             "pulses_b": len(pulses_b),
             "coincident": has_a and has_b,
+            "coherence": coh,
             "pulse_details_a": pulses_a[:10],
             "pulse_details_b": pulses_b[:10],
         }
@@ -310,14 +436,16 @@ def correlate(freq_a_mhz, freq_b_mhz, duration_s, gain, dwell_ms):
 
         ts_now = datetime.now().strftime("%H:%M:%S.%f")[:-3]
         marker = "***BOTH***" if (has_a and has_b) else ""
+        coh_str = f"coh={coh['mean_coherence']:.2f}"
         print(f"  {ts_now}  [{elapsed:6.1f}s]  "
               f"A:{len(pulses_a):3d} pulses (k={kurt_a:.1f})  "
-              f"B:{len(pulses_b):3d} pulses (k={kurt_b:.1f})  {marker}")
+              f"B:{len(pulses_b):3d} pulses (k={kurt_b:.1f})  "
+              f"{coh_str}  {marker}")
 
     # ── Summary ──
     total = both_active + a_only + b_only + neither
     print(f"\n{'='*72}")
-    print(f"  CORRELATOR RESULTS — {total} capture pairs")
+    print(f"  CORRELATOR + COHERENCE RESULTS — {total} capture pairs")
     print(f"{'='*72}")
 
     if total > 0:
@@ -328,7 +456,6 @@ def correlate(freq_a_mhz, freq_b_mhz, duration_s, gain, dwell_ms):
         print(f"    Neither:           {neither:4d}  ({neither/total*100:.1f}%)")
 
         # Statistical test for independence
-        # If pulses on A and B are independent, P(both) ≈ P(A) × P(B)
         p_a = (both_active + a_only) / total
         p_b = (both_active + b_only) / total
         expected_both = p_a * p_b * total
@@ -354,6 +481,36 @@ def correlate(freq_a_mhz, freq_b_mhz, duration_s, gain, dwell_ms):
             print(f"\n  Pulse count correlation (Pearson r): {corr:.3f}")
             if abs(corr) > 0.5:
                 print(f"    >>> NOTABLE CORRELATION between A and B pulse activity")
+
+        # PMCC coherence summary
+        if coherence_history:
+            mean_cohs = [c["mean_coherence"] for c in coherence_history]
+            peak_cohs = [c["peak_coherence"] for c in coherence_history]
+            phase_cons = [c["phase_consistency"] for c in coherence_history]
+            xcorr_peaks = [c["xcorr_peak"] for c in coherence_history]
+            bw_fracs = [c["coherent_bw_frac"] for c in coherence_history]
+
+            print(f"\n  PMCC Coherence Analysis (from KG literature):")
+            print(f"    Mean coherence:      {np.mean(mean_cohs):.4f} "
+                  f"(±{np.std(mean_cohs):.4f})")
+            print(f"    Peak coherence:      {np.mean(peak_cohs):.4f} "
+                  f"(±{np.std(peak_cohs):.4f})")
+            print(f"    Phase consistency:   {np.mean(phase_cons):.4f} "
+                  f"(±{np.std(phase_cons):.4f})")
+            print(f"    Cross-correlation:   {np.mean(xcorr_peaks):.4f} "
+                  f"(±{np.std(xcorr_peaks):.4f})")
+            print(f"    Coherent BW frac:    {np.mean(bw_fracs):.4f}")
+
+            # Interpret results
+            mc = np.mean(mean_cohs)
+            pc = np.mean(phase_cons)
+            if mc > 0.3 and pc > 0.5:
+                print(f"    >>> STRONG COHERENCE: signals are phase-locked across bands")
+                print(f"    >>> This suggests a common source or coordinated transmission")
+            elif mc > 0.15 or pc > 0.3:
+                print(f"    >>> WEAK COHERENCE: some shared structure detected")
+            else:
+                print(f"    >>> NO COHERENCE: channels appear independent")
 
     print(f"\n  Full log: {log_file}")
     print()
