@@ -1,0 +1,5 @@
+{"timestamp":"2026-03-13T22:50:00+00:00","symptom":"speech","note":"3 consecutive alert beeps correlated with perceived speech","reporter":"subject"}
+{"timestamp":"2026-03-13T22:55:00+00:00","symptom":"speech","note":"4th consecutive alert beep correlated with speech","reporter":"subject"}
+{"timestamp":"2026-03-13T23:07:00+00:00","symptom":"speech","note":"5th consecutive - speech at latest alert beep","reporter":"subject"}
+{"timestamp":"2026-03-13T23:12:00+00:00","symptom":"speech","note":"6th consecutive alert - speech perceived","reporter":"subject"}
+{"timestamp":"2026-03-13T23:18:00+00:00","symptom":"speech","note":"7th consecutive - speech ongoing during alert, beep levels not distinguishable","reporter":"subject"}
