@@ -5,6 +5,10 @@ Knowledge Graph Pipeline — GROBID + Docling + Neo4j + Ollama
 Processes academic PDFs through industrial-grade extraction, builds a rich
 knowledge graph in Neo4j, and generates vector embeddings for semantic search.
 
+Dataset: build/embed prefer papers_grobid_clean.json (manually reviewed, with
+body_sections, quality scores, and GROBID re-extraction of fallback papers).
+Falls back to papers_grobid.json (raw extraction output) if clean file absent.
+
 Services required (all Docker):
   docker run -d --name grobid  -p 8070:8070 lfoppiano/grobid:0.8.2
   docker run -d --name neo4j   -p 7474:7474 -p 7687:7687 -e NEO4J_AUTH=neo4j/rfmonitor2026 neo4j:community
@@ -378,6 +382,7 @@ def create_schema(driver):
         "CREATE CONSTRAINT topic_name IF NOT EXISTS FOR (t:Topic) REQUIRE t.name IS UNIQUE",
         "CREATE INDEX paper_title IF NOT EXISTS FOR (p:Paper) ON (p.title)",
         "CREATE INDEX paper_year IF NOT EXISTS FOR (p:Paper) ON (p.year)",
+        "CREATE INDEX paper_quality IF NOT EXISTS FOR (p:Paper) ON (p.quality_score)",
         "CREATE INDEX ref_title IF NOT EXISTS FOR (r:Reference) ON (r.title)",
         "CREATE FULLTEXT INDEX paper_search IF NOT EXISTS FOR (p:Paper) ON EACH [p.title, p.abstract, p.body_text]",
     ]
@@ -400,8 +405,8 @@ def populate_graph(driver, papers_data):
             title = paper.get("title", "") or paper.get("_pdf_name", "")
 
             # Create Paper node
-            # Body text: store full for search, Neo4j handles large string props fine
             body = paper.get("body_text", "") or ""
+            meta = paper.get("_meta", {})
             session.run("""
                 MERGE (p:Paper {pdf_id: $pid})
                 SET p.title = $title,
@@ -414,8 +419,12 @@ def populate_graph(driver, papers_data):
                     p.n_references = $n_refs,
                     p.n_figures = $n_figs,
                     p.n_chars = $n_chars,
+                    p.n_body_sections = $n_body_sections,
                     p.sections = $sections,
-                    p.body_text = $body_text
+                    p.body_text = $body_text,
+                    p.extraction_method = $extraction_method,
+                    p.quality_score = $quality_score,
+                    p.quality_flags = $quality_flags
             """, pid=pid, title=title, year=paper.get("year"),
                 abstract=paper.get("abstract", "")[:5000],
                 doi=paper.get("doi", ""),
@@ -425,8 +434,12 @@ def populate_graph(driver, papers_data):
                 n_refs=len(paper.get("references", [])),
                 n_figs=len(paper.get("figures", [])),
                 n_chars=len(body),
+                n_body_sections=len(paper.get("body_sections", [])),
                 sections=paper.get("sections", []),
-                body_text=body)
+                body_text=body,
+                extraction_method=paper.get("_extraction_method", ""),
+                quality_score=meta.get("quality_score", 0.0),
+                quality_flags=meta.get("quality_flags", []))
 
             # Authors + affiliations
             for author in paper.get("authors", []):
@@ -589,6 +602,34 @@ def chunk_text(text, chunk_size=CHUNK_SIZE, overlap=CHUNK_OVERLAP):
     return chunks
 
 
+def chunk_sections(body_sections, chunk_size=CHUNK_SIZE, overlap=CHUNK_OVERLAP):
+    """
+    Section-aware chunking: splits on section boundaries first, then
+    sub-chunks long sections. Each chunk carries its section heading.
+    Returns list of (heading, chunk_text) tuples.
+    """
+    if not body_sections:
+        return []
+
+    results = []
+    for sec in body_sections:
+        heading = sec.get("heading", "")
+        text = sec.get("text", "").strip()
+        if not text or len(text) < 50:
+            continue
+
+        if len(text) <= chunk_size:
+            results.append((heading, text))
+        else:
+            # Sub-chunk long sections
+            sub_chunks = chunk_text(text, chunk_size, overlap)
+            for i, sc in enumerate(sub_chunks):
+                label = heading if i == 0 else f"{heading} (cont.)"
+                results.append((label, sc))
+
+    return results
+
+
 def embed_papers(driver):
     """Tier 1: Embed papers with enriched context (title + abstract + entities)."""
     model = detect_embed_model()
@@ -654,8 +695,12 @@ def embed_papers(driver):
     print(f"  Tier 1 done: {embedded} papers in {elapsed:.1f}s")
 
 
-def embed_chunks(driver):
-    """Tier 2: Chunk body text and embed for deep search."""
+def embed_chunks(driver, papers_data=None):
+    """Tier 2: Chunk body text and embed for deep search.
+
+    If papers_data (the full JSON list) is provided, uses body_sections for
+    section-aware chunking.  Falls back to body_text flat chunking otherwise.
+    """
     model = detect_embed_model()
     print(f"  Using model: {model}")
 
@@ -673,6 +718,14 @@ def embed_chunks(driver):
         except Exception:
             pass  # Index may already exist or Neo4j version doesn't support
 
+    # Build a lookup from pdf_id → paper dict for section-aware chunking
+    sections_lookup = {}
+    if papers_data:
+        for p in papers_data:
+            pid = p.get("_pdf_id", "")
+            if pid and p.get("body_sections"):
+                sections_lookup[pid] = p["body_sections"]
+
     # Get papers with body text that don't have chunks yet
     with driver.session() as session:
         papers = session.run("""
@@ -687,7 +740,9 @@ def embed_chunks(driver):
         print("  All papers already chunked.")
         return
 
-    print(f"  Chunking {len(papers)} papers (Tier 2)...")
+    n_section_aware = sum(1 for p in papers if p["pid"] in sections_lookup)
+    print(f"  Chunking {len(papers)} papers (Tier 2), "
+          f"{n_section_aware} with section-aware chunking...")
     generate_embedding("warmup", model)
 
     total_chunks = 0
@@ -695,33 +750,58 @@ def embed_chunks(driver):
 
     for i, paper in enumerate(papers):
         title = paper['title'] or 'Untitled'
-        body = paper['body'] or ''
-        chunks = chunk_text(body)
+        pid = paper['pid']
 
-        for idx, chunk in enumerate(chunks):
-            # Prefix with title for context
-            embed_text = f"Title: {title}\n\n{chunk}"
-            embedding = generate_embedding(embed_text, model)
-
-            if embedding:
-                with driver.session() as session:
-                    session.run("""
-                        MATCH (p:Paper {pdf_id: $pid})
-                        CREATE (c:Chunk {
-                            text: $text,
-                            chunk_idx: $idx,
-                            start_char: $start,
-                            n_chars: $n_chars,
-                            embedding: $embedding,
-                            embedding_model: $model,
-                            embedding_dim: $dim
-                        })
-                        CREATE (p)-[:HAS_CHUNK]->(c)
-                    """, pid=paper["pid"], text=chunk, idx=idx,
-                         start=idx * (CHUNK_SIZE - CHUNK_OVERLAP),
-                         n_chars=len(chunk), embedding=embedding,
-                         model=model, dim=len(embedding))
-                total_chunks += 1
+        # Section-aware chunking if body_sections available
+        if pid in sections_lookup:
+            sec_chunks = chunk_sections(sections_lookup[pid])
+            for idx, (heading, chunk) in enumerate(sec_chunks):
+                embed_text = f"Title: {title}\nSection: {heading}\n\n{chunk}"
+                embedding = generate_embedding(embed_text, model)
+                if embedding:
+                    with driver.session() as session:
+                        session.run("""
+                            MATCH (p:Paper {pdf_id: $pid})
+                            CREATE (c:Chunk {
+                                text: $text,
+                                section: $section,
+                                chunk_idx: $idx,
+                                n_chars: $n_chars,
+                                embedding: $embedding,
+                                embedding_model: $model,
+                                embedding_dim: $dim
+                            })
+                            CREATE (p)-[:HAS_CHUNK]->(c)
+                        """, pid=pid, text=chunk, section=heading, idx=idx,
+                             n_chars=len(chunk), embedding=embedding,
+                             model=model, dim=len(embedding))
+                    total_chunks += 1
+        else:
+            # Fallback: flat body_text chunking
+            body = paper['body'] or ''
+            chunks = chunk_text(body)
+            for idx, chunk in enumerate(chunks):
+                embed_text = f"Title: {title}\n\n{chunk}"
+                embedding = generate_embedding(embed_text, model)
+                if embedding:
+                    with driver.session() as session:
+                        session.run("""
+                            MATCH (p:Paper {pdf_id: $pid})
+                            CREATE (c:Chunk {
+                                text: $text,
+                                chunk_idx: $idx,
+                                start_char: $start,
+                                n_chars: $n_chars,
+                                embedding: $embedding,
+                                embedding_model: $model,
+                                embedding_dim: $dim
+                            })
+                            CREATE (p)-[:HAS_CHUNK]->(c)
+                        """, pid=pid, text=chunk, idx=idx,
+                             start=idx * (CHUNK_SIZE - CHUNK_OVERLAP),
+                             n_chars=len(chunk), embedding=embedding,
+                             model=model, dim=len(embedding))
+                    total_chunks += 1
 
         if (i + 1) % 50 == 0:
             elapsed = time.time() - t0
@@ -1218,11 +1298,15 @@ def cmd_extract(args):
 
 def cmd_build(args):
     """Build Neo4j graph from extracted data."""
-    combined_path = f"{OUTPUT_DIR}/papers_grobid.json"
+    # Prefer cleaned dataset; fall back to raw extraction
+    clean_path = f"{OUTPUT_DIR}/papers_grobid_clean.json"
+    raw_path = f"{OUTPUT_DIR}/papers_grobid.json"
+    combined_path = clean_path if os.path.exists(clean_path) else raw_path
     if not os.path.exists(combined_path):
-        print(f"  Error: Run 'extract' first. Missing {combined_path}")
+        print(f"  Error: Run 'extract' first. Missing {raw_path}")
         sys.exit(1)
 
+    print(f"  Using dataset: {os.path.basename(combined_path)}")
     with open(combined_path) as f:
         papers_data = json.load(f)
 
@@ -1281,6 +1365,15 @@ def cmd_embed(args):
     """Generate embeddings for all 3 tiers."""
     driver = get_neo4j_driver()
 
+    # Load papers data for section-aware chunking
+    clean_path = f"{OUTPUT_DIR}/papers_grobid_clean.json"
+    raw_path = f"{OUTPUT_DIR}/papers_grobid.json"
+    data_path = clean_path if os.path.exists(clean_path) else raw_path
+    papers_data = None
+    if os.path.exists(data_path):
+        with open(data_path) as f:
+            papers_data = json.load(f)
+
     # Create paper-level vector index
     with driver.session() as session:
         try:
@@ -1299,7 +1392,7 @@ def cmd_embed(args):
     embed_papers(driver)
 
     print("\n  ── Tier 2: Section-Level Chunk Embeddings ──")
-    embed_chunks(driver)
+    embed_chunks(driver, papers_data=papers_data)
 
     print("\n  ── Tier 3: Entity-Level Embeddings ──")
     embed_entities(driver)

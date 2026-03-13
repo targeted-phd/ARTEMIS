@@ -8,7 +8,7 @@ Forensic RF signal analysis toolkit for investigating anomalous pulsed signals i
 Basic signal detection with RTL-SDR Blog V4 and whip antenna. Kurtosis-based pulse detection, 24h sentinel monitoring, cross-frequency correlation, and LTE comparison analysis.
 
 ### Phase 2: Knowledge Graph (Complete)
-739 academic papers, books, and reports extracted and loaded into a Neo4j knowledge graph with 38,700+ edges. Three-tier extraction pipeline: GROBID (structured metadata), PyMuPDF (fallback text), Tesseract OCR (scanned documents). Content-level entity extraction identifies frequencies, power levels, mechanisms, health effects, technologies, and organizations mentioned in each paper.
+739 academic papers, books, and reports extracted and loaded into a Neo4j knowledge graph with 38,700+ edges. Three-tier extraction pipeline: GROBID (structured metadata), PyMuPDF (fallback text), Tesseract OCR (scanned documents). Content-level entity extraction identifies frequencies, power levels, mechanisms, health effects, technologies, and organizations mentioned in each paper. Cleaned dataset (`papers_grobid_clean.json`) with manual per-paper review: structured `body_sections`, recovered metadata via GROBID re-extraction of 251 fallback papers, quality scoring (mean 0.88), and schema normalization across all 739 records.
 
 ### Phase 3: Signal Correlation & Encoding Analysis (Next)
 Forward modeling pipeline: known speech → encoding transforms → simulated RTL-SDR capture → compare with real observations. Tests four published encoding methods from the literature:
@@ -37,7 +37,7 @@ Forward modeling pipeline: known speech → encoding transforms → simulated RT
 | Total edges | 38,721 |
 
 ### Node Types
-- **Paper** — title, authors, abstract, full body text, year, DOI, sections, figures
+- **Paper** — title, authors, abstract, full body text, year, DOI, sections, figures, quality_score, extraction_method, quality_flags
 - **Author** — name, email
 - **Institution** — affiliation name
 - **Reference** — cited work (title, journal, year, DOI)
@@ -92,7 +92,12 @@ Password: rfmonitor2026
 ```cypher
 -- Find all papers about the microwave auditory effect
 MATCH (p:Paper)-[:IN_TOPIC]->(t:Topic {name: 'microwave_auditory'})
-RETURN p.title, p.year, p.n_references ORDER BY p.year
+RETURN p.title, p.year, p.quality_score ORDER BY p.year
+
+-- Find high-quality papers only (score >= 0.8)
+MATCH (p:Paper) WHERE p.quality_score >= 0.8
+RETURN p.title, p.year, p.quality_score, p.extraction_method
+ORDER BY p.quality_score DESC LIMIT 20
 
 -- Find papers mentioning a specific frequency
 MATCH (p:Paper)-[:MENTIONS]->(f:Frequency {name: '915 MHz'})
@@ -145,8 +150,8 @@ Phase 2 — Knowledge Graph
                            GROBID for metadata, PyMuPDF fallback, Tesseract OCR
                            Content entity extraction (freq, power, mechanisms, etc.)
                            Neo4j graph population with 11 edge types
-  build_connections.py   Connection analysis (shared authors, citations, etc.)
-  serve_knowledge_graph.py   D3.js web viewer + Obsidian export + CLI query
+                           Section-aware chunking from body_sections
+                           Prefers papers_grobid_clean.json (normalized dataset)
 
 Phase 3 — Forward Model
   forward_model.py       Speech → encoding → simulated SDR → compare with real data
@@ -173,9 +178,9 @@ python demod_pulses.py batch --top 100 --concat 5
 python forward_model.py test
 
 # Phase 2 — Knowledge graph (full pipeline)
-python kg_pipeline.py extract    # GROBID + PyMuPDF fallback + OCR
-python kg_pipeline.py build      # Populate Neo4j with entities + edges
-python kg_pipeline.py embed      # Generate embeddings via Ollama
+python kg_pipeline.py extract    # GROBID + PyMuPDF fallback + OCR → papers_grobid.json
+python kg_pipeline.py build      # Populate Neo4j (uses papers_grobid_clean.json if present)
+python kg_pipeline.py embed      # Generate embeddings via Ollama (section-aware chunking)
 python kg_pipeline.py status     # Check pipeline status
 # Then open http://localhost:7474 for Neo4j Browser
 ```
