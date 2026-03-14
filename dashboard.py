@@ -278,11 +278,11 @@ HTML = r"""<!DOCTYPE html>
   </div>
   <div class="header-right">
     <div style="display:flex;gap:6px;align-items:center">
-      <button onclick="scroll(-60)" style="background:#1a1a2a;border:1px solid #2a2a3a;color:#888;padding:4px 10px;border-radius:3px;cursor:pointer;font-size:12px">&#9664;&#9664;</button>
-      <button onclick="scroll(-10)" style="background:#1a1a2a;border:1px solid #2a2a3a;color:#888;padding:4px 8px;border-radius:3px;cursor:pointer;font-size:12px">&#9664;</button>
+      <button onclick="navScroll(-60)" style="background:#1a1a2a;border:1px solid #2a2a3a;color:#888;padding:4px 10px;border-radius:3px;cursor:pointer;font-size:12px">&#9664;&#9664;</button>
+      <button onclick="navScroll(-10)" style="background:#1a1a2a;border:1px solid #2a2a3a;color:#888;padding:4px 8px;border-radius:3px;cursor:pointer;font-size:12px">&#9664;</button>
       <span id="navInfo" style="font-size:10px;color:#556;min-width:60px;text-align:center">LIVE</span>
-      <button onclick="scroll(10)" style="background:#1a1a2a;border:1px solid #2a2a3a;color:#888;padding:4px 8px;border-radius:3px;cursor:pointer;font-size:12px">&#9654;</button>
-      <button onclick="scroll(60)" style="background:#1a1a2a;border:1px solid #2a2a3a;color:#888;padding:4px 10px;border-radius:3px;cursor:pointer;font-size:12px">&#9654;&#9654;</button>
+      <button onclick="navScroll(10)" style="background:#1a1a2a;border:1px solid #2a2a3a;color:#888;padding:4px 8px;border-radius:3px;cursor:pointer;font-size:12px">&#9654;</button>
+      <button onclick="navScroll(60)" style="background:#1a1a2a;border:1px solid #2a2a3a;color:#888;padding:4px 10px;border-radius:3px;cursor:pointer;font-size:12px">&#9654;&#9654;</button>
       <button onclick="goLive()" style="background:#0a2a0a;border:1px solid #2a4a2a;color:#4a4;padding:4px 10px;border-radius:3px;cursor:pointer;font-size:11px;font-weight:bold">LIVE</button>
     </div>
     <div class="status"><span class="dot live" id="dot"></span><span id="st">connecting...</span></div>
@@ -893,7 +893,7 @@ function upd(data) {
 let currentOffset = 0;
 let autoScroll = true;
 
-function scroll(delta) {
+function navScroll(delta) {
   currentOffset = Math.max(0, currentOffset - delta);
   autoScroll = (currentOffset === 0);
   pollNow();
@@ -1132,7 +1132,7 @@ def get_state():
             cycle_time = None
         if prev_cycle_time and cycle_time:
             gap_sec = (cycle_time - prev_cycle_time).total_seconds()
-            if gap_sec > 300:  # > 5 min gap
+            if gap_sec > 900:  # > 15 min gap (cycles are ~10 min with 13 targets)
                 history.append({
                     "maxK": None, "ei": None, "eiA": None, "eiB": None,
                     "ts": "", "fh": {}, "symptom": None, "gap": True,
