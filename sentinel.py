@@ -447,8 +447,13 @@ def run_sentinel(target_freqs_mhz, sweep_start, sweep_stop, sweep_step,
                 hourly_stare_pulses[r["freq_mhz"]] = \
                     hourly_stare_pulses.get(r["freq_mhz"], 0) + r["pulse_count"]
 
-                # Save IQ if elevated kurtosis and within budget
-                if r["kurtosis"] > 25 and iq_dir_size_mb() < iq_budget_mb:
+                # Save IQ:
+                # Zone A (622-636): ALWAYS save (only 2 files so far)
+                # Zone B/UL: save if kurtosis > 25
+                nominal = r.get("nominal_freq_mhz", r.get("freq_mhz", 0))
+                is_zone_a = isinstance(nominal, (int, float)) and 618 < nominal < 640
+                save_iq = (is_zone_a or r["kurtosis"] > 25) and iq_dir_size_mb() < iq_budget_mb
+                if save_iq:
                     ts = datetime.now().strftime("%H%M%S")
                     iq_f = f"{IQ_DUMP_DIR}/sentinel_{r['freq_mhz']:.0f}MHz_{ts}.iq"
                     with open(iq_f, "wb") as f:
