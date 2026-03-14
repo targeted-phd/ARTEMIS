@@ -113,3 +113,26 @@ Locking support detected on remote "origin". Consider enabling it with:
   $ git config lfs.https://github-artemis/targeted-phd/ARTEMIS.git/info/lfs.locksverify true
 To github-artemis:targeted-phd/ARTEMIS.git
    cacdede..a185072  main -> main
+[main 88a6105] auto: 2026-03-14 01:00 snapshot
+ 24 files changed, 1738 insertions(+), 1 deletion(-)
+ create mode 100644 results/ml_v2/features.npz
+ create mode 100644 results/ml_v2/features_meta.json
+ create mode 100644 results/ml_v2/models/rf_headache.joblib
+ create mode 100644 results/ml_v2/models/rf_paresthesia.joblib
+ create mode 100644 results/ml_v2/models/rf_pressure.joblib
+ create mode 100644 results/ml_v2/models/rf_sleep.joblib
+ create mode 100644 results/ml_v2/models/rf_speech.joblib
+ create mode 100644 results/ml_v2/models/rf_tinnitus.joblib
+ create mode 100644 results/ml_v2/models/scaler_headache.joblib
+ create mode 100644 results/ml_v2/models/scaler_paresthesia.joblib
+ create mode 100644 results/ml_v2/models/scaler_pressure.joblib
+ create mode 100644 results/ml_v2/models/scaler_sleep.joblib
+ create mode 100644 results/ml_v2/models/scaler_speech.joblib
+ create mode 100644 results/ml_v2/models/scaler_tinnitus.joblib
+ create mode 100644 results/ml_v2_output.log
+ create mode 100644 results/sentinel_20260314_00.jsonl
+ create mode 100644 rf_ml_v2.py
+Locking support detected on remote "origin". Consider enabling it with:
+  $ git config lfs.https://github-artemis/targeted-phd/ARTEMIS.git/info/lfs.locksverify true
+To github-artemis:targeted-phd/ARTEMIS.git
+   766a3df..88a6105  main -> main

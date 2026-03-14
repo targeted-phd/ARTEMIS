@@ -1,0 +1,21 @@
+Processing 2571 signal-bearing IQ files with 6 workers...
+  200/2571 — 199 with signal
+  400/2571 — 399 with signal
+  600/2571 — 599 with signal
+  800/2571 — 799 with signal
+  1000/2571 — 999 with signal
+  1200/2571 — 1199 with signal
+  1400/2571 — 1399 with signal
+  1600/2571 — 1599 with signal
+  1800/2571 — 1799 with signal
+  2000/2571 — 1999 with signal
+  2200/2571 — 2199 with signal
+  2400/2571 — 2399 with signal
+
+Done: 2571 total, 2570 with signal
+  PRF: 209437 ± 29914 Hz (n=2570)
+  Width: 3.45 ± 1.00 us
+  BW: 455884 ± 249216 Hz
+  Mod index: 0.682 ± 0.439
+  Bursts/file: 3.9 ± 4.7
+DONE
