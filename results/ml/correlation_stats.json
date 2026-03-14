@@ -1,0 +1,202 @@
+{
+  "n_symptoms": 52,
+  "n_null": 1000,
+  "symptom_types": {
+    "speech": 32,
+    "headache": 13,
+    "paresthesia": 1,
+    "headache+tinnitus": 1,
+    "tinnitus": 4,
+    "pressure": 1
+  },
+  "mann_whitney": [
+    {
+      "feature": "max_kurt",
+      "p_value": 4.135532235030812e-22,
+      "p_bonferroni": 4.962638581062779e-21,
+      "effect_size_d": -1.5602089166641235,
+      "rank_biserial": 0.7879999876022339,
+      "sym_mean": 0.0,
+      "null_mean": 117.83160400390625,
+      "sym_std": 0.0,
+      "null_std": 106.80559539794922
+    },
+    {
+      "feature": "total_pulses",
+      "p_value": 4.1356092278551617e-22,
+      "p_bonferroni": 4.962731073426194e-21,
+      "effect_size_d": -1.4023346900939941,
+      "rank_biserial": 0.7879999876022339,
+      "sym_mean": 0.0,
+      "null_mean": 7647.56298828125,
+      "sym_std": 0.0,
+      "null_std": 7712.34423828125
+    },
+    {
+      "feature": "total_pulse_duration_us",
+      "p_value": 4.1356478504850813e-22,
+      "p_bonferroni": 4.9627775215562934e-21,
+      "effect_size_d": -1.4151089191436768,
+      "rank_biserial": 0.7879999876022339,
+      "sym_mean": 0.0,
+      "null_mean": 20249.3359375,
+      "sym_std": 0.0,
+      "null_std": 20236.5234375
+    },
+    {
+      "feature": "ei_total",
+      "p_value": 4.621829768348757e-22,
+      "p_bonferroni": 5.5461959239669e-21,
+      "effect_size_d": -0.38152796030044556,
+      "rank_biserial": 0.7870000004768372,
+      "sym_mean": 0.0,
+      "null_mean": 136.6427764892578,
+      "sym_std": 0.0,
+      "null_std": 506.49517822265625
+    },
+    {
+      "feature": "max_kurt_zone_b",
+      "p_value": 6.652020484573441e-22,
+      "p_bonferroni": 7.98242458148813e-21,
+      "effect_size_d": -1.4387550354003906,
+      "rank_biserial": 0.7829999923706055,
+      "sym_mean": 0.0,
+      "null_mean": 111.34539794921875,
+      "sym_std": 0.0,
+      "null_std": 109.44612121582031
+    },
+    {
+      "feature": "max_kurt_ul",
+      "p_value": 4.114584178843075e-21,
+      "p_bonferroni": 4.937501176170403e-20,
+      "effect_size_d": -1.632147192955017,
+      "rank_biserial": 0.7670000195503235,
+      "sym_mean": 0.0,
+      "null_mean": 22.1299991607666,
+      "sym_std": 0.0,
+      "null_std": 19.175073623657227
+    },
+    {
+      "feature": "n_active_targets",
+      "p_value": 9.076641875551862e-20,
+      "p_bonferroni": 1.0891969992168293e-18,
+      "effect_size_d": -1.6391491889953613,
+      "rank_biserial": 0.7260000109672546,
+      "sym_mean": 0.0,
+      "null_mean": 3.5460000038146973,
+      "sym_std": 0.0,
+      "null_std": 3.0593926906585693
+    },
+    {
+      "feature": "ei_zone_b",
+      "p_value": 9.350605921878193e-15,
+      "p_bonferroni": 1.1220726767440653e-13,
+      "effect_size_d": -1.0673587322235107,
+      "rank_biserial": 0.6130000352859497,
+      "sym_mean": 0.0,
+      "null_mean": 11.934820175170898,
+      "sym_std": 0.0,
+      "null_std": 15.813225746154785
+    },
+    {
+      "feature": "is_night",
+      "p_value": 9.223425149684772e-05,
+      "p_bonferroni": 0.0011068109888583422,
+      "effect_size_d": -0.7729182243347168,
+      "rank_biserial": 0.23000001907348633,
+      "sym_mean": 0.0,
+      "null_mean": 0.23000000417232513,
+      "sym_std": 0.0,
+      "null_std": 0.4208325147628784
+    },
+    {
+      "feature": "hour",
+      "p_value": 0.02430998906493187,
+      "p_bonferroni": 0.29171985387802124,
+      "effect_size_d": -0.2599055767059326,
+      "rank_biserial": 0.18400001525878906,
+      "sym_mean": 11.0,
+      "null_mean": 12.034000396728516,
+      "sym_std": 0.0,
+      "null_std": 5.626263618469238
+    },
+    {
+      "feature": "minute",
+      "p_value": 0.31551799178123474,
+      "p_bonferroni": 1.0,
+      "effect_size_d": 0.08977850526571274,
+      "rank_biserial": -0.0824422836303711,
+      "sym_mean": 30.94230842590332,
+      "null_mean": 29.923999786376953,
+      "sym_std": 0.23316068947315216,
+      "null_std": 16.038959503173828
+    },
+    {
+      "feature": "mean_pulse_width_us",
+      "p_value": 0.9903833270072937,
+      "p_bonferroni": 1.0,
+      "effect_size_d": 0.13056525588035583,
+      "rank_biserial": 0.0009999871253967285,
+      "sym_mean": 2.710000514984131,
+      "null_mean": 2.6364800930023193,
+      "sym_std": 4.76837158203125e-07,
+      "null_std": 0.7963342070579529
+    }
+  ],
+  "logistic_auc": 0.9287307692307691,
+  "logistic_coefs": {
+    "max_kurt": -0.9616254151641891,
+    "total_pulses": -0.6370095409774329,
+    "total_pulse_duration_us": -0.6045743197725075,
+    "ei_total": -0.022543944153112613,
+    "max_kurt_zone_b": -0.8914331418522315,
+    "max_kurt_ul": -0.8715963390811594,
+    "n_active_targets": -0.9026997354988772,
+    "ei_zone_b": -0.4717704348271551,
+    "is_night": -0.6077080482012903,
+    "hour": -2.98756112266795
+  },
+  "permutation_p": 0.0004997501249375312,
+  "permutation_mean_auc": 0.48990796634615386,
+  "lag_analysis": {
+    "peak_lag_cycles": 0,
+    "peak_correlation": 0.0
+  },
+  "kg_literature": {
+    "headache": {
+      "n_papers": 0,
+      "n_concepts": 0,
+      "top_paper": ""
+    },
+    "paresthesia": {
+      "n_papers": 0,
+      "n_concepts": 0,
+      "top_paper": ""
+    },
+    "tinnitus": {
+      "n_papers": 0,
+      "n_concepts": 0,
+      "top_paper": ""
+    },
+    "speech": {
+      "n_papers": 0,
+      "n_concepts": 0,
+      "top_paper": ""
+    },
+    "pressure": {
+      "n_papers": 0,
+      "n_concepts": 0,
+      "top_paper": ""
+    },
+    "nausea": {
+      "n_papers": 0,
+      "n_concepts": 0,
+      "top_paper": ""
+    },
+    "sleep": {
+      "n_papers": 0,
+      "n_concepts": 0,
+      "top_paper": ""
+    }
+  }
+}

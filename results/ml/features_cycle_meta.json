@@ -1,0 +1,50 @@
+{
+  "feature_names": [
+    "ei_total",
+    "ei_zone_b",
+    "hour",
+    "is_night",
+    "max_kurt",
+    "max_kurt_ul",
+    "max_kurt_zone_b",
+    "mean_pulse_width_us",
+    "minute",
+    "n_active_targets",
+    "total_pulse_duration_us",
+    "total_pulses"
+  ],
+  "n_cycles": 1859,
+  "source": "ml_master_dataset.json",
+  "meta": [
+    {
+      "index": 0,
+      "cst": "2026-03-12 00:46:50",
+      "type": "ACTIVE",
+      "has_zone_a": false
+    },
+    {
+      "index": 1,
+      "cst": "2026-03-12 00:48:06",
+      "type": "ACTIVE",
+      "has_zone_a": false
+    },
+    {
+      "index": 2,
+      "cst": "2026-03-12 00:49:23",
+      "type": "QUIET",
+      "has_zone_a": false
+    },
+    {
+      "index": 3,
+      "cst": "2026-03-12 00:50:40",
+      "type": "ACTIVE",
+      "has_zone_a": false
+    },
+    {
+      "index": 4,
+      "cst": "2026-03-12 00:51:56",
+      "type": "ACTIVE",
+      "has_zone_a": false
+    }
+  ]
+}

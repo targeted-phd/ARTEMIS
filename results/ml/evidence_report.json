@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-03-14T03:59:26.621362Z",
+  "report_hash": "95c4de59e2f856dc91d8c1ce6baa286253ef4e1facc5b934f8338e0f3d090852",
+  "correlation": {
+    "auc": 0.9287307692307691,
+    "permutation_p": 0.0004997501249375312,
+    "n_symptoms": 52,
+    "significant": true
+  },
+  "fingerprints": {
+    "n_clusters": 8,
+    "silhouette": 0.061363353554035785
+  },
+  "modes": {
+    "n_modes": 8,
+    "symptom_by_mode": {
+      "QUIET": 63
+    }
+  }
+}
