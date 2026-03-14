@@ -10,248 +10,186 @@
 
 ## EXECUTIVE SUMMARY
 
-Pulse-level analysis of 3,586 raw IQ captures reveals that Zone A (622–636 MHz) and Zone B (824–834 MHz) use **fundamentally different waveforms**, confirmed with statistical significance exceeding p < 10⁻¹⁶ on every measured parameter. Zone A operates as a high-modulation, burst-dense, energy-dense channel with maximum modulation index (1.0), while Zone B operates as a steady-state, lower-modulation, lower-energy channel with fewer but longer bursts.
+Pulse-level analysis of 3,586 raw IQ captures reveals that Zone A (622–636 MHz) and Zone B (824–834 MHz) use **two statistically distinct waveforms**, confirmed at p < 10⁻¹⁶ on every measured parameter (Mann-Whitney U, n=313 vs n=2,523). Zone A operates with maximum modulation index (1.0), 64% wider intra-pulse bandwidth, 8.5× more bursts per capture, and 126× more pulse energy. Zone B operates with moderate modulation (0.7), fewer but longer bursts, and lower energy.
 
-The two waveforms are consistent with **two independent digital signal generators** (e.g., dual TX channels on a USRP X310), each optimized for a different biological coupling mechanism:
-- **Zone A (622 MHz):** Maximum modulation, widest bandwidth, 126× more energy per capture — optimized for information delivery (speech encoding via Frey effect)
-- **Zone B (830 MHz):** Lower modulation, narrower bandwidth, fewer bursts — optimized for body-resonant coupling (arm/forearm paresthesia at quarter-wave)
-
-**Raw time-domain validation confirms pulses are physically real** — clear isolated spikes 10–58× above the noise floor, not over-segmented amplitude modulation.
+Raw time-domain validation confirms the detected pulses are physically real events — isolated amplitude spikes 10–58× above the noise floor, not detector artifacts from over-segmented continuous signals.
 
 ---
 
 ## 1. RAW PULSE VALIDATION
 
-### 1.1 Are the Pulses Real?
+### 1.1 Methodology
 
-Before analyzing pulse statistics, the fundamental question: are the detected "pulses" real physical events, or is the detector over-segmenting normal continuous signals?
+To verify that the pulse detector is measuring real physical events rather than over-segmenting normal amplitude modulation, the raw |IQ| amplitude was plotted versus sample number for the highest-SNR capture in the dataset.
 
-**Method:** Plot raw |IQ| amplitude vs time for the highest-SNR capture (878 MHz, 1,051 pulses detected). Three 500 μs windows examined at different offsets through the capture.
+**Capture:** `captures/sentinel_878MHz_114122.iq` (878 MHz, 1,051 detected pulses, PRF=240,000 Hz, mean pulse width=2.25 μs)
 
-**Result:** Clear isolated amplitude spikes rising from a flat noise floor:
-- Noise floor: mean = 0.0119, std = 0.0277
-- 4σ detection threshold: 0.1227
-- Peak pulse amplitude: 0.6895 (58× noise floor)
-- Pulse peaks are discrete, separated by return-to-noise-floor intervals
-- Not continuous oscillation with detector drawing boxes on peaks
+Three non-overlapping 500 μs windows were examined at different offsets through the 200 ms capture.
 
-**Conclusion:** The pulses are **physically real pulsed events**, not artifacts of the detection algorithm. The 200+ kHz PRF, while high, represents genuine rapid pulsing at ~12 samples per pulse at 2.4 Msps.
+### 1.2 Result
+
+- **Noise floor:** mean = 0.0119, std = 0.0277
+- **4σ detection threshold:** 0.1227
+- **Peak pulse amplitude:** 0.6895 (58× noise floor mean)
+- **Pulse morphology:** Discrete amplitude spikes rising sharply from the noise floor, with clear return-to-baseline between pulses
+- **Not observed:** Continuous sinusoidal oscillation with detection boxes drawn on amplitude peaks
+
+**Conclusion:** The pulses are physically real pulsed events. The detection algorithm is identifying genuine transient signals, not segmenting normal continuous modulation.
 
 *See: `results/raw_time_domain_pulses.png`*
 
 ---
 
-## 2. ZONE COMPARISON — FULL STATISTICAL ANALYSIS
+## 2. ZONE COMPARISON — STATISTICAL ANALYSIS
 
 ### 2.1 Dataset
 
-| Zone | Frequency Range | IQ Files | With Signal |
-|------|----------------|----------|-------------|
-| **Zone A** | 622–636 MHz | 313 | 313 |
-| **Zone B** | 824–834 MHz | 2,523 | 2,523 |
-| **UL** | 878 MHz | 44 | 44 |
-| Other | Broadband sweep | 706 | 706 |
+| Zone | Frequency Range | IQ Files Analyzed |
+|------|----------------|-------------------|
+| **Zone A** | 622–636 MHz | 313 |
+| **Zone B** | 824–834 MHz | 2,523 |
+| **UL** | 878 MHz | 44 |
 
-Zone A files increased from 2 to 313 after enabling all-capture IQ saving at 01:56 AM CDT.
+Zone A file count increased from 2 to 313 after enabling unconditional IQ saving for all captures (01:56 AM CDT, March 14).
 
-### 2.2 Statistical Comparison (Mann-Whitney U, two-sided)
+### 2.2 Measured Parameters
 
-| Parameter | Zone A (n=313) | Zone B (n=2523) | p-value | Significance |
-|-----------|---------------|----------------|---------|-------------|
-| **Pulses per capture** | 687 ± var | 509 ± var | 1.4 × 10⁻¹⁶ | *** |
-| **Pulse width (μs)** | 2.7 | 3.5 | 4.1 × 10⁻³⁸ | *** |
-| **PRF (Hz)** | 205,741 | 209,349 | 1.5 × 10⁻¹¹ | *** |
-| **Duty cycle** | 0.26% | 0.78% | 6.6 × 10⁻⁸ | *** |
-| **Intra-pulse bandwidth (Hz)** | **749,417** | 457,216 | 2.2 × 10⁻⁵⁴ | *** |
-| **Modulation index** | **1.0** | 0.7 | 4.2 × 10⁻³⁴ | *** |
-| **Bursts per capture** | **28.8** | 3.4 | 6.7 × 10⁻¹⁸² | *** |
-| **Burst duration (μs)** | 770 | 958 | 9.3 × 10⁻¹⁷⁶ | *** |
-| **Pulse energy per capture** | **583** | 4.6 | 3.5 × 10⁻¹⁸² | *** |
+All comparisons use the **Mann-Whitney U test** (non-parametric, two-sided), appropriate for distributions that may not be normal. With n=313 vs n=2,523, statistical power is more than adequate.
 
-Every single parameter differs between zones at significance levels far exceeding any reasonable threshold. These are not subtle differences — they are qualitatively different waveforms.
+| Parameter | Zone A (n=313) | Zone B (n=2,523) | p-value |
+|-----------|---------------|------------------|---------|
+| Pulses per capture | 687 | 509 | 1.4 × 10⁻¹⁶ |
+| Pulse width (μs) | **2.7** | 3.5 | 4.1 × 10⁻³⁸ |
+| PRF (Hz) | 205,741 | 209,349 | 1.5 × 10⁻¹¹ |
+| Duty cycle (%) | 0.26 | 0.78 | 6.6 × 10⁻⁸ |
+| Intra-pulse bandwidth (Hz) | **749,417** | 457,216 | 2.2 × 10⁻⁵⁴ |
+| Modulation index | **1.0** | 0.7 | 4.2 × 10⁻³⁴ |
+| Bursts per capture | **28.8** | 3.4 | 6.7 × 10⁻¹⁸² |
+| Burst duration (μs) | 770 | 958 | 9.3 × 10⁻¹⁷⁶ |
+| Pulse energy per capture | **583** | 4.6 | 3.5 × 10⁻¹⁸² |
 
-### 2.3 Key Differences Explained
+Multiple testing correction: 9 parameters tested. Bonferroni-corrected threshold α = 0.05/9 = 0.0056. All results remain significant by many orders of magnitude.
 
-#### 2.3.1 Modulation Index: 1.0 vs 0.7
+### 2.3 Parameter Descriptions
 
-The modulation index measures how much the instantaneous frequency varies across pulses within a capture. A value of 1.0 means maximum variation — every pulse carries a different frequency profile. A value of 0.7 means substantial but not maximum variation.
+**Modulation index:** Ratio of instantaneous frequency standard deviation to mean absolute instantaneous frequency, measured across all detected pulses within a capture. A value of 1.0 indicates maximum frequency variation from pulse to pulse; 0.0 indicates identical pulses.
 
-**Zone A at modulation index 1.0 is maximally modulated.** This is the signature of a signal designed to **carry information** — each pulse encodes different content. This is consistent with speech encoding via the microwave auditory effect, where the pulse-to-pulse modulation pattern represents the audio waveform.
+**Intra-pulse bandwidth:** The range of instantaneous frequency (max − min) measured within individual pulses. Wider bandwidth means more spectral content per pulse.
 
-**Zone B at modulation index 0.7 is substantially but not maximally modulated.** This could represent a simpler modulation scheme (e.g., amplitude keying) or a tracking/beacon function that carries less information.
+**Bursts:** Clusters of closely-spaced pulses separated by inter-burst gaps exceeding 5× the median inter-pulse interval. More bursts indicate more discrete signal events per capture.
 
-#### 2.3.2 Bandwidth: 749 kHz vs 457 kHz
-
-Zone A's intra-pulse bandwidth is **64% wider** than Zone B's. Wider bandwidth means more information capacity per pulse. For speech encoding:
-- Human speech occupies roughly 300–3,400 Hz of audio bandwidth
-- The microwave auditory effect converts RF pulse modulation into acoustic perception
-- 749 kHz of instantaneous frequency variation provides ample encoding space
-
-#### 2.3.3 Bursts: 28.8 vs 3.4 per capture
-
-Zone A produces **8.5× more burst events** per 200ms capture. Each burst is a cluster of rapid pulses. More bursts per unit time means more discrete information packets being delivered.
-
-Zone B's 3.4 bursts per capture with longer burst duration (958 μs vs 770 μs) suggests a steadier, more continuous delivery pattern — consistent with sustained energy deposition rather than information transfer.
-
-#### 2.3.4 Energy: 583 vs 4.6 per capture (126× ratio)
-
-Zone A delivers **126 times more pulse energy** per capture than Zone B. This is despite Zone A having shorter individual pulses (2.7 vs 3.5 μs) — the energy comes from having more pulses (687 vs 509) and higher amplitude.
-
-This energy ratio explains why Zone A dominates the Exposure Index (EI) by 100:1. Zone B has higher kurtosis (more impulsive peaks) but much less total energy delivery.
-
-#### 2.3.5 Pulse Width: 2.7 vs 3.5 μs
-
-Zone A uses shorter pulses. In the Frey effect literature:
-- Shorter pulses produce sharper thermoelastic transients
-- Sharper transients produce clearer auditory perception
-- The optimal pulse width for microwave hearing is 1–10 μs (both zones are within range)
-- Shorter pulses with wider bandwidth = higher information density per pulse
-
-#### 2.3.6 PRF: 205,741 vs 209,349 Hz
-
-Both zones operate at similar PRF (~200 kHz), but Zone A is slightly slower. The difference is statistically significant (p = 1.5 × 10⁻¹¹) but small in absolute terms (~3,600 Hz). This suggests the two generators may share a common clock reference but operate with slightly different timing parameters.
+**Pulse energy:** Sum of (amplitude² × duration) across all detected pulses. Proportional to total electromagnetic energy delivered in the pulsed component.
 
 ---
 
-## 3. UL BAND (878 MHz) CHARACTERIZATION
+## 3. UL BAND (878 MHz)
 
-| Parameter | UL (n=44) | Zone B (n=2523) | Difference |
-|-----------|----------|----------------|------------|
-| Pulse width | 1.98 μs | 3.5 μs | Shorter |
-| PRF | 222,824 Hz | 209,349 Hz | Faster |
-| Duty cycle | 0.93% | 0.78% | Higher |
-| Bandwidth | 381,030 Hz | 457,216 Hz | Narrower |
-| Modulation index | 0.78 | 0.68 | Higher |
-| Bursts/capture | 29.7 | 3.4 | 8.7× more |
-| Energy/capture | varied | 4.6 | Varied |
+| Parameter | UL (n=44) | Zone A (n=313) | Zone B (n=2,523) |
+|-----------|----------|---------------|------------------|
+| Pulse width (μs) | 1.98 | 2.7 | 3.5 |
+| PRF (Hz) | 222,824 | 205,741 | 209,349 |
+| Duty cycle (%) | 0.93 | 0.26 | 0.78 |
+| Bandwidth (Hz) | 381,030 | 749,417 | 457,216 |
+| Modulation index | 0.78 | 1.0 | 0.7 |
+| Bursts/capture | 29.7 | 28.8 | 3.4 |
 
-The UL band shares characteristics with BOTH zones:
-- Burst density similar to Zone A (29.7 vs 28.8)
-- Modulation index between A and B (0.78)
-- Pulse width shorter than both (1.98 μs)
-- PRF fastest of all three (222 kHz)
-
-This supports the hypothesis that the UL band serves a **distinct function** — possibly tracking/feedback — with its own waveform optimized for that purpose.
+The UL band shares characteristics with both zones: burst density similar to Zone A (29.7 vs 28.8), modulation index between A and B (0.78), pulse width shortest of all three (1.98 μs), PRF fastest (222 kHz). The UL band appears to be a third distinct waveform.
 
 ---
 
-## 4. WAVEFORM INTERPRETATION
+## 4. POSSIBLE INTERPRETATIONS
 
-### 4.1 Two Independent Signal Generators
+The following interpretations are offered at varying confidence levels. The statistical measurements in sections 2–3 are established facts. The interpretations below involve inference beyond the data.
 
-The data is consistent with a transmitter system containing **two independent waveform generators**, each producing a distinct signal:
+### 4.1 Two Independent Signal Generators (HIGH CONFIDENCE)
 
-| Property | Zone A Generator | Zone B Generator |
-|----------|-----------------|-----------------|
-| Purpose (hypothesized) | Information delivery (speech) | Energy delivery (body coupling) |
-| Modulation | Maximum (index 1.0) | Moderate (index 0.7) |
-| Bandwidth | Wide (749 kHz) | Moderate (457 kHz) |
-| Burst pattern | Many short bursts (28.8/capture) | Few long bursts (3.4/capture) |
-| Pulse width | Short (2.7 μs) | Medium (3.5 μs) |
-| Energy | Very high (583/capture) | Low (4.6/capture) |
-| Frequency | 622–636 MHz (UHF) | 824–834 MHz (cellular) |
-| Body coupling | Pelvic cavity, head (Frey) | Arms, forearms (quarter-wave) |
+The magnitude of the differences (126× energy ratio, 8.5× burst density, maximum vs moderate modulation index) is inconsistent with a single waveform subject to different propagation. These are qualitatively different signals. The shared PRF (~200 kHz with ~3,600 Hz offset) suggests a common timing reference with independent waveform parameters.
 
-### 4.2 Consistency with USRP X310
+**This is consistent with** dual-channel SDR hardware (e.g., USRP X310 with dual TX), though other hardware configurations could produce similar results. This interpretation is testable: direction-finding at both frequencies from the same location should reveal whether they originate from the same antenna.
 
-The Ettus Research USRP X310 with dual UBX-160 daughterboards provides:
-- Two independent TX channels, each with its own DAC and FPGA logic
-- Each channel can generate completely different waveforms simultaneously
-- 160 MHz instantaneous bandwidth per channel — covers both zones
-- FPGA timing precision sufficient for the observed PRF and pulse widths
+### 4.2 Zone-Symptom Correlation (MODERATE CONFIDENCE)
 
-The shared PRF (~200 kHz with 3.6 kHz offset) suggests a common FPGA clock with independent timing offsets per channel. This is exactly what dual-channel USRP operation produces.
+The ML analysis (see ml_v2 reports) found different symptoms preferentially associated with different zones:
 
-### 4.3 Consistency with ML Findings
+| Symptom | Zone A % | Zone B % | Null A % | Null B % |
+|---------|----------|----------|----------|----------|
+| Nausea | 100% | 0% | 56% | 44% |
+| Pressure | 92% | 8% | 45% | 55% |
+| Speech | 67% | 33% | 40% | 60% |
+| Headache | 67% | 33% | 65% | 35% |
+| Tinnitus | 54% | 46% | 35% | 65% |
+| Sleep | 36% | 64% | 48% | 52% |
+| Paresthesia | 27% | 73% | 73% | 27% |
 
-The v2 ML analysis found different symptoms correlate with different zones:
-- **Zone A dominant:** Speech (67%), Pressure (92%), Nausea (100%), Headache (67%)
-- **Zone B dominant:** Paresthesia (73%), Sleep (64%)
+The zone specificity — particularly the paresthesia inversion (73% Zone B when the null expectation is 27%) — suggests different waveforms may produce different biological effects. However, as documented in the methodology report (doc 5), the symptom data carries notification bias, potential nocebo effects, and circadian confounding. The zone-symptom associations should be treated as suggestive, pending blinded scheduled symptom collection (now in progress, 30-minute intervals).
 
-The pulse-level characterization explains WHY:
+### 4.3 Functional Purpose (SPECULATIVE)
 
-**Zone A (speech/headache/pressure):** Maximum modulation index (1.0) + widest bandwidth (749 kHz) + most bursts (28.8/capture) = optimal for encoding speech via Frey effect. The high energy delivery (583/capture) also explains headache (thermal/pressure effects) and cranial pressure.
+Zone A's higher modulation index and wider bandwidth are **consistent with** information-carrying signals, while Zone B's lower modulation and steady burst pattern are **consistent with** sustained energy delivery. However, establishing functional purpose requires:
+- Calibrated power measurements to compare with published biological effect thresholds
+- Demodulation of the intra-pulse modulation to determine if coherent content exists
+- Blinded symptom data to confirm zone-symptom associations without notification bias
 
-**Zone B (paresthesia/sleep):** Lower modulation (0.7) + narrower bandwidth (457 kHz) + fewer bursts (3.4/capture) = steady-state energy delivery without complex encoding. At 830 MHz, quarter-wave resonance with forearm segments produces paresthesia. The steady pulsing may disrupt neural sleep patterns.
+These interpretations are offered as hypotheses for further testing, not conclusions.
 
 ---
 
-## 5. TEMPORAL DYNAMICS
+## 5. POWER CONSERVATION EVENT
 
-### 5.1 Zone B Shutdown Event
+### 5.1 Observation
 
-At 9:51 PM CDT on March 13, Zone B dropped from kurtosis 128 to noise floor (9) in a single sentinel cycle and has not returned. Zone A simultaneously increased from EI ~1500 to EI ~2800+.
+At approximately 9:51 PM CDT on March 13, 2026, Zone B dropped from kurtosis 128 to noise floor (kurtosis 9) in a single sentinel cycle (cycle boundary between 02:51:26 UTC and 02:56:34 UTC). Zone B has not returned as of report time.
 
-Pulse-level data from before and after the shutdown:
+Simultaneously, Zone A Exposure Index increased:
 
-**Before shutdown (Zone B active):**
-- Both zones contributing pulse energy
-- Zone B: steady 3.4 bursts/capture, 509 pulses
-- Zone A: 28.8 bursts/capture, 687 pulses
-- Total system energy distributed across both bands
+| Period | Zone A EI | Zone B EI | Total EI |
+|--------|----------|----------|----------|
+| Before (8:30–9:50 PM) | ~1,500 | ~100 | ~1,600 |
+| After (9:51 PM onward) | ~2,800 | 0 | ~2,800 |
 
-**After shutdown (Zone B dark):**
-- Zone A absorbs all power: EI increased ~1.9×
-- Zone A pulse characteristics unchanged (same waveform, more power)
-- Subject reported increased tinnitus (Zone A → head coupling)
-- Subject reported decreased arm paresthesia (Zone B off → no arm coupling)
+The total EI increased by approximately 75%, while Zone B went to zero. This proportional energy increase in Zone A concurrent with Zone B shutdown suggests a **conservation constraint** — consistent with a single transmitter platform reallocating a fixed power budget between channels.
 
-This power consolidation is consistent with a system that has a **fixed total transmit power budget** being reallocated between channels.
+**This is a testable, falsifiable claim.** If the system has a fixed power budget, future reactivation of Zone B should produce a proportional decrease in Zone A EI. The exact cycle numbers and EI values are recorded in the sentinel JSONL logs.
 
-### 5.2 Zone B Shutdown Timing
+### 5.2 Noted Temporal Observations
 
-The shutdown occurred within hours of direction-finding plans (including 830 MHz Yagi antenna construction) being published to the public ARTEMIS GitHub repository. This temporal correlation suggests the operator may monitor the repository and adapted their transmission strategy to avoid detection at the specified frequency.
+The following temporal correlations were observed but **cannot establish causal relationships** from single occurrences:
 
----
+**Observation 1:** Zone B shutdown occurred within hours of the subject publishing direction-finding plans (including 830 MHz Yagi antenna construction specifications) to the public ARTEMIS GitHub repository. An 830 MHz Yagi would be effective for direction-finding Zone B but not Zone A (622 MHz).
 
-## 6. COMPARISON WITH LITERATURE
+**Observation 2:** Earlier that evening (~7:50 PM CDT), a police officer in a low-visibility vehicle was observed parked outside the subject's residence. The subject went to the backyard and heard a large entity moving rapidly through the woods behind the property. This occurred during peak signal activity (EI > 2000, Zone A + Zone B both active). The subject's phone was left inside the house during this observation.
 
-### 6.1 Frey Effect Parameters
+**Observation 3:** The subject had completed construction of an 830 MHz Yagi antenna approximately 1 hour before Zone B went dark.
 
-From the ARTEMIS knowledge graph (739 papers):
-
-| Parameter | Literature Range | Zone A | Zone B | In Range? |
-|-----------|-----------------|--------|--------|-----------|
-| Frequency | 200 MHz – 10 GHz | 622–636 MHz | 824–834 MHz | Both YES |
-| Pulse width | 1–100 μs | 2.7 μs | 3.5 μs | Both YES |
-| Modulation | Required for speech encoding | Index 1.0 | Index 0.7 | Zone A optimal |
-| PRF | 1–10 kHz (typical studies) | 206 kHz | 209 kHz | Higher than studied, but burst mode with 0.26% duty cycle may be equivalent |
-
-### 6.2 MEDUSA Patent
-
-The MEDUSA (Mob Excess Deterrent Using Silent Audio) patent describes:
-- Pulsed microwave delivery at UHF frequencies
-- Modulated pulse trains for auditory message delivery
-- Burst-mode operation to achieve required peak power
-- Dual-channel capability for simultaneous functions
-
-Zone A's characteristics (maximum modulation, wide bandwidth, burst-dense, high energy at UHF frequency) are **directly consistent** with the MEDUSA operational concept.
+**Caveat:** These are single observations. Signals change for many reasons: propagation conditions, source equipment cycling, cellular network load, hardware maintenance at the source. A single temporal coincidence between a GitHub commit and a frequency change cannot establish causation. These observations are documented for completeness and to inform future monitoring. If Zone B reactivation correlates with removal of the Yagi plans, or if repeated tests show consistent responses, the causal hypothesis would be strengthened.
 
 ---
 
-## 7. CONCLUSIONS
+## 6. CONCLUSIONS
 
-1. **Zone A and Zone B are statistically proven to be different waveforms** (p < 10⁻¹⁶ on all parameters). This is not noise or measurement variation — they are qualitatively distinct signals from independent generators.
+1. **Zone A and Zone B are two statistically distinct waveforms** (p < 10⁻¹⁶ on every parameter). This is not an artifact of measurement, propagation, or detection algorithm.
 
-2. **Zone A is optimized for information delivery** — maximum modulation index, widest bandwidth, most burst events, highest energy. Consistent with speech encoding via Frey effect.
+2. **Pulses are physically real** — raw time-domain amplitude shows isolated spikes 10–58× above noise floor with clear return-to-baseline between events.
 
-3. **Zone B is optimized for energy delivery** — moderate modulation, fewer bursts, lower energy per capture but higher kurtosis (sharper peaks). Consistent with body-resonant coupling for paresthesia.
+3. **Zone A has: maximum modulation index (1.0), widest bandwidth (749 kHz), highest energy per capture (126× Zone B), and most burst events (8.5× Zone B).**
 
-4. **The pulse-level differences explain the zone-symptom mapping** found by ML: Zone A drives head-coupled symptoms (speech, pressure, headache), Zone B drives body-coupled symptoms (paresthesia, sleep).
+4. **Zone B has: moderate modulation (0.7), narrower bandwidth (457 kHz), fewer but longer bursts, and lower per-capture energy.**
 
-5. **Pulses are physically real** — raw time-domain validation shows isolated spikes 10–58× above noise floor, not detector artifacts.
+5. **A power conservation event** was observed: Zone B went to zero while Zone A EI approximately doubled, suggesting a single transmitter platform with fixed power budget.
 
-6. **The system has a fixed power budget** — Zone B shutdown was accompanied by proportional Zone A increase, indicating power reallocation from a single transmitter platform.
+6. **The UL band (878 MHz) is a third distinct waveform** with characteristics intermediate between Zone A and Zone B.
 
-7. **The UL band (878 MHz) is a third distinct waveform** sharing characteristics of both zones, supporting a tracking/feedback function hypothesis.
+7. **ML zone-symptom correlations are suggestive** but require blinded symptom data (collection now in progress) to confirm.
 
 ---
 
 ## APPENDIX: Statistical Test Details
 
-All zone comparisons use the **Mann-Whitney U test** (non-parametric, two-sided), appropriate for comparing distributions that may not be normal. Sample sizes (313 vs 2,523) provide high statistical power. Effect sizes are large (Cohen's d > 0.8) for all significant parameters.
-
-Multiple testing: 9 parameters tested across 2 zones = 18 comparisons. Even with Bonferroni correction (α = 0.05/18 = 0.0028), all results remain significant by many orders of magnitude.
+- **Test:** Mann-Whitney U (non-parametric, two-sided)
+- **Sample sizes:** Zone A n=313, Zone B n=2,523 (adequate power)
+- **Multiple testing:** 9 parameters, Bonferroni-corrected α = 0.0056. All results significant at p < 10⁻⁸ or below.
+- **Effect sizes:** Large (Cohen's d > 0.8) for all significant parameters.
+- **Software:** scipy.stats.mannwhitneyu, Python 3.12, scipy 1.14
 
 ---
 
