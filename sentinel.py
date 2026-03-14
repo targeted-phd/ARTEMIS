@@ -244,7 +244,10 @@ def analyze_iq(iq, freq_hz):
 
 
 def hash_data(data_str):
-    return hashlib.sha256(data_str.encode()).hexdigest()[:16]
+    # Full SHA-256 (64 hex chars / 256 bits) for forensic-grade integrity.
+    # Prior versions used [:16] (64 bits) — insufficient for legal/forensic use.
+    # Existing data retains 16-char hashes; new entries get full 64-char hashes.
+    return hashlib.sha256(data_str.encode()).hexdigest()
 
 
 # ── Main sentinel ───────────────────────────────────────────────────────────
