@@ -335,13 +335,18 @@ def dose_response(data, X, feature_names):
     results = {}
 
     for sym in SYMPTOM_COLS:
-        severities = [r.get(sym, 0) for r in data]
-        if max(severities) < 1:
+        interp_col = f"{sym}_interp"
+        severities = [r.get(interp_col, 0) or 0 for r in data]
+        if max(severities) < 0.1:
             continue
 
-        # Group by severity level
-        levels = sorted(set(s for s in severities if s > 0))
-        if len(levels) < 2:
+        # Group by severity level (bin continuous interp values)
+        pos_sevs = [s for s in severities if s > 0.1]
+        if len(pos_sevs) < 3:
+            continue
+        # Bin into low/med/high
+        levels = sorted(set(round(s) for s in pos_sevs if round(s) > 0))
+        if len(levels) < 1:
             continue
 
         print(f"\n  Dose-response: {sym.upper()}")
@@ -349,8 +354,11 @@ def dose_response(data, X, feature_names):
         for rf in RF_FEATURES:
             vals_by_sev = {}
             for sev in [0] + levels:
-                idx = [i for i, r in enumerate(data) if r.get(sym, 0) == sev
-                       and (sev > 0 or r.get("type") == "ACTIVE")]
+                if sev == 0:
+                    idx = [i for i, r in enumerate(data) if (r.get(interp_col, 0) or 0) < 0.1
+                           and r.get("did_respond") and r.get("type") == "ACTIVE"]
+                else:
+                    idx = [i for i, r in enumerate(data) if round(r.get(interp_col, 0) or 0) == sev]
                 vals = [data[i].get(rf, 0) or 0 for i in idx]
                 if vals:
                     vals_by_sev[sev] = np.mean(vals)
@@ -360,9 +368,9 @@ def dose_response(data, X, feature_names):
                 sev_vals = []
                 rf_vals = []
                 for i, r in enumerate(data):
-                    s = r.get(sym, 0)
+                    s = r.get(interp_col, 0) or 0
                     v = r.get(rf)
-                    if v is not None and isinstance(v, (int, float)):
+                    if v is not None and isinstance(v, (int, float)) and r.get("did_respond"):
                         sev_vals.append(s)
                         rf_vals.append(v)
                 if len(set(sev_vals)) > 1:
@@ -388,7 +396,7 @@ def temporal_analysis(data):
     # Hour-of-day profile per symptom
     print("\n  Temporal profiles:")
     for sym in SYMPTOM_COLS:
-        pos_hours = [r["hour"] for r in data if r.get(sym, 0) > 0]
+        pos_hours = [r["hour"] for r in data if (r.get(f"{sym}_interp", 0) or 0) > 0.05]
         if not pos_hours:
             continue
         all_hours = [r["hour"] for r in data if r.get("type") == "ACTIVE"]
@@ -408,7 +416,7 @@ def temporal_analysis(data):
     # Lag analysis: does RF precede symptoms?
     print("\n  Lag analysis (RF activity before symptom onset):")
     for sym in SYMPTOM_COLS:
-        y = np.array([1 if r.get(sym, 0) > 0 else 0 for r in data])
+        y = np.array([1 if (r.get(f"{sym}_interp", 0) or 0) > 0.05 else 0 for r in data])
         if y.sum() < 3:
             continue
 
@@ -456,11 +464,13 @@ def zone_differential(data):
     results = {}
 
     for sym in SYMPTOM_COLS:
-        pos = [r for r in data if r.get(sym, 0) > 0]
+        interp_col = f"{sym}_interp"
+        pos = [r for r in data if (r.get(interp_col, 0) or 0) > 0.05]
         if not pos:
             continue
 
-        neg_active = [r for r in data if r.get(sym, 0) == 0 and r.get("type") == "ACTIVE"]
+        neg_active = [r for r in data if (r.get(interp_col, 0) or 0) < 0.05
+                      and r.get("did_respond") and r.get("type") == "ACTIVE"]
 
         # Zone A dominant vs Zone B dominant during symptoms
         a_dom = sum(1 for r in pos if (r.get("max_kurt_zone_a") or 0) > (r.get("max_kurt_zone_b") or 0))
@@ -619,7 +629,7 @@ def generate_plots(data, X, feature_names, sym_results, dose_results, temporal_r
     n_sym = len(SYMPTOM_COLS)
     cooccur = np.zeros((n_sym, n_sym))
     for r in data:
-        active = [i for i, s in enumerate(SYMPTOM_COLS) if r.get(s, 0) > 0]
+        active = [i for i, s in enumerate(SYMPTOM_COLS) if (r.get(f"{s}_interp", 0) or 0) > 0.05]
         for a in active:
             for b in active:
                 cooccur[a, b] += 1
@@ -717,8 +727,8 @@ def cmd_analyze(args=None):
     print(f"{'─' * 60}")
 
     # Check: when did symptom reporting start vs zone activity
-    sym_rows = [r for r in data if r.get("any_symptom", 0) > 0]
-    nonsym_rows = [r for r in data if r.get("any_symptom", 0) == 0 and r.get("type") == "ACTIVE"]
+    sym_rows = [r for r in data if (r.get("any_symptom_interp") or 0) > 0]
+    nonsym_rows = [r for r in data if r.get("any_symptom_interp") == 0 and r.get("type") == "ACTIVE"]
     if sym_rows:
         first_sym = sym_rows[0]["cst"]
         last_sym = sym_rows[-1]["cst"]
