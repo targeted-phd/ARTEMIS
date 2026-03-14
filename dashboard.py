@@ -28,114 +28,254 @@ HTML = r"""<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ARTEMIS</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: #06060b; color: #c8c8d8; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 13px; }
+  :root {
+    --bg:       #05050e;
+    --bg-card:  #080812;
+    --border:   #13132a;
+    --border2:  #1c1c36;
+    --dim:      #36365a;
+    --muted:    #4e4e74;
+    --text:     #b0b0cc;
+    --za:       #2288ff;
+    --zb:       #ff8800;
+    --zul:      #aa44ff;
+    --accent:   #55aaff;
+    --r: 4px;
+  }
 
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 13px;
+    min-height: 100vh;
+  }
+
+  /* Scanline overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0px, transparent 3px,
+      rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.08) 4px
+    );
+    z-index: 9999;
+  }
+
+  /* ── Header ── */
   .header {
-    background: #0a0a12;
-    padding: 10px 20px;
-    border-bottom: 1px solid #16162a;
+    background: linear-gradient(180deg, #0d0d1e 0%, #07070f 100%);
+    padding: 0 20px;
+    height: 46px;
+    border-bottom: 1px solid var(--border2);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 24px rgba(0,0,0,0.7);
   }
-  .header h1 { font-size: 15px; color: #5af; letter-spacing: 4px; font-weight: normal; text-shadow: 0 0 12px rgba(80,160,255,0.4); }
-  .header-right { display: flex; align-items: center; gap: 20px; }
-  .status { font-size: 11px; color: #556; }
-  .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
-  .dot.live { background: #0d0; box-shadow: 0 0 8px #0d0; animation: pulse 2s ease-in-out infinite; }
-  .dot.stale { background: #c80; }
-  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent 0%, rgba(85,170,255,0.4) 30%,
+      rgba(85,170,255,0.6) 50%, rgba(85,170,255,0.4) 70%,
+      transparent 100%);
+  }
+  .header-left { display: flex; align-items: center; gap: 18px; }
+  .header h1 {
+    font-size: 14px;
+    color: var(--accent);
+    letter-spacing: 6px;
+    font-weight: normal;
+    text-shadow: 0 0 20px rgba(85,170,255,0.55), 0 0 50px rgba(85,170,255,0.15);
+  }
+  .header-sub {
+    font-size: 9px;
+    color: var(--dim);
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    border-left: 1px solid var(--border2);
+    padding-left: 16px;
+  }
+  .header-right { display: flex; align-items: center; gap: 24px; }
+  .status { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 7px; }
+  .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .dot.live  { background: #00dd44; box-shadow: 0 0 8px #00dd44, 0 0 20px rgba(0,221,68,0.25); animation: pulse 2s ease-in-out infinite; }
+  .dot.stale { background: #cc8800; box-shadow: 0 0 6px #cc8800; }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
 
+  /* ── Grid ── */
   .grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    padding: 10px;
+    gap: 10px;
+    padding: 12px;
   }
   @media (max-width: 1100px) { .grid { grid-template-columns: repeat(2, 1fr); } }
 
+  /* ── Card base ── */
   .card {
-    background: #0c0c14;
-    border: 1px solid #18182a;
-    border-radius: 5px;
-    padding: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 14px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border2), transparent);
+    pointer-events: none;
   }
   .card h2 {
     font-size: 9px;
-    color: #445;
+    color: var(--dim);
     text-transform: uppercase;
     letter-spacing: 2.5px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     font-weight: normal;
-    border-bottom: 1px solid #16162a;
-    padding-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card h2::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
   }
 
-  .metric { font-size: 40px; font-weight: bold; line-height: 1; font-variant-numeric: tabular-nums; transition: color 0.8s ease; }
-  .sub { font-size: 11px; color: #445; margin-top: 5px; }
+  /* ── Metric cards ── */
+  .metric-glow {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    border-radius: var(--r);
+    opacity: 0;
+    transition: opacity 1.4s ease, background 1.4s ease;
+  }
+  .metric { font-size: 44px; font-weight: bold; line-height: 1; font-variant-numeric: tabular-nums; transition: color 0.8s ease, text-shadow 0.8s ease; position: relative; z-index: 1; }
+  .sub { font-size: 10px; color: var(--muted); margin-top: 8px; letter-spacing: 0.5px; position: relative; z-index: 1; }
 
-  /* Zone Power bars */
-  .bar-row { display: flex; align-items: center; gap: 6px; margin: 5px 0; }
-  .bar-label { width: 56px; text-align: right; font-size: 10px; color: #556; flex-shrink: 0; }
-  .bar-zone-tag { width: 14px; font-size: 9px; text-align: center; flex-shrink: 0; }
-  .bar-track { flex: 1; height: 18px; background: #0a0a12; border-radius: 2px; overflow: hidden; position: relative; border: 1px solid #14141e; }
-  .bar-fill { height: 100%; transition: width 0.9s cubic-bezier(.25,.46,.45,.94); }
-  .bar-fill.a { background: linear-gradient(90deg, #0a1530 0%, #1244aa 40%, #28f 100%); }
-  .bar-fill.b { background: linear-gradient(90deg, #1a0800 0%, #a03000 40%, #f80 100%); }
-  .bar-fill.ul { background: linear-gradient(90deg, #120818 0%, #5a1899 40%, #a4f 100%); }
-  .bar-val { position: absolute; right: 5px; top: 0; line-height: 18px; font-size: 10px; color: #bbb; }
-  .bar-unit { font-size: 9px; color: #445; margin-left: 2px; }
+  /* ── Zone Exposure bars ── */
+  .zone-bars { display: flex; flex-direction: column; gap: 12px; padding-top: 2px; }
+  .bar-block { display: flex; flex-direction: column; gap: 5px; }
+  .bar-header { display: flex; align-items: baseline; gap: 8px; }
+  .bar-zone-name { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; font-weight: bold; width: 52px; flex-shrink: 0; }
+  .bar-zone-name.za  { color: var(--za); }
+  .bar-zone-name.zb  { color: var(--zb); }
+  .bar-zone-name.zul { color: var(--zul); }
+  .bar-freq-range { font-size: 9px; color: var(--dim); flex: 1; }
+  .bar-val-label { font-size: 12px; font-variant-numeric: tabular-nums; font-weight: bold; text-align: right; min-width: 48px; }
+  .bar-val-label.za  { color: var(--za); }
+  .bar-val-label.zb  { color: var(--zb); }
+  .bar-val-label.zul { color: var(--zul); }
+  .bar-track { height: 6px; background: rgba(255,255,255,0.025); border-radius: 2px; overflow: hidden; position: relative; border: 1px solid var(--border); }
+  .bar-fill { height: 100%; border-radius: 1px; transition: width 0.9s cubic-bezier(.25,.46,.45,.94); }
+  .bar-fill.a  { background: linear-gradient(90deg, rgba(10,24,60,0.5) 0%, #1244aa 50%, var(--za) 100%); box-shadow: 3px 0 12px rgba(34,136,255,0.5); }
+  .bar-fill.b  { background: linear-gradient(90deg, rgba(40,12,0,0.5) 0%, #a03000 50%, var(--zb) 100%); box-shadow: 3px 0 12px rgba(255,136,0,0.5); }
+  .bar-fill.ul { background: linear-gradient(90deg, rgba(20,6,36,0.5) 0%, #5a1899 50%, var(--zul) 100%); box-shadow: 3px 0 12px rgba(170,68,255,0.5); }
 
   .span2 { grid-column: span 2; }
   .span4 { grid-column: 1 / -1; }
 
-  /* Timeline */
-  .chart-wrap { width: 100%; height: 200px; position: relative; }
-  .chart-wrap canvas { width: 100%; height: 100%; display: block; }
-  .chart-legend {
-    display: flex; gap: 14px; margin-bottom: 6px; font-size: 10px; color: #556;
-  }
-  .legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 1px; margin-right: 4px; vertical-align: middle; }
+  /* ── Symptom list ── */
+  .sym-list { display: flex; flex-direction: column; max-height: 134px; overflow-y: auto; }
+  .sym-list::-webkit-scrollbar { width: 3px; }
+  .sym-list::-webkit-scrollbar-track { background: transparent; }
+  .sym-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
 
-  /* Waterfall frequency heatmap */
-  .waterfall { display: flex; flex-direction: column; gap: 2px; }
-  .wf-zone { margin-bottom: 6px; }
-  .wf-zone-label {
-    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
-    margin-bottom: 3px; padding: 0 2px;
-  }
-  .wf-zone-label.za { color: #28f; }
-  .wf-zone-label.zb { color: #f80; }
-  .wf-zone-label.zul { color: #a4f; }
-  .wf-row { display: flex; align-items: center; gap: 4px; height: 18px; }
-  .wf-freq-label { width: 52px; text-align: right; font-size: 10px; color: #556; flex-shrink: 0; }
-  .wf-bar-track { flex: 1; height: 14px; background: #090910; border-radius: 1px; overflow: hidden; position: relative; }
-  .wf-bar-fill { height: 100%; border-radius: 1px; transition: width 0.6s ease, background 0.6s ease; }
-  .wf-val { font-size: 10px; color: #556; width: 40px; text-align: right; flex-shrink: 0; }
-
-  /* Symptoms */
   .sym-item {
-    padding: 5px 0;
+    padding: 6px 8px 6px 10px;
     font-size: 11px;
     display: flex;
-    gap: 8px;
+    gap: 10px;
     align-items: center;
-    border-bottom: 1px solid #0f0f18;
+    border-bottom: 1px solid rgba(19,19,42,0.9);
+    border-left: 2px solid transparent;
   }
   .sym-item:last-child { border-bottom: none; }
-  .sym-time { color: #778; width: 64px; flex-shrink: 0; font-size: 10px; }
-  .sym-tag { padding: 2px 7px; border-radius: 2px; font-size: 9px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; flex-shrink: 0; }
-  .sym-tag.speech   { background: #231200; color: #fb0; border: 1px solid #4a2800; }
-  .sym-tag.headache { background: #200808; color: #f55; border: 1px solid #440c0c; }
-  .sym-tag.paresthesia { background: #061520; color: #4bf; border: 1px solid #0c2840; }
-  .sym-tag.nausea   { background: #162008; color: #6d4; border: 1px solid #2a400c; }
-  .sym-detail { color: #445; font-size: 10px; }
+  .sym-item.speech      { border-left-color: #ffbb00; }
+  .sym-item.headache    { border-left-color: #ff5555; }
+  .sym-item.paresthesia { border-left-color: #44bbff; }
+  .sym-item.nausea      { border-left-color: #66dd44; }
+
+  .sym-time { color: var(--muted); width: 58px; flex-shrink: 0; font-size: 10px; }
+  .sym-tag { padding: 2px 8px; border-radius: 2px; font-size: 9px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; flex-shrink: 0; min-width: 82px; text-align: center; }
+  .sym-tag.speech      { background: rgba(35,18,0,0.9);  color: #ffbb00; border: 1px solid rgba(80,46,0,0.8); }
+  .sym-tag.headache    { background: rgba(32,8,8,0.9);   color: #ff5555; border: 1px solid rgba(70,14,14,0.8); }
+  .sym-tag.paresthesia { background: rgba(5,20,34,0.9);  color: #44bbff; border: 1px solid rgba(10,42,70,0.8); }
+  .sym-tag.nausea      { background: rgba(20,34,8,0.9);  color: #66dd44; border: 1px solid rgba(40,68,14,0.8); }
+  .sym-detail { color: var(--dim); font-size: 10px; flex: 1; }
+
+  /* ── Unified chart panel ── */
+  .chart-panel {
+    grid-column: 1 / -1;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    overflow: hidden;
+    position: relative;
+  }
+  .chart-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border2), transparent);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .chart-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px 9px;
+    border-bottom: 1px solid var(--border);
+  }
+  .chart-section-title { font-size: 9px; color: var(--dim); text-transform: uppercase; letter-spacing: 2.5px; }
+  .chart-legend { display: flex; gap: 16px; font-size: 10px; color: var(--muted); align-items: center; }
+  .legend-item { display: flex; align-items: center; gap: 5px; }
+  .legend-dot { display: inline-block; width: 20px; height: 3px; border-radius: 2px; flex-shrink: 0; }
+
+  .chart-divider { height: 1px; background: var(--border); position: relative; }
+  .chart-divider-label {
+    position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+    padding: 0 16px; font-size: 9px; color: var(--dim);
+    text-transform: uppercase; letter-spacing: 2px;
+    background: var(--bg-card); box-shadow: 0 0 0 1px var(--bg-card);
+  }
+  .chart-divider-right {
+    position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+    font-size: 9px; color: var(--dim); letter-spacing: 1px;
+    background: var(--bg-card); padding: 0 4px;
+  }
+
+  .chart-wrap { width: 100%; position: relative; }
+  .chart-wrap canvas { width: 100%; height: 100%; display: block; }
+  .chart-wrap.timeline { height: 200px; }
+  .chart-wrap.heatmap  { height: 320px; overflow: visible; }
 </style>
 </head>
 <body>
 <div class="header">
-  <h1>A R T E M I S</h1>
+  <div class="header-left">
+    <h1>A R T E M I S</h1>
+    <div class="header-sub">RF Exposure Monitor</div>
+  </div>
   <div class="header-right">
     <div class="status"><span class="dot live" id="dot"></span><span id="st">connecting...</span></div>
   </div>
@@ -145,21 +285,25 @@ HTML = r"""<!DOCTYPE html>
 
   <!-- Metric cards -->
   <div class="card">
+    <div class="metric-glow" id="eiGlow"></div>
     <h2>Exposure Index</h2>
     <div class="metric" id="ei" style="color:#334">—</div>
     <div class="sub" id="eiSub">—</div>
   </div>
   <div class="card">
+    <div class="metric-glow" id="kurtGlow"></div>
     <h2>Max Kurtosis</h2>
     <div class="metric" id="kurt" style="color:#334">—</div>
     <div class="sub" id="kurtSub">—</div>
   </div>
   <div class="card">
+    <div class="metric-glow" id="pulsesGlow"></div>
     <h2>Total Pulses</h2>
     <div class="metric" id="pulses" style="color:#334">—</div>
     <div class="sub" id="pulsesSub">—</div>
   </div>
   <div class="card">
+    <div class="metric-glow" id="nactGlow"></div>
     <h2>Active Freqs</h2>
     <div class="metric" id="nact" style="color:#334">—</div>
     <div class="sub" id="nactSub">—</div>
@@ -168,45 +312,59 @@ HTML = r"""<!DOCTYPE html>
   <!-- Zone Power (EI values) -->
   <div class="card span2">
     <h2>Zone Exposure Index</h2>
-    <div class="bar-row">
-      <span class="bar-label">622–636</span>
-      <span class="bar-zone-tag" style="color:#28f">A</span>
-      <div class="bar-track"><div class="bar-fill a" id="bA" style="width:0%"></div><span class="bar-val" id="vA"></span></div>
-    </div>
-    <div class="bar-row">
-      <span class="bar-label">824–834</span>
-      <span class="bar-zone-tag" style="color:#f80">B</span>
-      <div class="bar-track"><div class="bar-fill b" id="bB" style="width:0%"></div><span class="bar-val" id="vB"></span></div>
-    </div>
-    <div class="bar-row">
-      <span class="bar-label">878</span>
-      <span class="bar-zone-tag" style="color:#a4f">UL</span>
-      <div class="bar-track"><div class="bar-fill ul" id="bU" style="width:0%"></div><span class="bar-val" id="vU"></span></div>
+    <div class="zone-bars">
+      <div class="bar-block">
+        <div class="bar-header">
+          <span class="bar-zone-name za">Zone A</span>
+          <span class="bar-freq-range">622 – 636 MHz</span>
+          <span class="bar-val-label za" id="vA">—</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill a" id="bA" style="width:0%"></div></div>
+      </div>
+      <div class="bar-block">
+        <div class="bar-header">
+          <span class="bar-zone-name zb">Zone B</span>
+          <span class="bar-freq-range">824 – 834 MHz</span>
+          <span class="bar-val-label zb" id="vB">—</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill b" id="bB" style="width:0%"></div></div>
+      </div>
+      <div class="bar-block">
+        <div class="bar-header">
+          <span class="bar-zone-name zul">Zone UL</span>
+          <span class="bar-freq-range">878 MHz uplink</span>
+          <span class="bar-val-label zul" id="vU">—</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill ul" id="bU" style="width:0%"></div></div>
+      </div>
     </div>
   </div>
 
   <!-- Symptoms -->
   <div class="card span2">
     <h2>Recent Symptoms — CST</h2>
-    <div id="symList" style="max-height:120px;overflow-y:auto"></div>
+    <div class="sym-list" id="symList"></div>
   </div>
 
-  <!-- Timeline -->
-  <div class="card span4">
-    <h2>Timeline — 60-Cycle Window</h2>
-    <div class="chart-legend">
-      <span><span class="legend-dot" style="background:rgba(40,136,255,0.55)"></span>Zone A</span>
-      <span><span class="legend-dot" style="background:rgba(255,136,0,0.55)"></span>Zone B</span>
-      <span><span class="legend-dot" style="background:rgba(170,68,255,0.55)"></span>878 UL</span>
-      <span><span class="legend-dot" style="background:#fff; opacity:0.7"></span>Kurtosis</span>
+  <!-- Unified chart panel: Timeline + Heatmap in one container -->
+  <div class="chart-panel">
+    <div class="chart-section-header">
+      <span class="chart-section-title">Timeline — 60-cycle window</span>
+      <div class="chart-legend">
+        <span class="legend-item"><span class="legend-dot" style="background:rgba(34,136,255,0.75)"></span>Zone A</span>
+        <span class="legend-item"><span class="legend-dot" style="background:rgba(255,136,0,0.75)"></span>Zone B</span>
+        <span class="legend-item"><span class="legend-dot" style="background:rgba(170,68,255,0.75)"></span>878 UL</span>
+        <span class="legend-item"><span class="legend-dot" style="background:rgba(255,255,255,0.7); height:2px"></span>Kurtosis</span>
+      </div>
     </div>
-    <div class="chart-wrap"><canvas id="cv"></canvas></div>
-  </div>
+    <div class="chart-wrap timeline"><canvas id="cv"></canvas></div>
 
-  <!-- Time x Frequency Heatmap (shared x-axis with timeline above) -->
-  <div class="card span4" style="margin-top:-6px; border-top:none; border-top-left-radius:0; border-top-right-radius:0;">
-    <h2>Frequency × Time — symptom markers at alert time</h2>
-    <div class="chart-wrap" style="height:240px"><canvas id="heatmap"></canvas></div>
+    <div class="chart-divider">
+      <span class="chart-divider-label">Freq &times; Time</span>
+      <span class="chart-divider-right">symptom markers at alert time</span>
+    </div>
+
+    <div class="chart-wrap heatmap"><canvas id="heatmap"></canvas></div>
   </div>
 
 </div>
@@ -315,7 +473,7 @@ function draw() {
   const dpr = window.devicePixelRatio || 2;
   const n  = hist.length;
   const labelW = 55 * dpr;  // match heatmap left offset
-  const padTop    = H * 0.20;
+  const padTop    = H * 0.06;
   const padBottom = H * 0.14;
   const plotW = W - labelW;
   const plotH = H - padTop - padBottom;
@@ -378,50 +536,6 @@ function draw() {
   // Kurtosis line — bright white/silver on top of everything
   drawLine(ptsK, 'rgba(255,255,255,0.82)', 2.2, ctx);
 
-  // Symptom labels on timeline (angled, stacked if overlapping)
-  const tlSymStacks = {};
-  symptomsData.forEach(s => {
-    if (!s.symptom) return;
-    const alertLocal = s.alertLocalTime || s.localTime || '';
-    if (!alertLocal) return;
-    let bestIdx = -1, bestDist = Infinity;
-    const toMin = (ts) => {
-      const m = ts.match(/(\d+):(\d+)\s*(AM|PM)/i);
-      if (!m) return -1;
-      let hr = parseInt(m[1]); const mn = parseInt(m[2]);
-      if (m[3].toUpperCase() === 'PM' && hr !== 12) hr += 12;
-      if (m[3].toUpperCase() === 'AM' && hr === 12) hr = 0;
-      return hr * 60 + mn;
-    };
-    hist.forEach((h, i) => {
-      if (!h.ts) return;
-      const d2 = Math.abs(toMin(h.ts) - toMin(alertLocal));
-      if (d2 < bestDist) { bestDist = d2; bestIdx = i; }
-    });
-    if (bestIdx < 0 || bestDist >= 10) return;
-
-    const sym = s.symptom;
-    const color = sym === 'speech' ? '#fb0'
-                : sym === 'headache' ? '#f55'
-                : sym === 'tinnitus' ? '#f8f'
-                : sym === 'paresthesia' ? '#4bf'
-                : sym === 'nausea' ? '#6d4' : '#888';
-    const x = xi(bestIdx);
-    if (!tlSymStacks[bestIdx]) tlSymStacks[bestIdx] = 0;
-    const stackN = tlSymStacks[bestIdx];
-    const lf = Math.round(dpr * 8);
-
-    ctx.save();
-    ctx.translate(x, padTop - 6 - stackN * (lf + 4));
-    ctx.rotate(-Math.PI / 4);
-    ctx.font = 'bold ' + lf + 'px monospace';
-    ctx.fillStyle = color;
-    ctx.textAlign = 'left';
-    ctx.fillText(sym, 0, 0);
-    ctx.restore();
-    tlSymStacks[bestIdx]++;
-  });
-
   // Y-axis labels on left
   const fontSize = Math.max(12, Math.round(W / 80));
   ctx.font = fontSize + 'px monospace';
@@ -483,7 +597,7 @@ function drawHeatmap() {
   // Layout
   const labelW = 55 * dpr;   // freq labels on left
   const bottomH = 40 * dpr;  // room for bottom symptom labels
-  const topH = 45 * dpr;     // room for angled symptom labels
+  const topH = 4 * dpr;      // minimal top — all labels at bottom
   const plotW = W - labelW;
   const plotH = H - bottomH - topH;
   const cellW = plotW / nTime;
@@ -686,7 +800,7 @@ function upd(data) {
   const syms = (data.symptoms || []).filter(s => s.symptom);
   syms.slice(-12).reverse().forEach(s => {
     const d = document.createElement('div');
-    d.className = 'sym-item';
+    d.className = 'sym-item ' + (s.symptom || '');
     const localT = s.localTime || '—';
     const mk = s.alert_max_kurt
                ? Math.round(s.alert_max_kurt)
