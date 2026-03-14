@@ -1070,7 +1070,7 @@ def get_state():
         "current": latest,
         "history": history,
         "freqBins": FREQ_BINS,
-        "symptoms": symptoms[-20:],
+        "symptoms": symptoms,
     }
 
 
