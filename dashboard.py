@@ -277,6 +277,14 @@ HTML = r"""<!DOCTYPE html>
     <div class="header-sub">RF Exposure Monitor</div>
   </div>
   <div class="header-right">
+    <div style="display:flex;gap:6px;align-items:center">
+      <button onclick="scroll(-60)" style="background:#1a1a2a;border:1px solid #2a2a3a;color:#888;padding:4px 10px;border-radius:3px;cursor:pointer;font-size:12px">&#9664;&#9664;</button>
+      <button onclick="scroll(-10)" style="background:#1a1a2a;border:1px solid #2a2a3a;color:#888;padding:4px 8px;border-radius:3px;cursor:pointer;font-size:12px">&#9664;</button>
+      <span id="navInfo" style="font-size:10px;color:#556;min-width:60px;text-align:center">LIVE</span>
+      <button onclick="scroll(10)" style="background:#1a1a2a;border:1px solid #2a2a3a;color:#888;padding:4px 8px;border-radius:3px;cursor:pointer;font-size:12px">&#9654;</button>
+      <button onclick="scroll(60)" style="background:#1a1a2a;border:1px solid #2a2a3a;color:#888;padding:4px 10px;border-radius:3px;cursor:pointer;font-size:12px">&#9654;&#9654;</button>
+      <button onclick="goLive()" style="background:#0a2a0a;border:1px solid #2a4a2a;color:#4a4;padding:4px 10px;border-radius:3px;cursor:pointer;font-size:11px;font-weight:bold">LIVE</button>
+    </div>
     <div class="status"><span class="dot live" id="dot"></span><span id="st">connecting...</span></div>
   </div>
 </div>
@@ -441,27 +449,47 @@ function splinePath(pts, ctx2d) {
 }
 
 // Draw a filled area under a spline path
-function drawAreaFill(pts, baseY, fillStyle, ctx2d) {
-  if (pts.length < 2) return;
-  ctx2d.beginPath();
-  ctx2d.moveTo(pts[0][0], baseY);
-  ctx2d.lineTo(pts[0][0], pts[0][1]);
-  splinePath(pts, ctx2d);
-  ctx2d.lineTo(pts[pts.length - 1][0], baseY);
-  ctx2d.closePath();
-  ctx2d.fillStyle = fillStyle;
-  ctx2d.fill();
+// Split point array at null values (gaps) into segments
+function splitAtGaps(pts) {
+  const segments = [];
+  let current = [];
+  for (const p of pts) {
+    if (p[1] === null || isNaN(p[1])) {
+      if (current.length >= 2) segments.push(current);
+      current = [];
+    } else {
+      current.push(p);
+    }
+  }
+  if (current.length >= 2) segments.push(current);
+  return segments;
 }
 
-// Draw a spline stroke
+function drawAreaFill(pts, baseY, fillStyle, ctx2d) {
+  for (const seg of splitAtGaps(pts)) {
+    if (seg.length < 2) continue;
+    ctx2d.beginPath();
+    ctx2d.moveTo(seg[0][0], baseY);
+    ctx2d.lineTo(seg[0][0], seg[0][1]);
+    splinePath(seg, ctx2d);
+    ctx2d.lineTo(seg[seg.length - 1][0], baseY);
+    ctx2d.closePath();
+    ctx2d.fillStyle = fillStyle;
+    ctx2d.fill();
+  }
+}
+
+// Draw a spline stroke, breaking at gaps
 function drawLine(pts, strokeStyle, lineWidth, ctx2d) {
-  if (pts.length < 2) return;
-  ctx2d.beginPath();
-  splinePath(pts, ctx2d);
-  ctx2d.strokeStyle = strokeStyle;
-  ctx2d.lineWidth = lineWidth;
-  ctx2d.lineJoin = 'round';
-  ctx2d.stroke();
+  for (const seg of splitAtGaps(pts)) {
+    if (seg.length < 2) continue;
+    ctx2d.beginPath();
+    splinePath(seg, ctx2d);
+    ctx2d.strokeStyle = strokeStyle;
+    ctx2d.lineWidth = lineWidth;
+    ctx2d.lineJoin = 'round';
+    ctx2d.stroke();
+  }
 }
 
 // ── Main timeline draw ────────────────────────────────────────────────────
@@ -492,11 +520,13 @@ function draw() {
 
   // Each zone gets its own vertical scale so B and UL aren't crushed
   const maxEI  = Math.max(10, ...hist.map(h => (h.eiA||0) + (h.eiB||0) + (h.eiUL||0)));
-  const ptsA  = hist.map((h, i) => [xi(i), yOf(h.eiA  || 0, maxEIA)]);
-  const ptsB  = hist.map((h, i) => [xi(i), yOf(h.eiB  || 0, maxEIB)]);
-  const ptsUL = hist.map((h, i) => [xi(i), yOf(h.eiUL || 0, maxEIU)]);
-  const ptsK  = hist.map((h, i) => [xi(i), yOf(h.k    || 0, maxK)]);
-  const ptsEI = hist.map((h, i) => [xi(i), yOf((h.eiA||0)+(h.eiB||0)+(h.eiUL||0), maxEI)]);
+  // Gap entries have null values — these become null y-coords which splitAtGaps() handles
+  const gapVal = (v, mx) => (v === null || v === undefined) ? null : yOf(v, mx);
+  const ptsA  = hist.map((h, i) => [xi(i), h.gap ? null : gapVal(h.eiA, maxEIA)]);
+  const ptsB  = hist.map((h, i) => [xi(i), h.gap ? null : gapVal(h.eiB, maxEIB)]);
+  const ptsUL = hist.map((h, i) => [xi(i), h.gap ? null : gapVal(h.eiUL || 0, maxEIU)]);
+  const ptsK  = hist.map((h, i) => [xi(i), h.gap ? null : gapVal(h.k, maxK)]);
+  const ptsEI = hist.map((h, i) => [xi(i), h.gap ? null : gapVal((h.eiA||0)+(h.eiB||0)+(h.eiUL||0), maxEI)]);
 
   // Subtle grid lines
   ctx.save();
@@ -842,13 +872,14 @@ function upd(data) {
   // Build history array for timeline + heatmap
   if (data.history) {
     hist = data.history.map(h => ({
-      k:    h.maxK   || 0,
-      eiA:  h.eiA    || 0,
-      eiB:  h.eiB    || 0,
+      k:    h.gap ? null : (h.maxK || 0),
+      eiA:  h.gap ? null : (h.eiA || 0),
+      eiB:  h.gap ? null : (h.eiB || 0),
       eiUL: 0,
       ts:   h.ts     || '',
       sym:  h.symptom || null,
       fh:   h.fh     || {},
+      gap:  h.gap     || false,
     }));
   }
   if (data.freqBins) freqBins = data.freqBins;
@@ -859,10 +890,41 @@ function upd(data) {
 }
 
 // ── Poll loop ─────────────────────────────────────────────────────────────
-function poll() {
-  fetch('/api/state')
+let currentOffset = 0;
+let autoScroll = true;
+
+function scroll(delta) {
+  currentOffset = Math.max(0, currentOffset - delta);
+  autoScroll = (currentOffset === 0);
+  pollNow();
+}
+
+function goLive() {
+  currentOffset = 0;
+  autoScroll = true;
+  pollNow();
+}
+
+function pollNow() {
+  fetch('/api/state?offset=' + currentOffset)
     .then(r => r.json())
-    .then(d => { upd(d); setTimeout(poll, 5000); })
+    .then(d => {
+      upd(d);
+      const nav = document.getElementById('navInfo');
+      if (currentOffset === 0) {
+        nav.textContent = 'LIVE';
+        nav.style.color = '#4a4';
+      } else {
+        nav.textContent = '-' + currentOffset;
+        nav.style.color = '#fa0';
+      }
+    });
+}
+
+function poll() {
+  fetch('/api/state?offset=' + currentOffset)
+    .then(r => r.json())
+    .then(d => { upd(d); setTimeout(poll, autoScroll ? 5000 : 30000); })
     .catch(() => {
       document.getElementById('dot').className = 'dot stale';
       document.getElementById('st').textContent = 'disconnected';
@@ -992,8 +1054,19 @@ def get_state():
                  826, 828, 830, 832, 834, 878]
 
     # History: last 60 cycles with per-freq kurtosis for heatmap
+    # Insert null entries for gaps > 5 minutes so the chart shows blank space
     history = []
-    for c in cycles[-60:]:
+    prev_cycle_time = None
+    # Window: show 60 cycles, offset from end by 'offset' param
+    window_size = 60
+    total_cycles = len(cycles)
+    # offset=0 means latest, offset=60 means one window back
+    history_offset = getattr(get_state, '_offset', 0)
+    end_idx = total_cycles - history_offset
+    start_idx = max(0, end_idx - window_size)
+    end_idx = max(start_idx + 1, end_idx)
+
+    for c in cycles[start_idx:end_idx]:
         max_k = 0
         # Build per-bin max kurtosis
         freq_heat = {f: 0.0 for f in FREQ_BINS}
@@ -1051,6 +1124,20 @@ def get_state():
                     if isinstance(f2, (int, float)):
                         if 618 < f2 < 640: eiA += ei_r
                         elif 820 < f2 < 840: eiB += ei_r
+
+        # Detect gaps > 5 min — insert null entry so chart shows break
+        try:
+            cycle_time = local_dt if ts else None
+        except:
+            cycle_time = None
+        if prev_cycle_time and cycle_time:
+            gap_sec = (cycle_time - prev_cycle_time).total_seconds()
+            if gap_sec > 300:  # > 5 min gap
+                history.append({
+                    "maxK": None, "ei": None, "eiA": None, "eiB": None,
+                    "ts": "", "fh": {}, "symptom": None, "gap": True,
+                })
+        prev_cycle_time = cycle_time
 
         history.append({
             "maxK": round(max_k, 1),
@@ -1121,8 +1208,17 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Content-Type", "text/html")
             self.end_headers()
             self.wfile.write(HTML.encode())
-        elif self.path == "/api/state":
+        elif self.path.startswith("/api/state"):
+            # Support ?offset=N for scrolling back in time
+            from urllib.parse import urlparse, parse_qs
+            parsed = urlparse(self.path)
+            params = parse_qs(parsed.query)
+            offset = int(params.get("offset", [0])[0])
+            get_state._offset = max(0, offset)
             state = get_state()
+            if state:
+                state["offset"] = offset
+                state["total_cycles"] = len(load_all_cycles())
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.end_headers()
