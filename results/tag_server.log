@@ -1,0 +1,26 @@
+ARTEMIS Tag Server — http://100.96.113.92:8091
+  POST /tag?s=speech    — log symptom
+  GET  /tags            — view recent tags
+  Log: results/evidence/symptom_log.jsonl
+  [TAG] 2026-03-13T23:25:13.000747+00:00 — speech test
+  [TAG] 2026-03-13T23:48:14.125875+00:00 — paresthesia 
+  [TAG] 2026-03-13T23:48:16.689926+00:00 — speech 
+  [TAG] 2026-03-13T23:50:58.888811+00:00 — paresthesia 
+  [TAG] 2026-03-13T23:50:59.901969+00:00 — speech 
+  [TAG] 2026-03-13T23:51:03.096427+00:00 — paresthesia 
+  [TAG] 2026-03-13T23:51:04.875849+00:00 — paresthesia 
+  [TAG] 2026-03-13T23:56:44.282564+00:00 — speech 
+  [TAG] 2026-03-13T23:56:48.137248+00:00 — headache 
+  [TAG] 2026-03-13T23:58:14.729584+00:00 — speech 
+  [TAG] 2026-03-13T23:58:16.476252+00:00 — headache 
+  [TAG] 2026-03-13T23:58:19.697110+00:00 — headache 
+  [TAG] 2026-03-13T23:58:21.214159+00:00 — headache 
+ARTEMIS Tag Server — http://100.96.113.92:8091
+  POST /tag?s=speech    — log symptom
+  GET  /tags            — view recent tags
+  Log: results/evidence/symptom_log.jsonl
+  [TAG] 2026-03-13T23:58:27.155940+00:00 — speech test_with_context
+ARTEMIS Tag Server — http://100.96.113.92:8091
+  POST /tag?s=speech    — log symptom
+  GET  /tags            — view recent tags
+  Log: results/evidence/symptom_log.jsonl
