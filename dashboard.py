@@ -507,7 +507,25 @@ function draw() {
   const plotW = W - labelW;
   const plotH = H - padTop - padBottom;
   const baseY = padTop + plotH;
-  const dx = plotW / (n - 1);
+  // Time-proportional x positioning
+  function tsToMin(ts) {
+    const m = (ts||'').match(/(\d+):(\d+)\s*(AM|PM)/i);
+    if (!m) return null;
+    let hr = parseInt(m[1]); const mn = parseInt(m[2]);
+    if (m[3].toUpperCase() === 'PM' && hr !== 12) hr += 12;
+    if (m[3].toUpperCase() === 'AM' && hr === 12) hr = 0;
+    return hr * 60 + mn;
+  }
+  const tMins = hist.map(h => tsToMin(h.ts));
+  // Handle midnight wrap: if any time < first time, add 24h
+  const t0 = tMins.find(t => t !== null) || 0;
+  for (let i = 0; i < tMins.length; i++) {
+    if (tMins[i] !== null && tMins[i] < t0 - 120) tMins[i] += 1440;
+  }
+  const validTimes = tMins.filter(t => t !== null);
+  const tMin = Math.min(...validTimes);
+  const tMax = Math.max(...validTimes);
+  const tRange = Math.max(tMax - tMin, 1);
 
   // Compute per-series maxima (with floor)
   const maxK   = Math.max(50,  ...hist.map(h => h.k   || 0));
@@ -516,7 +534,11 @@ function draw() {
   const maxEIU = Math.max(10,  ...hist.map(h => h.eiUL || 0));
 
   const yOf = (v, maxV) => padTop + plotH - Math.max(0, Math.min(1, (v || 0) / maxV)) * plotH;
-  const xi   = i => labelW + i * dx;
+  const xi = i => {
+    const t = tMins[i];
+    if (t === null) return labelW;  // gap entry
+    return labelW + ((t - tMin) / tRange) * plotW;
+  };
 
   // Each zone gets its own vertical scale so B and UL aren't crushed
   const maxEI  = Math.max(10, ...hist.map(h => (h.eiA||0) + (h.eiB||0) + (h.eiUL||0)));
