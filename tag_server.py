@@ -150,7 +150,7 @@ _last_tag = {"symptom": None, "time": 0}
 DEDUP_WINDOW_S = 30  # ignore same symptom within 30 seconds
 
 
-def log_symptom(symptom, note="", rf_snap=None):
+def log_symptom(symptom, note="", rf_snap=None, severity=None, severity_label=None):
     """Append symptom entry to JSONL log. RF context is self-contained
     from the notification button URL — no lookups needed.
     Deduplicates: same symptom+alert_id within 30s is ignored."""
@@ -165,6 +165,8 @@ def log_symptom(symptom, note="", rf_snap=None):
     entry = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "symptom": symptom,
+        "severity": severity,
+        "severity_label": severity_label,
         "reporter": "subject",
         "alert_id": alert_id,
         "alert_cycle": rf_snap.get("c") if rf_snap else None,
@@ -220,6 +222,14 @@ class TagHandler(BaseHTTPRequestHandler):
                     f"Bad symptom. Valid: {', '.join(sorted(VALID_SYMPTOMS))}".encode())
                 return
 
+            # Severity (0=none, 1=mild, 2=moderate, 3=severe)
+            severity = params.get("severity", [None])[0]
+            severity_label = params.get("severity_label", [None])[0]
+            try:
+                severity = int(severity) if severity else None
+            except ValueError:
+                severity = None
+
             # Unpack self-contained RF snapshot from button URL
             rf_param = params.get("rf", [None])[0]
             rf_snap = None
@@ -229,7 +239,8 @@ class TagHandler(BaseHTTPRequestHandler):
                 except (json.JSONDecodeError, TypeError):
                     pass
 
-            entry = log_symptom(symptom, note, rf_snap=rf_snap)
+            entry = log_symptom(symptom, note, rf_snap=rf_snap,
+                                severity=severity, severity_label=severity_label)
             if entry is None:
                 # Duplicate within dedup window
                 self.send_response(200)
@@ -252,50 +263,99 @@ class TagHandler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
 
         if parsed.path == "/quick":
-            # Mobile quick-tap page with all symptom buttons
+            # Mobile symptom tagging page — multi-select with severity
             params = parse_qs(parsed.query)
             rf = params.get("rf", [""])[0]
-            rf_esc = rf.replace("'", "\\'")
-            buttons = [
-                ("Speech", "speech", "#fa0", "#2a1800"),
-                ("Headache", "headache", "#f44", "#2a0808"),
-                ("Paresthesia", "paresthesia", "#4af", "#081828"),
-                ("Tinnitus", "tinnitus", "#f8f", "#280828"),
-                ("Nausea", "nausea", "#6d4", "#0a2808"),
-                ("Pressure", "pressure", "#aaf", "#0a0a28"),
-                ("Sleep", "sleep", "#88f", "#0a0828"),
-                ("Clear", "clear", "#4a4", "#082808"),
-            ]
-            btns_html = ""
-            for label, val, color, bg in buttons:
-                btns_html += (
-                    f'<button onclick="tag(\'{val}\')" '
-                    f'style="background:{bg};color:{color};border:2px solid {color};'
-                    f'padding:18px 0;font-size:18px;border-radius:8px;'
-                    f'font-weight:bold;cursor:pointer;width:100%">'
-                    f'{label}</button>\n'
-                )
+            rf_esc = rf.replace("'", "\\'").replace('"', '\\"')
             page = f"""<!DOCTYPE html>
 <html><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ARTEMIS — Tag Symptom</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>ARTEMIS</title>
 <style>
-body {{ background:#08080d; color:#ccc; font-family:sans-serif; padding:16px; }}
-h2 {{ color:#6af; font-size:14px; margin-bottom:12px; }}
-.grid {{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }}
-.done {{ text-align:center; color:#4a4; font-size:16px; margin-top:16px; display:none; }}
+* {{ margin:0; padding:0; box-sizing:border-box; }}
+body {{ background:#08080d; color:#ccc; font-family:-apple-system,sans-serif; padding:12px; -webkit-tap-highlight-color:transparent; }}
+h2 {{ color:#6af; font-size:13px; letter-spacing:2px; margin-bottom:10px; text-transform:uppercase; }}
+.row {{ display:flex; align-items:center; gap:6px; margin:6px 0; padding:8px; border-radius:6px; border:1px solid #1a1a2a; background:#0c0c14; }}
+.row.active {{ border-color:var(--c); }}
+.sym-name {{ flex:1; font-size:15px; font-weight:bold; }}
+.sev {{ display:flex; gap:4px; }}
+.sev button {{
+  width:36px; height:36px; border-radius:50%; border:2px solid #2a2a3a;
+  background:#111; color:#888; font-size:14px; font-weight:bold; cursor:pointer;
+  transition: all 0.15s;
+}}
+.sev button.on {{ color:#fff; }}
+.status {{ text-align:center; padding:8px; margin-top:10px; font-size:13px; border-radius:4px; display:none; }}
+.status.ok {{ display:block; background:#0a2a08; color:#4a4; }}
 </style></head><body>
-<h2>ARTEMIS — Tag Symptom</h2>
-<div class="grid">{btns_html}</div>
-<div class="done" id="done">Logged.</div>
+<h2>Tag Symptoms</h2>
+<div id="symptoms"></div>
+<div class="status" id="status"></div>
 <script>
 const rf = '{rf_esc}';
-function tag(s) {{
-  fetch('/tag?s=' + s + '&rf=' + encodeURIComponent(rf), {{method:'POST'}})
-    .then(() => {{
-      document.getElementById('done').style.display = 'block';
-      setTimeout(() => {{ document.getElementById('done').style.display = 'none'; }}, 2000);
-    }});
+const syms = [
+  {{name:'Speech', key:'speech', color:'#fa0'}},
+  {{name:'Headache', key:'headache', color:'#f44'}},
+  {{name:'Tinnitus', key:'tinnitus', color:'#f8f'}},
+  {{name:'Paresthesia', key:'paresthesia', color:'#4af'}},
+  {{name:'Nausea', key:'nausea', color:'#6d4'}},
+  {{name:'Pressure', key:'pressure', color:'#aaf'}},
+  {{name:'Sleep disruption', key:'sleep', color:'#88f'}},
+];
+const state = {{}};
+const container = document.getElementById('symptoms');
+
+syms.forEach(s => {{
+  state[s.key] = 0;
+  const row = document.createElement('div');
+  row.className = 'row';
+  row.style.setProperty('--c', s.color);
+  row.id = 'row-' + s.key;
+
+  let sevBtns = '';
+  for (let i = 0; i <= 3; i++) {{
+    const labels = ['—','Mild','Mod','Severe'];
+    sevBtns += '<button id="'+s.key+'-'+i+'" onclick="setSev(\\''+s.key+'\\','+i+')" title="'+labels[i]+'">'+i+'</button>';
+  }}
+
+  row.innerHTML = '<span class="sym-name" style="color:'+s.color+'">'+s.name+'</span><div class="sev">'+sevBtns+'</div>';
+  container.appendChild(row);
+  // Highlight 0 as default
+  document.getElementById(s.key+'-0').style.borderColor = '#444';
+}});
+
+function setSev(key, level) {{
+  const prev = state[key];
+  state[key] = level;
+  const sym = syms.find(s => s.key === key);
+  const row = document.getElementById('row-' + key);
+
+  // Update button styles
+  for (let i = 0; i <= 3; i++) {{
+    const btn = document.getElementById(key + '-' + i);
+    if (i === level) {{
+      btn.classList.add('on');
+      btn.style.borderColor = sym.color;
+      btn.style.background = level > 0 ? sym.color + '33' : '#111';
+    }} else {{
+      btn.classList.remove('on');
+      btn.style.borderColor = '#2a2a3a';
+      btn.style.background = '#111';
+    }}
+  }}
+  row.className = level > 0 ? 'row active' : 'row';
+
+  // Auto-submit on every change
+  if (level > 0) {{
+    const sevLabels = ['none','mild','moderate','severe'];
+    fetch('/tag?s=' + key + '&severity=' + level + '&severity_label=' + sevLabels[level] + '&rf=' + encodeURIComponent(rf), {{method:'POST'}})
+      .then(() => {{
+        const st = document.getElementById('status');
+        st.textContent = sym.name + ' — ' + sevLabels[level];
+        st.className = 'status ok';
+        setTimeout(() => {{ st.className = 'status'; }}, 2000);
+      }});
+  }}
 }}
 </script></body></html>"""
             self.send_response(200)

@@ -120,15 +120,25 @@ for s in symptoms:
         else: continue
         if d<bd: bd=d; bi=i
     if bi is not None and bd<300:
-        if s['symptom'] not in dataset[bi]['symptoms']:
-            dataset[bi]['symptoms'].append(s['symptom'])
+        sym = s['symptom']
+        sev = s.get('severity', 1)
+        try: sev = int(sev)
+        except: sev = 1
+        if sym not in dataset[bi].get('symptoms', []):
+            dataset[bi].setdefault('symptoms', []).append(sym)
+        # Track max severity per symptom per row
+        sev_key = f'sev_{sym}'
+        dataset[bi][sev_key] = max(dataset[bi].get(sev_key, 0), sev)
 
 all_st=set()
 for r in dataset:
     for s in r.get('symptoms',[]): all_st.add(s)
 for r in dataset:
-    for st in sorted(all_st): r[f'sym_{st}']=1 if st in r.get('symptoms',[]) else 0
-    r['any_symptom']=1 if r.get('symptoms') else 0
+    for st in sorted(all_st):
+        r[f'sym_{st}'] = 1 if st in r.get('symptoms',[]) else 0
+        r[f'sev_{st}'] = r.get(f'sev_{st}', 0)
+    r['any_symptom'] = 1 if r.get('symptoms') else 0
+    r['max_severity'] = max((r.get(f'sev_{st}', 0) for st in all_st), default=0)
 
 # ── Assemble master ──
 iq_meta=[{'file':f,'cst':datetime.fromtimestamp(os.path.getmtime(f),tz=CST).strftime('%Y-%m-%d %H:%M:%S'),
