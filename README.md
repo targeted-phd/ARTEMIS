@@ -1,210 +1,267 @@
-# RF Monitor
+# ARTEMIS — Anomalous RF Tracking, Evidence Mining & Intelligence System
 
-Forensic RF signal analysis toolkit for investigating anomalous pulsed signals in the cellular band. Uses statistical detection methods that reveal low-duty-cycle pulses invisible to conventional spectrum analyzers, backed by a knowledge graph of 739 academic papers spanning RF dosimetry, microwave auditory effect, acoustics, neuroscience, directed energy, and signal processing.
+Open-source forensic RF investigation toolkit. Continuous monitoring, real-time alerting, spectral analysis, exposure quantification, and symptom correlation for investigating anomalous pulsed signals across multiple frequency bands.
 
-## Project Phases
+**Repository:** [github.com/targeted-phd/ARTEMIS](https://github.com/targeted-phd/ARTEMIS)
 
-### Phase 1: SDR Signal Collection & Detection (Complete)
-Basic signal detection with RTL-SDR Blog V4 and whip antenna. Kurtosis-based pulse detection, 24h sentinel monitoring, cross-frequency correlation, and LTE comparison analysis.
+## What This Does
 
-### Phase 2: Knowledge Graph (Complete)
-739 academic papers, books, and reports extracted and loaded into a Neo4j knowledge graph with 38,700+ edges. Three-tier extraction pipeline: GROBID (structured metadata), PyMuPDF (fallback text), Tesseract OCR (scanned documents). Content-level entity extraction identifies frequencies, power levels, mechanisms, health effects, technologies, and organizations mentioned in each paper. Cleaned dataset (`papers_grobid_clean.json`) with manual per-paper review: structured `body_sections`, recovered metadata via GROBID re-extraction of 251 fallback papers, quality scoring (mean 0.88), and schema normalization across all 739 records.
+ARTEMIS monitors the RF spectrum 24/7 with an RTL-SDR, detects anomalous pulsed signals that standard spectrum analyzers miss, quantifies exposure using a dimensionless Buckingham Pi index, correlates RF activity with reported symptoms via mobile push notifications, and generates forensic evidence reports.
 
-### Phase 3: Signal Correlation & Encoding Analysis (Next)
-Forward modeling pipeline: known speech → encoding transforms → simulated RTL-SDR capture → compare with real observations. Tests four published encoding methods from the literature:
-- AM envelope (pulse amplitude = speech waveform)
-- PRF modulation (pulse rate = audio frequency)
-- Lin/MEDUSA time-derivative (perceived sound ∝ dP/dt)
-- Full thermoelastic inverse (desired acoustic pressure → required SAR)
+### Key Capabilities
 
-### Phase 4+: Hardware Expansion (Future)
-- Directional antenna + LNA for improved sensitivity
-- GPS-tagged portable monitoring for spatial mapping
-- Infrasound/ultrasound microphone array
-- Higher-bandwidth SDR (HackRF/USRP, ~100 MSPS to resolve individual µs pulses)
-- Real-time classification pipeline
-
-## Knowledge Graph
-
-### Stats
-| Metric | Count |
-|--------|-------|
-| Papers/books/reports | 739 |
-| Authors | 1,502 |
-| Cited references | 14,953 |
-| Institutions | 444 |
-| Content entities | 1,682 |
-| Total edges | 38,721 |
-
-### Node Types
-- **Paper** — title, authors, abstract, full body text, year, DOI, sections, figures, quality_score, extraction_method, quality_flags
-- **Author** — name, email
-- **Institution** — affiliation name
-- **Reference** — cited work (title, journal, year, DOI)
-- **Topic** — category classification (9 topics) + keyword tags
-- **Frequency** — specific frequencies mentioned (e.g., "915 MHz", "2.45 GHz")
-- **Power** — power/SAR levels (e.g., "1.6 kW/kg", "10 mW/cm²")
-- **Mechanism** — physical mechanisms (thermoelastic expansion, Frey effect, bone conduction, etc.)
-- **HealthEffect** — health outcomes (hearing loss, tinnitus, Havana syndrome, BBB disruption, etc.)
-- **Technology** — devices/systems (FDTD, phased array, V2K, MEDUSA, RTL-SDR, etc.)
-- **Organization** — agencies (DARPA, ICNIRP, FCC, NATO, etc.)
-- **Tissue** — biological targets (brain tissue, cochlea, skull bone, etc.)
-- **Modulation** — signal types (pulse modulation, AM envelope, UWB, frequency hopping, etc.)
-
-### Edge Types
-| Edge | Meaning | Count |
-|------|---------|-------|
-| CITES | Paper → Reference | 15,767 |
-| SHARED_ENTITIES | Papers sharing 3+ content entities | 7,740 |
-| MENTIONS | Paper → content entity | 6,431 |
-| HAS_FIGURE | Paper → figure caption | 3,561 |
-| AUTHORED | Author → Paper | 1,643 |
-| TAGGED | Paper → keyword topic | 1,160 |
-| AFFILIATED_WITH | Author → Institution | 1,032 |
-| IN_TOPIC | Paper → category topic | 865 |
-| SHARED_AUTHOR | Papers by same author | 230 |
-| CO_CITES | Papers citing 2+ same refs | 201 |
-| CITES_INTERNAL | Paper → Paper (in-collection citation) | 91 |
-
-### Topic Distribution
-| Topic | Papers |
-|-------|--------|
-| Acoustics / infrasound / ultrasound | 160 |
-| Weapons / surveillance / DEW | 69 |
-| Medical / clinical / health effects | 62 |
-| Signal processing / UWB / modulation | 55 |
-| Neuroscience / brain stimulation | 52 |
-| RF dosimetry / SAR / FDTD | 50 |
-| Microwave auditory effect / Frey | 22 |
-| Electromagnetic theory / propagation | 16 |
-| Other | 379 |
-
-### Neo4j Connection
-```
-URL:      bolt://localhost:7687
-Browser:  http://localhost:7474
-User:     neo4j
-Password: rfmonitor2026
-```
-
-### Example Cypher Queries
-
-```cypher
--- Find all papers about the microwave auditory effect
-MATCH (p:Paper)-[:IN_TOPIC]->(t:Topic {name: 'microwave_auditory'})
-RETURN p.title, p.year, p.quality_score ORDER BY p.year
-
--- Find high-quality papers only (score >= 0.8)
-MATCH (p:Paper) WHERE p.quality_score >= 0.8
-RETURN p.title, p.year, p.quality_score, p.extraction_method
-ORDER BY p.quality_score DESC LIMIT 20
-
--- Find papers mentioning a specific frequency
-MATCH (p:Paper)-[:MENTIONS]->(f:Frequency {name: '915 MHz'})
-RETURN p.title, p.year
-
--- Find health effects connected to RF dosimetry papers
-MATCH (p:Paper)-[:IN_TOPIC]->(t:Topic {name: 'rf_dosimetry'})
-MATCH (p)-[:MENTIONS]->(h:HealthEffect)
-RETURN h.name, count(p) as papers ORDER BY papers DESC
-
--- Find papers that share the most content entities
-MATCH (p1:Paper)-[s:SHARED_ENTITIES]->(p2:Paper)
-RETURN p1.title, p2.title, s.count ORDER BY s.count DESC LIMIT 20
-
--- Find the citation network around a specific author
-MATCH (a:Author {name: 'James Lin'})-[:AUTHORED]->(p:Paper)-[:CITES]->(r:Reference)
-RETURN p.title, collect(r.title) as citations
-
--- Which mechanisms are discussed alongside which health effects?
-MATCH (p:Paper)-[:MENTIONS]->(m:Mechanism)
-MATCH (p)-[:MENTIONS]->(h:HealthEffect)
-RETURN m.name, h.name, count(p) as papers ORDER BY papers DESC
-
--- Find all papers about a specific technology
-MATCH (p:Paper)-[:MENTIONS]->(tech:Technology {name: 'directed energy weapon'})
-RETURN p.title, p.year, p.abstract ORDER BY p.year
-
--- Full-text search across all papers
-CALL db.index.fulltext.queryNodes('paper_search', 'thermoelastic cochlea')
-YIELD node, score
-RETURN node.title, score ORDER BY score DESC LIMIT 10
-```
+- **24/7 Sentinel Monitoring** — 13 target frequencies across two bands, frequency jitter for broadband detection, auto-restart on failure
+- **Exposure Index (EI)** — Dimensionless power-time-impulsiveness metric: `EI = Σ_f [P_linear × Σ(pulse_width_μs) × (kurtosis / k_noise)]`
+- **Mobile Alerts** — Self-hosted ntfy over Tailscale mesh, push notifications with symptom tagging (7 symptoms × 4 severity levels)
+- **Live Dashboard** — Real-time browser UI with timeline charts, frequency heatmap, zone power bars, symptom overlay
+- **Spectrum Painter** — Waterfall spectrograms, pulse envelope analysis, instantaneous frequency (modulation fingerprint), pulse statistics
+- **Evidence Reports** — Automated forensic reports with hardware identification, temporal correlation, spectral analysis
+- **Knowledge Graph** — 739 academic papers in Neo4j with content-level entity extraction
 
 ## Architecture
 
 ```
-Phase 1 — Signal Detection
-  pulse_detector.py      Calibrated band scanner — two-pass (baseline + detect)
-  sentinel.py            24h hardened stare + sweep monitor with migration detection
-  pulse_monitor.py       Single-freq watch + cross-band correlator
-  demod_pulses.py        Pulse demodulation & speech pattern detection
-  analyze_scan.py        Within-band anomaly detection
-  analyze_pulses.py      Pulse timing: PRIs, width distributions, cross-freq sync
-  plot_timeseries.py     Time-series visualization
-  generate_report.py     Comprehensive text report with LTE comparison
-  known_bands.py         US RF allocation database (400-1766 MHz)
-
-Phase 2 — Knowledge Graph
-  kg_pipeline.py         Main pipeline: extract → build → embed
-                           GROBID for metadata, PyMuPDF fallback, Tesseract OCR
-                           Content entity extraction (freq, power, mechanisms, etc.)
-                           Neo4j graph population with 11 edge types
-                           Section-aware chunking from body_sections
-                           Prefers papers_grobid_clean.json (normalized dataset)
-
-Phase 3 — Forward Model
-  forward_model.py       Speech → encoding → simulated SDR → compare with real data
+┌──────────────────────────────────────────────────────────────────────┐
+│                         ARTEMIS SYSTEM                               │
+│                                                                      │
+│  RTL-SDR ──→ sentinel.py (systemd, 24/7)                            │
+│               ├── 13 target freqs (Zone A 622-636 + Zone B 824-834) │
+│               ├── ±1.5 MHz jitter per capture                       │
+│               ├── Exposure Index (EI) per cycle                     │
+│               ├── Audible alerts (local speaker)                    │
+│               ├── ntfy push (Tailscale) ──→ Phone app               │
+│               │                              └── Tag Symptoms page  │
+│               └── JSONL logs (hourly rotation)                      │
+│                        │                                             │
+│                        ▼                                             │
+│  dashboard.py (localhost:8080) ◄── reads logs every 5s              │
+│  ├── EI / Kurtosis / Pulses / Active Freqs                         │
+│  ├── Zone A/B/UL power timeline (independent scaling)               │
+│  ├── Frequency × Time heatmap with symptom markers                  │
+│  └── Recent symptoms list                                            │
+│                                                                      │
+│  tag_server.py (Tailscale:8091) ◄── phone button presses           │
+│  ├── /quick — multi-symptom severity page                           │
+│  ├── /tag — log symptom with RF context (self-contained nonce)      │
+│  └── symptom_log.jsonl                                               │
+│                                                                      │
+│  rebuild_ml_dataset.sh (cron, every 30 min)                         │
+│  └── ml_master_dataset.json — unified ML-ready dataset              │
+│                                                                      │
+│  autopush.sh (cron, hourly)                                         │
+│  └── git commit + push to GitHub via SSH deploy key                  │
+│                                                                      │
+│  spectrum_painter.py — IQ → waterfall + pulse + modulation analysis │
+│  kg_pipeline.py — GROBID → Neo4j knowledge graph + embeddings      │
+│  forward_model.py — speech → encoding → simulated SDR comparison    │
+└──────────────────────────────────────────────────────────────────────┘
 ```
+
+## Monitored Frequency Zones
+
+| Zone | Frequency Range | Band Allocation | Role |
+|------|----------------|-----------------|------|
+| **Zone A** | 622–636 MHz | UHF-TV / 600 MHz 5G transition | Primary exposure (highest EI) |
+| **Zone B** | 824–834 MHz | Cellular downlink (B5/B26) | Secondary / targeting |
+| **UL** | 878 MHz | Cellular uplink | Possible tracking/feedback |
+
+## Exposure Index
+
+The Buckingham Pi Exposure Index quantifies total RF exposure without calibrated equipment:
+
+```
+EI = Σ across all active frequencies [
+    P_linear                    (received power, uncalibrated but consistent)
+  × Σ pulse_width_μs           (total pulse duration, extrapolated from sampled widths)
+  × (kurtosis / k_noise)       (impulsiveness relative to noise floor)
+]
+```
+
+- **EI < 5**: Quiet / noise floor
+- **EI 20–200**: Low activity (typical daytime)
+- **EI 200–1000**: Moderate activity
+- **EI 1000–2000**: High activity
+- **EI > 2000**: Extreme (headache/tinnitus onset observed above this threshold)
+
+Decomposed per zone: `ei_zone_a`, `ei_zone_b` — reveals power allocation shifts between bands.
+
+## Symptom Tagging
+
+Mobile push notifications via self-hosted ntfy over Tailscale. Each notification links to a symptom tagging page with:
+
+| Symptom | Color | Description |
+|---------|-------|-------------|
+| Speech | Gold | Perceived speech / voice-to-skull |
+| Headache | Red | Head pain |
+| Tinnitus | Pink | Ringing / high-pitched tone |
+| Paresthesia | Blue | Tingling / goosebumps without cold |
+| Nausea | Green | Nausea / dizziness |
+| Pressure | Light blue | Head/ear pressure |
+| Sleep disruption | Purple | Disrupted sleep |
+
+Each symptom has severity 0–3 (none / mild / moderate / severe). Multiple symptoms can be tagged per alert. Each tag carries the alert's unique nonce (alert_id) and RF snapshot so it maps to the exact signal event, regardless of response delay.
+
+## ML Dataset
+
+`results/ml_master_dataset.json` — rebuilt every 30 minutes. Contains:
+
+| Section | Description |
+|---------|-------------|
+| `timeline` | Per-cycle rows with EI, kurtosis, pulse counts, widths, symptom labels, severity. All CST. |
+| `symptoms` | Raw symptom reports with alert RF context and response delay |
+| `iq_captures` | 2,896 raw IQ file index with timestamps and frequencies |
+| `spectrograms` | 37 spectrogram analyses with PRF, duty cycle, bandwidths |
+| `wideband_survey` | 872-channel survey (24–1766 MHz) |
+
+### Timeline Row Features
+
+| Feature | Type | Description |
+|---------|------|-------------|
+| `cst` | string | Timestamp in CST |
+| `hour`, `minute` | int | For time-of-day analysis |
+| `day_of_week` | string | For weekly patterns |
+| `is_night` | bool | 9 PM – 6 AM |
+| `type` | string | ACTIVE / QUIET / GAP_NO_DATA |
+| `has_zone_a` | bool | False before Zone A was added to monitoring |
+| `ei_total` | float | Total Exposure Index |
+| `ei_zone_a` | float | Zone A EI (None if not monitored) |
+| `ei_zone_b` | float | Zone B EI |
+| `max_kurt` | float | Peak kurtosis across all readings |
+| `max_kurt_zone_a/b/ul` | float | Per-zone peak kurtosis |
+| `n_active_targets` | int | Number of 13 nominal targets active (kurt > 20) |
+| `total_pulses` | int | Total pulse count |
+| `mean_pulse_width_us` | float | Average pulse width in microseconds |
+| `total_pulse_duration_us` | float | Integrated pulse-on time |
+| `sym_speech`, `sym_headache`, etc. | int (0/1) | Binary symptom indicators |
+| `sev_speech`, `sev_headache`, etc. | int (0–3) | Max severity per symptom |
+| `max_severity` | int (0–3) | Worst symptom severity this cycle |
+| `any_symptom` | int (0/1) | Any symptom reported |
+
+**Important:** `GAP_NO_DATA` means the sentinel was not running — do not treat as quiet. `has_zone_a=False` means Zone A was not monitored — `ei_zone_a` will be None.
+
+## Services (systemd)
+
+| Service | Port | Binding | Purpose |
+|---------|------|---------|---------|
+| `rf-sentinel` | — | — | 24/7 RF monitoring, alerts |
+| `artemis-dash` | 8080 | localhost | Live dashboard |
+| `artemis-tags` | 8091 | Tailscale IP | Symptom tag server |
+| `ntfy` | 8090 | Tailscale IP | Push notification server |
+
+```bash
+# Status
+systemctl --user status rf-sentinel
+systemctl --user status artemis-dash
+systemctl --user status artemis-tags
+sudo systemctl status ntfy
+
+# Restart
+systemctl --user restart rf-sentinel
+```
+
+## Cron Jobs
+
+| Schedule | Script | Purpose |
+|----------|--------|---------|
+| Every hour at :00 | `autopush.sh` | Git commit + push to GitHub |
+| Every 30 min | `rebuild_ml_dataset.sh` | Rebuild ML master dataset |
+
+## Evidence Reports
+
+All reports in `results/evidence/`:
+
+| Report | Date | Content |
+|--------|------|---------|
+| `incident_report_20260313.md` | Mar 12–13 | Initial incident: nocturnal intensification, frequency hopping, symptom correlation |
+| `spectrum_analysis_report_20260313.md` | Mar 13 | Waterfall spectrograms, hardware fingerprint, legitimate sources ruled out |
+| `wideband_survey_report_20260313.md` | Mar 13 | Full spectrum 24–1766 MHz, three active zones identified |
+| `transmitter_identification_report_20260313.md` | Mar 13–14 | Hardware ID: USRP X310, dual-band, $9–14K system |
+| `escalation_report_20260314_0028.md` | Mar 14 | Sustained 374 kurtosis, headache + tinnitus, dose-response |
+| `live_activity_report_20260313_1654.md` | Mar 13 | Live capture during active event, 136.4 kurtosis |
+
+## Signal Characteristics (Summary)
+
+| Parameter | Zone A (622–636 MHz) | Zone B (824–834 MHz) |
+|-----------|---------------------|---------------------|
+| Peak kurtosis | 369 | 374 |
+| PRF (intra-burst) | Not yet characterized | 150,000–253,000 Hz |
+| Pulse width | Not yet characterized | 2.1–7.2 μs |
+| Duty cycle | Not yet characterized | 0.27–1.78% |
+| Intra-pulse bandwidth | Not yet characterized | 300–1,500 kHz |
+| Received power | -17 to -28 dB | -38 to -44 dB |
+| Channel spacing | 2 MHz | 2 MHz |
+
+Zone co-activation: 79% of cycles show both zones active simultaneously. Zone A never activates alone.
+
+## Knowledge Graph
+
+739 papers in Neo4j with 38,700+ edges across 13 node types and 11 edge types. Content-level entity extraction for frequencies, power levels, mechanisms, health effects, technologies, and organizations.
+
+```
+Neo4j:    bolt://localhost:7687  (neo4j / rfmonitor2026)
+Browser:  http://localhost:7474
+```
+
+Pipeline: `python kg_pipeline.py extract → build → embed → search "query"`
 
 ## Quick Start
 
 ```bash
+# Clone
+git clone https://github.com/targeted-phd/ARTEMIS.git
+cd ARTEMIS
+
 # Environment
 python -m venv .venv && source .venv/bin/activate
-pip install numpy scipy matplotlib pymupdf grobid-client-python neo4j pytesseract requests
+pip install numpy scipy matplotlib requests
 
-# Docker services
-docker run -d --name grobid -p 8070:8070 -e JAVA_OPTS="-Xms4g -Xmx12g" --memory=16g lfoppiano/grobid:0.8.2
-docker run -d --name neo4j -p 7474:7474 -p 7687:7687 -e NEO4J_AUTH=neo4j/rfmonitor2026 neo4j:community
-docker run -d --name ollama -p 11434:11434 ollama/ollama
-docker exec ollama ollama pull nomic-embed-text
+# Start monitoring
+python sentinel.py --duration 999999999
 
-# Phase 1 — Signal collection
-python sentinel.py --targets 826,828,830,832,834,878 --duration 86400
+# Dashboard (separate terminal)
+python dashboard.py
+# Open http://127.0.0.1:8080
 
-# Phase 1 — Analysis
-python demod_pulses.py batch --top 100 --concat 5
-python forward_model.py test
+# Spectrum analysis on captured IQ
+python spectrum_painter.py --batch
 
-# Phase 2 — Knowledge graph (full pipeline)
-python kg_pipeline.py extract    # GROBID + PyMuPDF fallback + OCR → papers_grobid.json
-python kg_pipeline.py build      # Populate Neo4j (uses papers_grobid_clean.json if present)
-python kg_pipeline.py embed      # Generate embeddings via Ollama (section-aware chunking)
-python kg_pipeline.py status     # Check pipeline status
-# Then open http://localhost:7474 for Neo4j Browser
+# Rebuild ML dataset
+bash rebuild_ml_dataset.sh
 ```
-
-## Detection Method
-
-Standard spectrum analyzers average power over time, burying low-duty-cycle pulses. A 10 µs pulse in a 10s integration window is attenuated by -60 dB — invisible.
-
-This toolkit captures raw IQ and computes:
-- **Kurtosis**: Gaussian noise ≈ 3.0 (RTL-SDR baseline ~8-10 due to 8-bit ADC). Impulsive signals push higher.
-- **PAPR**: Peak-to-average power ratio. Gaussian ≈ 10-12 dB. Pulses push higher.
-- **Spectral flatness**: 1.0 = white noise. Tonal/narrowband content reduces it.
-
-Two-pass calibration establishes per-band baseline statistics, then flags channels that deviate using robust median + MAD estimators.
 
 ## Hardware
 
-- RTL-SDR Blog V4 (R828D tuner, 24 MHz - 1.766 GHz)
-- Whip antenna (included with SDR)
-- Ubuntu on WSL2
+**Monitoring station:**
+- RTL-SDR Blog V4 (R828D tuner, 24 MHz – 1.766 GHz)
+- Omnidirectional whip antenna
+- Ubuntu on WSL2, GTX 1080 desktop
 
-## Key Findings
+**Identified transmitter (from signal analysis):**
+- Ettus Research USRP X310 with dual UBX-160 daughterboards
+- External wideband power amplifiers (622 MHz + 826 MHz)
+- Log-periodic dipole array (LPDA) antenna, 500–900 MHz
+- Pre-programmed GNU Radio / UHD application
+- Estimated system cost: $9,000–14,000
+- Fixed installation, AC powered, estimated range 100–500 meters
 
-- **826-834 MHz uplink cluster**: Consistent POSSIBLE SPEECH scores (0.59-0.64) across all channels, high modulation ratios, formant-like structure, but no pitch — uniform signature argues against speech, likely protocol feature
-- **878 MHz downlink**: Different behavior — 5-10x more bursts, lower scores, consistent with LTE downlink patterns
-- **Forward model**: Lin/MEDUSA encoding ranked #1 (0.878 similarity to real data), confirming it produces the closest match to observed signal characteristics
-- **Knowledge graph**: 739 papers processed into 38,700+ edge graph with content-level entity extraction across 9 topic domains
+## Detection Method
+
+Standard spectrum analyzers average power over time, burying low-duty-cycle pulses. A 10 μs pulse in a 10s integration window is attenuated by -60 dB — invisible.
+
+ARTEMIS captures raw IQ and computes per-capture:
+- **Kurtosis**: Gaussian noise ≈ 3.0 (RTL-SDR baseline ~8.5). Impulsive signals: 20–374.
+- **PAPR**: Peak-to-average power ratio. Gaussian ≈ 10–12 dB. Pulses: 17–30 dB.
+- **Pulse detection**: 4σ amplitude threshold, minimum 3 samples. Measures width, SNR, timing.
+- **Exposure Index**: Integrates power × pulse duration × impulsiveness across all frequencies.
+
+## Security
+
+- Dashboard binds to `127.0.0.1` only — not network accessible
+- ntfy and tag server bind to Tailscale IP only — encrypted mesh, no public internet
+- SSH deploy key for GitHub push — scoped to ARTEMIS repo only
+- Pseudonymous GitHub account — no personal identity in commits or repo
+- All data stays on local machine + Tailscale mesh + GitHub
+
+## License
+
+Research use. This toolkit is designed for defensive RF forensics and academic investigation.

@@ -84,11 +84,7 @@ def ntfy_push(level, max_kurt, active_freqs, cycle_num, stare_results=None):
                     f"method=POST, clear=true")
 
         quick_url = f"http://100.96.113.92:8091/quick?rf={rf_encoded}"
-        actions = "; ".join([
-            btn("Speech", "speech"),
-            btn("Headache", "headache"),
-            f"view, All symptoms, {quick_url}, clear=true",
-        ])
+        actions = f"view, Tag Symptoms, {quick_url}, clear=true"
 
         subprocess.Popen([
             "curl", "-s", "-X", "POST", NTFY_URL,
