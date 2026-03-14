@@ -142,6 +142,12 @@ for r in dataset:
         # Clean up redundant columns
         r.pop(f'sym_{st}', None)
         r.pop(f'sev_{st}', None)
+    # did_respond: True = user submitted symptoms or confirmed clear
+    # False = no response (symptom values are UNKNOWN, not zero)
+    # ML should ONLY train on rows where did_respond=True
+    has_symptoms = len(r.get('symptoms', [])) > 0
+    has_clear = 'clear' in r.get('symptoms', [])
+    r['did_respond'] = has_symptoms or has_clear
     r['any_symptom'] = 1 if r.get('symptoms') else 0
     r['max_severity'] = max((r.get(st, 0) for st in all_st), default=0)
     r['symptom_total'] = sum(r.get(st, 0) for st in all_st)
