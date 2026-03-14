@@ -260,6 +260,63 @@ master={
         'monitoring_start':dataset[0]['cst'],'monitoring_end':dataset[-1]['cst']},
 }
 for s in symptoms: s.pop('_cst',None)
+
+# ── Join pulse + BRF features from pulse_features.json + brf_timeseries.json ──
+import bisect
+try:
+    with open('results/pulse_features.json') as f:
+        pf_data = [r for r in json.load(f) if r.get('has_signal')]
+    brf_lk = {}
+    try:
+        with open('results/brf_timeseries.json') as f:
+            brf_lk = {r['file']: r for r in json.load(f).get('per_file', [])}
+    except: pass
+    # Build sorted time index
+    pf_idx = []
+    for pf in pf_data:
+        try:
+            mt = datetime.fromtimestamp(os.path.getmtime(pf['file'])).astimezone(LOCAL_TZ).replace(tzinfo=None)
+            pf_idx.append((mt, pf))
+        except: pass
+    pf_idx.sort(key=lambda x: x[0])
+    pf_times = [x[0] for x in pf_idx]
+    td150 = timedelta(seconds=150)
+    n_pj = 0
+    for i, r in enumerate(dataset):
+        t = tl_times[i]
+        if t is None: continue
+        lo = bisect.bisect_left(pf_times, t - td150)
+        hi = bisect.bisect_right(pf_times, t + td150)
+        nearby = [pf_idx[j][1] for j in range(lo, hi)]
+        if not nearby:
+            r['pulse_n_files'] = 0
+            for k in ['pulse_width_mean_us','pulse_bw_mean_hz','pulse_modulation_index',
+                       'pulse_prf_hz','pulse_n_bursts_mean','pulse_energy_total','pulse_duty_cycle',
+                       'brf_mean_hz','brf_std_hz','brf_cv','brf_range_hz']:
+                r[k] = None
+            continue
+        n_pj += 1
+        def sm(vals):
+            v = [x for x in vals if x]
+            return round(float(np.mean(v)), 3) if v else None
+        r['pulse_n_files'] = len(nearby)
+        r['pulse_width_mean_us'] = sm([p.get('pulse_width_mean_us') for p in nearby])
+        r['pulse_bw_mean_hz'] = sm([p.get('pulse_bw_mean_hz') for p in nearby])
+        r['pulse_modulation_index'] = sm([p.get('modulation_index') for p in nearby])
+        r['pulse_prf_hz'] = sm([p.get('prf_hz') for p in nearby])
+        r['pulse_n_bursts_mean'] = sm([p.get('n_bursts') for p in nearby])
+        r['pulse_energy_total'] = sm([p.get('pulse_energy_total') for p in nearby])
+        r['pulse_duty_cycle'] = sm([p.get('duty_cycle') for p in nearby])
+        bv = [brf_lk[p['file']] for p in nearby if p['file'] in brf_lk]
+        r['brf_mean_hz'] = sm([b['brf_mean'] for b in bv])
+        r['brf_std_hz'] = sm([b['brf_std'] for b in bv])
+        r['brf_cv'] = sm([b['brf_cv'] for b in bv])
+        r['brf_range_hz'] = sm([b['brf_range'] for b in bv])
+    master['metadata']['pulse_features_joined'] = True
+except Exception as e:
+    n_pj = 0
+    print(f'Pulse join skipped: {e}')
+
 with open('results/ml_master_dataset.json','w') as f: json.dump(master,f,default=str)
-print(f'OK: {len(dataset)} rows, {nw} with symptoms, {len(iq_meta)} IQ, {len(spec_data)} spectrograms')
+print(f'OK: {len(dataset)} rows, {nw} with symptoms, {len(iq_meta)} IQ, {len(spec_data)} spectrograms, {n_pj} pulse-joined')
 "
