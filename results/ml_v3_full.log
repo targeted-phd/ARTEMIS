@@ -1,0 +1,257 @@
+=== PULSE FEATURE EXTRACTION: 3586 IQ files ===
+/home/tyler/projects/rf-monitor/pulse_ml.py:176: ConstantInputWarning: An input array is constant; the correlation coefficient is not defined.
+  rho, p = sp_stats.spearmanr(X[mask, j], y_cont[mask])
+/home/tyler/projects/rf-monitor/pulse_ml.py:176: ConstantInputWarning: An input array is constant; the correlation coefficient is not defined.
+  rho, p = sp_stats.spearmanr(X[mask, j], y_cont[mask])
+/home/tyler/projects/rf-monitor/pulse_ml.py:176: ConstantInputWarning: An input array is constant; the correlation coefficient is not defined.
+  rho, p = sp_stats.spearmanr(X[mask, j], y_cont[mask])
+  500/3586 — 368 with signal
+  1000/3586 — 828 with signal
+  1500/3586 — 1278 with signal
+  2000/3586 — 1725 with signal
+  2500/3586 — 2171 with signal
+  3000/3586 — 2634 with signal
+  3500/3586 — 3099 with signal
+Extracted: 3586 total, 3185 with signal
+
+=== ML V3: PULSE-LEVEL ANALYSIS ===
+Joined 2925 IQ files to timeline rows
+Feature matrix: 2925 x 37
+
+============================================================
+  HEADACHE (n+=365, n-=2560, total=2925)
+============================================================
+
+  Top pulse features correlated with headache severity:
+    tl_n_active_targets                 rho=+0.575  p=1.09e-256 ***
+    tl_ei_total                         rho=+0.572  p=3.04e-254 ***
+    tl_total_pulses                     rho=+0.563  p=8.95e-244 ***
+    burst_n_pulses_mean                 rho=-0.557  p=3.93e-238 ***
+    noise_mean                          rho=+0.555  p=2.50e-236 ***
+    noise_std                           rho=+0.554  p=2.61e-235 ***
+    pulse_energy_mean                   rho=+0.553  p=3.62e-234 ***
+    tl_max_kurt                         rho=+0.553  p=4.03e-234 ***
+    pulse_energy_total                  rho=+0.547  p=8.20e-228 ***
+    tl_max_kurt_zone_b                  rho=-0.545  p=3.35e-226 ***
+
+  RF AUC (5-fold): 1.000 ± 0.000
+
+  Top RF feature importances:
+    tl_max_kurt_zone_a                  importance=0.175
+    tl_ei_zone_a                        importance=0.160
+    tl_max_kurt_zone_b                  importance=0.127
+    tl_ei_total                         importance=0.116
+    pulse_energy_mean                   importance=0.078
+    tl_ei_zone_b                        importance=0.077
+    noise_std                           importance=0.052
+    pulse_energy_total                  importance=0.050
+    noise_mean                          importance=0.035
+    tl_total_pulses                     importance=0.034
+
+  Severity regression R² (on positive samples): 1.000
+
+============================================================
+  NAUSEA (n+=16, n-=2909, total=2925)
+============================================================
+
+  Top pulse features correlated with nausea severity:
+    tl_ei_zone_a                        rho=-0.224  p=1.53e-05 ***
+    tl_max_kurt_zone_a                  rho=+0.216  p=3.17e-05 ***
+    tl_n_active_targets                 rho=+0.131  p=1.32e-12 ***
+    tl_max_kurt_zone_b                  rho=-0.122  p=3.85e-11 ***
+    tl_max_kurt                         rho=+0.122  p=4.15e-11 ***
+    tl_total_pulses                     rho=+0.122  p=4.28e-11 ***
+    noise_mean                          rho=+0.115  p=4.54e-10 ***
+    noise_std                           rho=+0.113  p=8.92e-10 ***
+    pulse_energy_mean                   rho=+0.113  p=1.01e-09 ***
+    pulse_energy_total                  rho=+0.113  p=1.02e-09 ***
+
+  RF AUC (5-fold): 1.000 ± 0.000
+
+  Top RF feature importances:
+    tl_total_pulses                     importance=0.182
+    tl_ei_zone_a                        importance=0.165
+    tl_max_kurt                         importance=0.162
+    tl_ei_total                         importance=0.151
+    tl_max_kurt_zone_a                  importance=0.131
+    tl_max_kurt_zone_b                  importance=0.031
+    noise_mean                          importance=0.017
+    tl_n_active_targets                 importance=0.012
+    burst_n_pulses_mean                 importance=0.011
+
+  Severity regression R² (on positive samples): 1.000
+
+============================================================
+  PARESTHESIA (n+=575, n-=2350, total=2925)
+============================================================
+
+  Top pulse features correlated with paresthesia severity:
+    tl_max_kurt                         rho=-0.371  p=4.80e-96 ***
+    tl_ei_zone_b                        rho=-0.348  p=3.86e-74 ***
+    pulse_energy_mean                   rho=-0.322  p=2.27e-71 ***
+    pulse_snr_mean_db                   rho=-0.310  p=2.57e-66 ***
+    tl_ei_total                         rho=-0.295  p=9.53e-60 ***
+    tl_total_pulses                     rho=-0.292  p=1.17e-58 ***
+    pulse_snr_max_db                    rho=-0.284  p=3.21e-55 ***
+    tl_n_active_targets                 rho=-0.283  p=6.60e-55 ***
+    pulse_energy_total                  rho=-0.268  p=4.03e-49 ***
+    noise_std                           rho=-0.265  p=3.20e-48 ***
+
+  RF AUC (5-fold): 0.967 ± 0.008
+
+  Top RF feature importances:
+    tl_ei_zone_b                        importance=0.180
+    tl_max_kurt                         importance=0.173
+    tl_ei_total                         importance=0.137
+    tl_max_kurt_zone_b                  importance=0.131
+    tl_total_pulses                     importance=0.106
+    tl_n_active_targets                 importance=0.048
+    pulse_energy_mean                   importance=0.041
+    pulse_snr_mean_db                   importance=0.031
+    pulse_snr_max_db                    importance=0.019
+    noise_std                           importance=0.014
+
+  Severity regression R² (on positive samples): 0.992
+
+============================================================
+  PRESSURE (n+=357, n-=2568, total=2925)
+============================================================
+
+  Top pulse features correlated with pressure severity:
+    tl_ei_zone_a                        rho=+0.587  p=3.93e-35 ***
+    tl_ei_total                         rho=+0.567  p=5.41e-248 ***
+    tl_max_kurt_zone_b                  rho=-0.565  p=6.60e-246 ***
+    tl_n_active_targets                 rho=+0.562  p=1.07e-243 ***
+    pulse_energy_mean                   rho=+0.562  p=2.94e-243 ***
+    noise_std                           rho=+0.560  p=3.51e-241 ***
+    noise_mean                          rho=+0.560  p=9.99e-241 ***
+    burst_n_pulses_mean                 rho=-0.553  p=2.70e-234 ***
+    tl_total_pulses                     rho=+0.553  p=9.20e-234 ***
+    tl_max_kurt                         rho=+0.551  p=1.01e-231 ***
+
+  RF AUC (5-fold): 1.000 ± 0.000
+
+  Top RF feature importances:
+    tl_max_kurt_zone_b                  importance=0.180
+    tl_max_kurt_zone_a                  importance=0.174
+    tl_ei_zone_b                        importance=0.121
+    tl_ei_zone_a                        importance=0.101
+    pulse_energy_mean                   importance=0.093
+    tl_ei_total                         importance=0.064
+    pulse_energy_total                  importance=0.059
+    noise_std                           importance=0.053
+    noise_mean                          importance=0.037
+    tl_total_pulses                     importance=0.024
+
+  Severity regression R² (on positive samples): 1.000
+
+============================================================
+  SLEEP (n+=208, n-=2717, total=2925)
+============================================================
+
+  Top pulse features correlated with sleep severity:
+    tl_n_active_targets                 rho=-0.310  p=2.76e-66 ***
+    tl_total_pulses                     rho=-0.142  p=1.37e-14 ***
+    tl_ei_total                         rho=-0.141  p=1.58e-14 ***
+    tl_ei_zone_b                        rho=+0.081  p=3.60e-05 ***
+    tl_max_kurt_zone_b                  rho=+0.073  p=7.28e-05 ***
+    mean_ibi_us                         rho=+0.057  p=5.85e-03 **
+    burst_rep_rate_hz                   rho=-0.057  p=5.89e-03 **
+    pulse_bw_mean_hz                    rho=-0.056  p=2.24e-03 **
+    duty_cycle                          rho=+0.049  p=8.26e-03 **
+    total_pulse_duration_us             rho=+0.047  p=1.13e-02 *
+
+  RF AUC (5-fold): 0.997 ± 0.002
+
+  Top RF feature importances:
+    tl_n_active_targets                 importance=0.162
+    tl_ei_zone_b                        importance=0.158
+    tl_max_kurt_zone_b                  importance=0.134
+    tl_total_pulses                     importance=0.129
+    tl_ei_total                         importance=0.118
+    tl_max_kurt                         importance=0.114
+    noise_mean                          importance=0.012
+    pulse_energy_mean                   importance=0.012
+    pulse_snr_max_db                    importance=0.012
+    pulse_snr_mean_db                   importance=0.012
+
+  Severity regression R² (on positive samples): 1.000
+
+============================================================
+  SPEECH (n+=365, n-=2560, total=2925)
+============================================================
+
+  Top pulse features correlated with speech severity:
+    tl_ei_zone_a                        rho=-0.574  p=2.57e-33 ***
+    tl_n_active_targets                 rho=+0.573  p=1.85e-255 ***
+    tl_ei_total                         rho=+0.569  p=1.56e-250 ***
+    tl_total_pulses                     rho=+0.559  p=1.51e-240 ***
+    burst_n_pulses_mean                 rho=-0.557  p=4.98e-238 ***
+    tl_max_kurt                         rho=+0.556  p=5.90e-237 ***
+    noise_mean                          rho=+0.554  p=5.61e-235 ***
+    noise_std                           rho=+0.553  p=6.79e-234 ***
+    pulse_energy_mean                   rho=+0.552  p=1.80e-233 ***
+    tl_max_kurt_zone_b                  rho=-0.547  p=9.96e-228 ***
+
+  RF AUC (5-fold): 1.000 ± 0.000
+
+  Top RF feature importances:
+    tl_max_kurt_zone_a                  importance=0.175
+    tl_ei_zone_a                        importance=0.160
+    tl_max_kurt_zone_b                  importance=0.127
+    tl_ei_total                         importance=0.116
+    pulse_energy_mean                   importance=0.078
+    tl_ei_zone_b                        importance=0.077
+    noise_std                           importance=0.052
+    pulse_energy_total                  importance=0.050
+    noise_mean                          importance=0.035
+    tl_total_pulses                     importance=0.034
+
+  Severity regression R² (on positive samples): 1.000
+
+============================================================
+  TINNITUS (n+=573, n-=2352, total=2925)
+============================================================
+
+  Top pulse features correlated with tinnitus severity:
+    tl_ei_zone_a                        rho=+0.946  p=4.62e-180 ***
+    noise_mean                          rho=+0.492  p=8.40e-178 ***
+    noise_std                           rho=+0.491  p=4.55e-177 ***
+    pulse_energy_mean                   rho=+0.485  p=2.72e-172 ***
+    pulse_energy_total                  rho=+0.484  p=5.42e-172 ***
+    burst_n_pulses_mean                 rho=-0.469  p=9.85e-160 ***
+    tl_max_kurt                         rho=+0.468  p=5.01e-159 ***
+    n_bursts                            rho=+0.462  p=2.17e-154 ***
+    burst_rep_rate_hz                   rho=+0.447  p=3.57e-115 ***
+    mean_ibi_us                         rho=-0.447  p=3.66e-115 ***
+
+  RF AUC (5-fold): 0.997 ± 0.001
+
+  Top RF feature importances:
+    tl_max_kurt_zone_a                  importance=0.149
+    tl_ei_zone_a                        importance=0.134
+    tl_max_kurt_zone_b                  importance=0.115
+    tl_ei_total                         importance=0.113
+    pulse_energy_mean                   importance=0.090
+    tl_ei_zone_b                        importance=0.077
+    pulse_energy_total                  importance=0.058
+    noise_std                           importance=0.047
+    tl_n_active_targets                 importance=0.044
+    tl_total_pulses                     importance=0.039
+
+  Severity regression R² (on positive samples): 1.000
+
+============================================================
+  ZONE COMPARISON (A=313, B=2523)
+============================================================
+  n_pulses                        A=     687.4  B=     508.6  p=1.41e-16 ***
+  pulse_width_mean_us             A=       2.7  B=       3.5  p=4.11e-38 ***
+  prf_hz                          A=  205741.0  B=  209348.9  p=1.45e-11 ***
+  duty_cycle                      A=       0.0  B=       0.0  p=6.64e-08 ***
+  pulse_bw_mean_hz                A=  749417.4  B=  457216.1  p=2.23e-54 ***
+  modulation_index                A=       1.0  B=       0.7  p=4.21e-34 ***
+  n_bursts                        A=      28.8  B=       3.4  p=6.66e-182 ***
+  burst_duration_mean_us          A=     770.0  B=     957.6  p=9.33e-176 ***
+  pulse_energy_total              A=     583.1  B=       4.6  p=3.52e-182 ***
+
+=== DONE ===

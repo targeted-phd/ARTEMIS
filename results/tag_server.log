@@ -163,3 +163,26 @@ ARTEMIS Tag Server — http://100.96.113.92:8091
   [TAG] 2026-03-14T06:48:41.438981+00:00 — speech 
   [TAG] 2026-03-14T06:48:41.442704+00:00 — headache 
   [TAG] 2026-03-14T06:48:41.445091+00:00 — tinnitus 
+ARTEMIS Tag Server — http://100.96.113.92:8091
+  POST /tag?s=speech    — log symptom
+  GET  /tags            — view recent tags
+  Log: results/evidence/symptom_log.jsonl
+  [TAG] 2026-03-14T07:11:42.983486+00:00 — headache 
+  [TAG] 2026-03-14T07:11:42.987371+00:00 — tinnitus 
+  [TAG] 2026-03-14T07:11:42.989948+00:00 — pressure 
+  [TAG] 2026-03-14T07:11:54.091880+00:00 — headache 
+  [TAG] 2026-03-14T07:11:54.095578+00:00 — tinnitus 
+  [TAG] 2026-03-14T07:11:56.268048+00:00 — headache 
+  [TAG] 2026-03-14T07:11:56.271756+00:00 — tinnitus 
+  [TAG] 2026-03-14T07:11:56.273994+00:00 — pressure 
+  [TAG] 2026-03-14T07:13:44.365433+00:00 — headache 
+  [TAG] 2026-03-14T07:13:44.368734+00:00 — tinnitus 
+  [TAG] 2026-03-14T07:13:44.370870+00:00 — pressure 
+ARTEMIS Tag Server — http://100.96.113.92:8091
+  POST /tag?s=speech    — log symptom
+  GET  /tags            — view recent tags
+  Log: results/evidence/symptom_log.jsonl
+  [TAG] 2026-03-14T07:18:36.964857+00:00 — speech 
+  [TAG] 2026-03-14T07:18:36.968792+00:00 — tinnitus 
+  [TAG] 2026-03-14T07:29:14.250664+00:00 — speech 
+  [TAG] 2026-03-14T07:29:14.255070+00:00 — tinnitus 

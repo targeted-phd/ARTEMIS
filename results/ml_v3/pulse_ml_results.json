@@ -1,186 +1,350 @@
 {
   "headache": {
-    "n_pos": 9,
-    "n_neg": 2561,
+    "n_pos": 365,
+    "n_neg": 2560,
     "auc": 1.0,
     "top_correlations": [
       [
         "tl_n_active_targets",
+        0.575,
+        0.0
+      ],
+      [
+        "tl_ei_total",
+        0.572,
+        0.0
+      ],
+      [
+        "tl_total_pulses",
+        0.563,
+        0.0
+      ],
+      [
+        "burst_n_pulses_mean",
+        -0.557,
+        0.0
+      ],
+      [
+        "noise_mean",
+        0.555,
+        0.0
+      ],
+      [
+        "noise_std",
+        0.554,
+        0.0
+      ],
+      [
+        "pulse_energy_mean",
+        0.553,
+        0.0
+      ],
+      [
+        "tl_max_kurt",
+        0.553,
+        0.0
+      ],
+      [
+        "pulse_energy_total",
+        0.547,
+        0.0
+      ],
+      [
+        "tl_max_kurt_zone_b",
+        -0.545,
+        0.0
+      ],
+      [
+        "n_bursts",
+        0.54,
+        0.0
+      ],
+      [
+        "mean_ibi_us",
+        -0.517,
+        0.0
+      ],
+      [
+        "burst_rep_rate_hz",
+        0.517,
+        0.0
+      ],
+      [
+        "burst_duration_mean_us",
+        -0.511,
+        0.0
+      ],
+      [
+        "tl_ei_zone_a",
+        0.47,
+        0.0
+      ]
+    ]
+  },
+  "nausea": {
+    "n_pos": 16,
+    "n_neg": 2909,
+    "auc": 1.0,
+    "top_correlations": [
+      [
+        "tl_ei_zone_a",
+        -0.224,
+        1.5e-05
+      ],
+      [
+        "tl_max_kurt_zone_a",
+        0.216,
+        3.2e-05
+      ],
+      [
+        "tl_n_active_targets",
+        0.131,
+        0.0
+      ],
+      [
+        "tl_max_kurt_zone_b",
+        -0.122,
+        0.0
+      ],
+      [
+        "tl_max_kurt",
         0.122,
         0.0
       ],
       [
         "tl_total_pulses",
-        0.102,
+        0.122,
+        0.0
+      ],
+      [
+        "noise_mean",
+        0.115,
+        0.0
+      ],
+      [
+        "noise_std",
+        0.113,
+        0.0
+      ],
+      [
+        "pulse_energy_mean",
+        0.113,
+        0.0
+      ],
+      [
+        "pulse_energy_total",
+        0.113,
+        0.0
+      ],
+      [
+        "burst_duration_mean_us",
+        -0.109,
+        0.0
+      ],
+      [
+        "burst_n_pulses_mean",
+        -0.109,
+        0.0
+      ],
+      [
+        "n_bursts",
+        0.109,
         0.0
       ],
       [
         "tl_ei_total",
-        0.102,
+        0.103,
         0.0
       ],
       [
-        "tl_ei_zone_b",
-        0.095,
-        1e-06
-      ],
-      [
-        "tl_max_kurt",
-        0.081,
-        4.2e-05
-      ],
-      [
-        "burst_prf_mean_hz",
-        -0.077,
-        8.6e-05
-      ],
-      [
-        "burst_n_pulses_mean",
-        -0.073,
-        0.000203
-      ],
-      [
-        "ipi_median_us",
-        0.071,
-        0.000315
-      ],
-      [
-        "prf_hz",
-        -0.071,
-        0.000315
-      ],
-      [
-        "ipi_mean_us",
-        0.063,
-        0.001456
-      ],
-      [
-        "n_bursts",
-        0.062,
-        0.001527
-      ],
-      [
-        "pulse_width_median_us",
-        -0.058,
-        0.003044
-      ],
-      [
-        "tl_max_kurt_zone_b",
-        0.058,
-        0.003239
-      ],
-      [
-        "duty_cycle",
-        -0.053,
-        0.006784
-      ],
-      [
-        "pulse_width_mean_us",
-        -0.051,
-        0.009385
+        "mean_ibi_us",
+        -0.096,
+        3e-06
       ]
     ]
   },
   "paresthesia": {
     "n_pos": 575,
-    "n_neg": 1995,
-    "auc": 0.961,
+    "n_neg": 2350,
+    "auc": 0.967,
     "top_correlations": [
+      [
+        "tl_max_kurt",
+        -0.371,
+        0.0
+      ],
       [
         "tl_ei_zone_b",
         -0.348,
         0.0
       ],
       [
-        "tl_max_kurt",
-        -0.329,
-        0.0
-      ],
-      [
-        "tl_max_kurt_zone_b",
-        -0.329,
-        0.0
-      ],
-      [
         "pulse_energy_mean",
-        -0.272,
+        -0.322,
         0.0
       ],
       [
         "pulse_snr_mean_db",
-        -0.272,
-        0.0
-      ],
-      [
-        "pulse_snr_max_db",
-        -0.261,
-        0.0
-      ],
-      [
-        "tl_total_pulses",
-        -0.24,
+        -0.31,
         0.0
       ],
       [
         "tl_ei_total",
-        -0.237,
+        -0.295,
+        0.0
+      ],
+      [
+        "tl_total_pulses",
+        -0.292,
+        0.0
+      ],
+      [
+        "pulse_snr_max_db",
+        -0.284,
         0.0
       ],
       [
         "tl_n_active_targets",
-        -0.229,
+        -0.283,
         0.0
       ],
       [
         "pulse_energy_total",
-        -0.208,
+        -0.268,
         0.0
       ],
       [
         "noise_std",
+        -0.265,
+        0.0
+      ],
+      [
+        "tl_max_kurt_zone_a",
+        -0.258,
+        1e-06
+      ],
+      [
+        "noise_mean",
         -0.204,
         0.0
       ],
       [
-        "pulse_width_std_us",
-        -0.149,
+        "tl_max_kurt_zone_b",
+        -0.163,
         0.0
       ],
       [
-        "pulse_width_mean_us",
-        -0.147,
-        0.0
-      ],
-      [
-        "pulse_width_median_us",
+        "tl_ei_zone_a",
         -0.139,
+        0.00764
+      ],
+      [
+        "burst_n_pulses_mean",
+        0.112,
+        0.0
+      ]
+    ]
+  },
+  "pressure": {
+    "n_pos": 357,
+    "n_neg": 2568,
+    "auc": 1.0,
+    "top_correlations": [
+      [
+        "tl_ei_zone_a",
+        0.587,
+        0.0
+      ],
+      [
+        "tl_ei_total",
+        0.567,
+        0.0
+      ],
+      [
+        "tl_max_kurt_zone_b",
+        -0.565,
+        0.0
+      ],
+      [
+        "tl_n_active_targets",
+        0.562,
+        0.0
+      ],
+      [
+        "pulse_energy_mean",
+        0.562,
+        0.0
+      ],
+      [
+        "noise_std",
+        0.56,
         0.0
       ],
       [
         "noise_mean",
-        -0.129,
+        0.56,
+        0.0
+      ],
+      [
+        "burst_n_pulses_mean",
+        -0.553,
+        0.0
+      ],
+      [
+        "tl_total_pulses",
+        0.553,
+        0.0
+      ],
+      [
+        "tl_max_kurt",
+        0.551,
+        0.0
+      ],
+      [
+        "pulse_energy_total",
+        0.55,
+        0.0
+      ],
+      [
+        "n_bursts",
+        0.536,
+        0.0
+      ],
+      [
+        "mean_ibi_us",
+        -0.521,
+        0.0
+      ],
+      [
+        "burst_rep_rate_hz",
+        0.521,
+        0.0
+      ],
+      [
+        "burst_duration_mean_us",
+        -0.511,
         0.0
       ]
     ]
   },
   "sleep": {
     "n_pos": 208,
-    "n_neg": 2362,
+    "n_neg": 2717,
     "auc": 0.997,
     "top_correlations": [
       [
         "tl_n_active_targets",
-        -0.314,
+        -0.31,
         0.0
       ],
       [
         "tl_total_pulses",
-        -0.103,
+        -0.142,
         0.0
       ],
       [
         "tl_ei_total",
-        -0.102,
+        -0.141,
         0.0
       ],
       [
@@ -189,223 +353,223 @@
         3.6e-05
       ],
       [
-        "noise_mean",
-        0.065,
-        0.000979
+        "tl_max_kurt_zone_b",
+        0.073,
+        7.3e-05
       ],
       [
-        "pulse_energy_total",
-        0.065,
-        0.001012
-      ],
-      [
-        "noise_std",
-        0.065,
-        0.00106
-      ],
-      [
-        "duty_cycle",
-        0.06,
-        0.002526
-      ],
-      [
-        "total_pulse_duration_us",
+        "mean_ibi_us",
         0.057,
-        0.003774
+        0.005845
       ],
       [
-        "pulse_energy_mean",
-        0.053,
-        0.007515
-      ],
-      [
-        "pulse_snr_max_db",
-        0.05,
-        0.011849
-      ],
-      [
-        "pulse_snr_mean_db",
-        0.042,
-        0.03289
+        "burst_rep_rate_hz",
+        -0.057,
+        0.005893
       ],
       [
         "pulse_bw_mean_hz",
-        -0.037,
-        0.062472
+        -0.056,
+        0.002239
       ],
       [
-        "n_pulses",
-        0.033,
-        0.097801
+        "duty_cycle",
+        0.049,
+        0.008264
       ],
       [
-        "n_bursts",
-        0.031,
-        0.118495
+        "total_pulse_duration_us",
+        0.047,
+        0.011307
+      ],
+      [
+        "pulse_width_median_us",
+        0.047,
+        0.011669
+      ],
+      [
+        "freq_mhz",
+        0.046,
+        0.012759
+      ],
+      [
+        "burst_n_pulses_mean",
+        0.046,
+        0.013204
+      ],
+      [
+        "tl_max_kurt",
+        -0.044,
+        0.018323
+      ],
+      [
+        "pulse_width_mean_us",
+        0.041,
+        0.028113
       ]
     ]
   },
   "speech": {
-    "n_pos": 9,
-    "n_neg": 2561,
+    "n_pos": 365,
+    "n_neg": 2560,
     "auc": 1.0,
     "top_correlations": [
       [
-        "tl_n_active_targets",
-        0.122,
+        "tl_ei_zone_a",
+        -0.574,
         0.0
       ],
       [
-        "tl_total_pulses",
-        0.102,
+        "tl_n_active_targets",
+        0.573,
         0.0
       ],
       [
         "tl_ei_total",
-        0.102,
+        0.569,
         0.0
       ],
       [
-        "tl_ei_zone_b",
-        0.095,
-        1e-06
-      ],
-      [
-        "tl_max_kurt",
-        0.081,
-        4.2e-05
-      ],
-      [
-        "burst_prf_mean_hz",
-        -0.077,
-        8.6e-05
+        "tl_total_pulses",
+        0.559,
+        0.0
       ],
       [
         "burst_n_pulses_mean",
-        -0.073,
-        0.000203
+        -0.557,
+        0.0
       ],
       [
-        "ipi_median_us",
-        0.071,
-        0.000315
+        "tl_max_kurt",
+        0.556,
+        0.0
       ],
       [
-        "prf_hz",
-        -0.071,
-        0.000315
+        "noise_mean",
+        0.554,
+        0.0
       ],
       [
-        "ipi_mean_us",
-        0.063,
-        0.001456
+        "noise_std",
+        0.553,
+        0.0
       ],
       [
-        "n_bursts",
-        0.062,
-        0.001527
-      ],
-      [
-        "pulse_width_median_us",
-        -0.058,
-        0.003044
+        "pulse_energy_mean",
+        0.552,
+        0.0
       ],
       [
         "tl_max_kurt_zone_b",
-        0.058,
-        0.003239
+        -0.547,
+        0.0
       ],
       [
-        "duty_cycle",
-        -0.053,
-        0.006784
+        "pulse_energy_total",
+        0.546,
+        0.0
       ],
       [
-        "pulse_width_mean_us",
-        -0.051,
-        0.009385
+        "n_bursts",
+        0.538,
+        0.0
+      ],
+      [
+        "mean_ibi_us",
+        -0.513,
+        0.0
+      ],
+      [
+        "burst_rep_rate_hz",
+        0.513,
+        0.0
+      ],
+      [
+        "burst_duration_mean_us",
+        -0.511,
+        0.0
       ]
     ]
   },
   "tinnitus": {
-    "n_pos": 217,
-    "n_neg": 2353,
-    "auc": 0.994,
+    "n_pos": 573,
+    "n_neg": 2352,
+    "auc": 0.997,
     "top_correlations": [
       [
-        "tl_n_active_targets",
-        -0.279,
+        "tl_ei_zone_a",
+        0.946,
         0.0
       ],
       [
-        "tl_ei_zone_b",
-        0.1,
+        "noise_mean",
+        0.492,
+        0.0
+      ],
+      [
+        "noise_std",
+        0.491,
+        0.0
+      ],
+      [
+        "pulse_energy_mean",
+        0.485,
+        0.0
+      ],
+      [
+        "pulse_energy_total",
+        0.484,
+        0.0
+      ],
+      [
+        "burst_n_pulses_mean",
+        -0.469,
+        0.0
+      ],
+      [
+        "tl_max_kurt",
+        0.468,
+        0.0
+      ],
+      [
+        "n_bursts",
+        0.462,
+        0.0
+      ],
+      [
+        "burst_rep_rate_hz",
+        0.447,
+        0.0
+      ],
+      [
+        "mean_ibi_us",
+        -0.447,
+        0.0
+      ],
+      [
+        "tl_max_kurt_zone_b",
+        -0.445,
+        0.0
+      ],
+      [
+        "burst_duration_mean_us",
+        -0.436,
+        0.0
+      ],
+      [
+        "tl_ei_total",
+        0.429,
         0.0
       ],
       [
         "tl_total_pulses",
-        -0.077,
-        8.5e-05
-      ],
-      [
-        "tl_ei_total",
-        -0.076,
-        0.000114
-      ],
-      [
-        "pulse_energy_total",
-        0.07,
-        0.000359
-      ],
-      [
-        "noise_mean",
-        0.067,
-        0.000627
-      ],
-      [
-        "noise_std",
-        0.066,
-        0.000797
-      ],
-      [
-        "total_pulse_duration_us",
-        0.055,
-        0.005196
-      ],
-      [
-        "pulse_energy_mean",
-        0.053,
-        0.007038
-      ],
-      [
-        "duty_cycle",
-        0.046,
-        0.019852
-      ],
-      [
-        "n_bursts",
-        0.044,
-        0.024399
-      ],
-      [
-        "ipi_mean_us",
-        0.041,
-        0.03938
-      ],
-      [
-        "n_pulses",
-        0.04,
-        0.042766
-      ],
-      [
-        "ipi_std_us",
-        0.039,
-        0.050462
+        0.419,
+        0.0
       ],
       [
         "pulse_snr_mean_db",
-        0.037,
-        0.058537
+        0.397,
+        0.0
       ]
     ]
   }
