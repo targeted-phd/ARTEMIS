@@ -501,17 +501,17 @@ def run_sentinel(target_freqs_mhz, sweep_start, sweep_stop, sweep_step,
                 alert_sound("critical")
                 ntfy_push("critical", max_kurt, active_freqs, cycle + cycle_offset)
                 print(f"  │  🔴 CRITICAL: max_kurt={max_kurt:.0f} "
-                      f"active_freqs={n_active_freqs}")
+                      f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
             elif max_kurt > 80 or n_active_freqs >= 4:
                 alert_sound("high")
                 ntfy_push("high", max_kurt, active_freqs, cycle + cycle_offset)
                 print(f"  │  🟡 HIGH: max_kurt={max_kurt:.0f} "
-                      f"active_freqs={n_active_freqs}")
+                      f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
             elif max_kurt > 30 or n_active_freqs >= 2:
                 alert_sound("detect")
                 ntfy_push("detect", max_kurt, active_freqs, cycle + cycle_offset)
                 print(f"  │  🟢 DETECT: max_kurt={max_kurt:.0f} "
-                      f"active_freqs={n_active_freqs}")
+                      f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
 
         # ── SWEEP PHASE ──
         print(f"  ├─ SWEEP: ", end="", flush=True)
@@ -579,10 +579,31 @@ def run_sentinel(target_freqs_mhz, sweep_start, sweep_stop, sweep_step,
         print(f"  └─ cycle time: {time.time() - cycle_start:.1f}s")
 
         # ── Log cycle (fsync'd) ──
+        # ── EXPOSURE INDEX (Buckingham Pi) ──
+        # EI = Σ_f [ P_linear × N_pulses × (kurtosis / k_noise) ]
+        # Dimensionless, monotonic with actual RF exposure
+        K_NOISE = 8.5
+        ei_total, ei_zone_a, ei_zone_b = 0.0, 0.0, 0.0
+        for fmhz, results in stare_results.items():
+            for r in results:
+                k = r.get("kurtosis", K_NOISE)
+                p = r.get("pulse_count", 0)
+                pwr_db = r.get("mean_pwr_db", -44)
+                p_lin = 10 ** (pwr_db / 10)
+                ei_r = p_lin * p * max(k / K_NOISE, 1.0)
+                ei_total += ei_r
+                f = r.get("freq_mhz", r.get("nominal_freq_mhz", fmhz))
+                if isinstance(f, (int, float)):
+                    if 618 < f < 640: ei_zone_a += ei_r
+                    elif 820 < f < 840: ei_zone_b += ei_r
+
         cycle_entry = {
             "cycle": cycle + cycle_offset,
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "elapsed_s": round(elapsed, 1),
+            "exposure_index": round(ei_total, 2),
+            "ei_zone_a": round(ei_zone_a, 2),
+            "ei_zone_b": round(ei_zone_b, 2),
             "stare": {str(f): results
                       for f, results in stare_results.items()},
             "new_anomalies": new_anomalies,
