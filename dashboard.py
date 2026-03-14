@@ -486,8 +486,6 @@ function draw() {
   const maxEIA = Math.max(10,  ...hist.map(h => h.eiA  || 0));
   const maxEIB = Math.max(10,  ...hist.map(h => h.eiB  || 0));
   const maxEIU = Math.max(10,  ...hist.map(h => h.eiUL || 0));
-  // Global EI max for normalizing all three area fills on same scale
-  const maxEI  = Math.max(maxEIA, maxEIB, maxEIU, 10);
 
   const yOf = (v, maxV) => padTop + plotH - Math.max(0, Math.min(1, (v || 0) / maxV)) * plotH;
   const xi   = i => labelW + i * dx;
