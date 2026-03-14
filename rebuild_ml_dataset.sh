@@ -142,15 +142,24 @@ for r in dataset:
         # Clean up redundant columns
         r.pop(f'sym_{st}', None)
         r.pop(f'sev_{st}', None)
-    # did_respond: True = user submitted symptoms or confirmed clear
-    # False = no response (symptom values are UNKNOWN, not zero)
-    # ML should ONLY train on rows where did_respond=True
-    has_symptoms = len(r.get('symptoms', [])) > 0
+    # Three states:
+    # did_respond=True + symptoms present -> confirmed symptoms
+    # did_respond=True + all zeros -> confirmed CLEAR (explicitly no symptoms)
+    # did_respond=False -> UNKNOWN (never responded, set symptom cols to None)
+    has_symptoms = len([s for s in r.get('symptoms', []) if s != 'clear']) > 0
     has_clear = 'clear' in r.get('symptoms', [])
     r['did_respond'] = has_symptoms or has_clear
-    r['any_symptom'] = 1 if r.get('symptoms') else 0
-    r['max_severity'] = max((r.get(st, 0) for st in all_st), default=0)
-    r['symptom_total'] = sum(r.get(st, 0) for st in all_st)
+    if not r['did_respond']:
+        # Unknown — null out all symptom columns so ML ignores these rows
+        for st in all_st:
+            r[st] = None
+        r['any_symptom'] = None
+        r['max_severity'] = None
+        r['symptom_total'] = None
+    else:
+        r['any_symptom'] = 1 if has_symptoms else 0
+        r['max_severity'] = max((r.get(st, 0) or 0 for st in all_st), default=0)
+        r['symptom_total'] = sum((r.get(st, 0) or 0 for st in all_st))
 
 # ── Assemble master ──
 iq_meta=[{'file':f,'cst':datetime.fromtimestamp(os.path.getmtime(f),tz=LOCAL_TZ).strftime('%Y-%m-%d %H:%M:%S'),
