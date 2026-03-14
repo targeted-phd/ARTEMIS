@@ -473,7 +473,7 @@ function draw() {
   const dpr = window.devicePixelRatio || 2;
   const n  = hist.length;
   const labelW = 55 * dpr;  // match heatmap left offset
-  const padTop    = H * 0.06;
+  const padTop    = H * 0.10;
   const padBottom = H * 0.14;
   const plotW = W - labelW;
   const plotH = H - padTop - padBottom;
@@ -491,10 +491,10 @@ function draw() {
   const yOf = (v, maxV) => padTop + plotH - Math.max(0, Math.min(1, (v || 0) / maxV)) * plotH;
   const xi   = i => labelW + i * dx;
 
-  // Build point arrays
-  const ptsA  = hist.map((h, i) => [xi(i), yOf(h.eiA  || 0, maxEI)]);
-  const ptsB  = hist.map((h, i) => [xi(i), yOf(h.eiB  || 0, maxEI)]);
-  const ptsUL = hist.map((h, i) => [xi(i), yOf(h.eiUL || 0, maxEI)]);
+  // Each zone gets its own vertical scale so B and UL aren't crushed
+  const ptsA  = hist.map((h, i) => [xi(i), yOf(h.eiA  || 0, maxEIA)]);
+  const ptsB  = hist.map((h, i) => [xi(i), yOf(h.eiB  || 0, maxEIB)]);
+  const ptsUL = hist.map((h, i) => [xi(i), yOf(h.eiUL || 0, maxEIU)]);
   const ptsK  = hist.map((h, i) => [xi(i), yOf(h.k    || 0, maxK)]);
 
   // Subtle grid lines
@@ -536,24 +536,33 @@ function draw() {
   // Kurtosis line — bright white/silver on top of everything
   drawLine(ptsK, 'rgba(255,255,255,0.82)', 2.2, ctx);
 
-  // Y-axis labels on left
-  const fontSize = Math.max(12, Math.round(W / 80));
-  ctx.font = fontSize + 'px monospace';
-  ctx.fillStyle = '#2a2a3a';
+  // Y-axis labels — small, left gutter, show each zone's scale
+  const yFont = Math.max(9, Math.round(W / 100));
+  ctx.font = yFont + 'px monospace';
   ctx.textAlign = 'right';
-  ctx.fillText('k=' + maxK.toFixed(0), labelW - 6, padTop + 10);
-  ctx.fillText('k=0', labelW - 6, baseY - 2);
+  // Kurtosis scale (white line)
+  ctx.fillStyle = 'rgba(255,255,255,0.35)';
+  ctx.fillText('k' + maxK.toFixed(0), labelW - 4, padTop + yFont);
+  // Zone A scale (blue)
+  ctx.fillStyle = 'rgba(40,136,255,0.5)';
+  ctx.fillText('A:' + maxEIA.toFixed(0), labelW - 4, padTop + yFont * 2.5);
+  // Zone B scale (orange)
+  ctx.fillStyle = 'rgba(255,136,0,0.5)';
+  ctx.fillText('B:' + maxEIB.toFixed(0), labelW - 4, padTop + yFont * 4);
+  // UL scale (purple)
+  ctx.fillStyle = 'rgba(170,68,255,0.5)';
+  ctx.fillText('UL:' + maxEIU.toFixed(0), labelW - 4, padTop + yFont * 5.5);
   ctx.textAlign = 'left';
 
-  // Time labels at bottom — shared x-axis for timeline + heatmap below
+  // Time labels at TOP — shared x-axis for timeline + heatmap below
   ctx.fillStyle = '#3a3a50';
   ctx.textAlign = 'center';
-  const timeFontSize = Math.max(14, Math.round(W / 70));
+  const timeFontSize = Math.max(10, Math.round(W / 90));
   ctx.font = timeFontSize + 'px monospace';
   const tLabelIdxs = [0, Math.floor(n*0.25), Math.floor(n*0.5), Math.floor(n*0.75), n-1];
   tLabelIdxs.forEach(i => {
     if (i >= 0 && i < n && hist[i] && hist[i].ts) {
-      ctx.fillText(hist[i].ts, xi(i), H - 4);
+      ctx.fillText(hist[i].ts, xi(i), padTop - 4);
     }
   });
   ctx.textAlign = 'left';
