@@ -482,15 +482,14 @@ def run_sentinel(target_freqs_mhz, sweep_start, sweep_stop, sweep_step,
                     print(f"  │  >>> TARGET DROPPED: {freq_mhz:.0f} MHz "
                           f"went from kurt={init_k:.1f} to {np.mean(kurts):.1f}")
 
-        # ── AUDIBLE ALERT ──
-        # Collect all kurtosis from this cycle across all frequencies
+        # ── AUDIBLE ALERT (rate-limited: notify on state CHANGE only) ──
         all_cycle_kurts = []
         for results in stare_results.values():
             all_cycle_kurts.extend(r["kurtosis"] for r in results)
+
+        current_level = "quiet"
         if all_cycle_kurts:
             max_kurt = max(all_cycle_kurts)
-            active_count = sum(1 for k in all_cycle_kurts if k > 20)
-            # Count how many distinct nominal frequencies are active
             active_freqs = set()
             for fmhz, results in stare_results.items():
                 if any(r["kurtosis"] > 20 for r in results):
@@ -498,20 +497,32 @@ def run_sentinel(target_freqs_mhz, sweep_start, sweep_stop, sweep_step,
             n_active_freqs = len(active_freqs)
 
             if max_kurt > 200 or n_active_freqs >= 6:
-                alert_sound("critical")
-                ntfy_push("critical", max_kurt, active_freqs, cycle + cycle_offset)
-                print(f"  │  🔴 CRITICAL: max_kurt={max_kurt:.0f} "
-                      f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
+                current_level = "critical"
             elif max_kurt > 80 or n_active_freqs >= 4:
-                alert_sound("high")
-                ntfy_push("high", max_kurt, active_freqs, cycle + cycle_offset)
-                print(f"  │  🟡 HIGH: max_kurt={max_kurt:.0f} "
-                      f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
+                current_level = "high"
             elif max_kurt > 30 or n_active_freqs >= 2:
-                alert_sound("detect")
-                ntfy_push("detect", max_kurt, active_freqs, cycle + cycle_offset)
-                print(f"  │  🟢 DETECT: max_kurt={max_kurt:.0f} "
+                current_level = "detect"
+
+            # Only send ntfy on state transitions (new activation, escalation,
+            # de-escalation). Local beep plays every cycle for awareness.
+            level_changed = (current_level != getattr(run_sentinel, '_prev_level', 'quiet'))
+            run_sentinel._prev_level = current_level
+
+            if current_level != "quiet":
+                # Always beep locally (short, non-intrusive)
+                alert_sound(current_level)
+                print(f"  │  {'🔴' if current_level=='critical' else '🟡' if current_level=='high' else '🟢'} "
+                      f"{current_level.upper()}: max_kurt={max_kurt:.0f} "
                       f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
+
+                # Only push ntfy notification on state change
+                if level_changed:
+                    ntfy_push(current_level, max_kurt, active_freqs,
+                              cycle + cycle_offset)
+        else:
+            if getattr(run_sentinel, '_prev_level', 'quiet') != 'quiet':
+                # Notify de-activation
+                run_sentinel._prev_level = 'quiet'
 
         # ── SWEEP PHASE ──
         print(f"  ├─ SWEEP: ", end="", flush=True)
