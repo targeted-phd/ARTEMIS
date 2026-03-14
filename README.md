@@ -283,17 +283,22 @@ All reports in `results/evidence/`:
 
 ## Signal Characteristics (Summary)
 
-| Parameter | Zone A (622–636 MHz) | Zone B (824–834 MHz) |
-|-----------|---------------------|---------------------|
-| Peak kurtosis | 369 | 374 |
-| PRF (intra-burst) | Not yet characterized | 150,000–253,000 Hz |
-| Pulse width | Not yet characterized | 2.1–7.2 μs |
-| Duty cycle | Not yet characterized | 0.27–1.78% |
-| Intra-pulse bandwidth | Not yet characterized | 300–1,500 kHz |
-| Received power | -17 to -28 dB | -38 to -44 dB |
-| Channel spacing | 2 MHz | 2 MHz |
+| Parameter | Zone A (622–636 MHz) | Zone B (824–834 MHz) | 878 MHz (UL) |
+|-----------|---------------------|---------------------|--------------|
+| Peak kurtosis | 452 | 446 | 105 |
+| PRF (intra-burst) | **35,000 Hz** | 209,000 ± 29,000 Hz | 223,000 ± 47,000 Hz |
+| Pulse width | **1.39 μs** | 3.47 ± 1.00 μs | 1.98 ± 0.16 μs |
+| Duty cycle | **0.26%** | 0.78 ± 0.34% | 0.93 ± 0.22% |
+| Intra-pulse bandwidth | **444 kHz** | 457 ± 251 kHz | 381 ± 73 kHz |
+| Modulation index | **0.857** (highest) | 0.680 | 0.782 |
+| Bursts per capture | **73.5** | 3.4 | 29.7 |
+| Received power | -17 to -28 dB | -38 to -44 dB | -17 to -29 dB |
+| Channel spacing | 2 MHz | 2 MHz | — |
+| IQ files analyzed | 2 | 2,524 | 44 |
 
-Zone co-activation: 79% of cycles show both zones active simultaneously. Zone A never activates alone.
+**Zone A has a fundamentally different pulse structure** — 6× slower PRF, shorter pulses, 20× more bursts per capture, and the highest modulation index. This is consistent with two independent waveform generators on dual TX channels, each optimized for different biological coupling.
+
+Zone co-activation: 79% of cycles show both zones active simultaneously. Zone A never activates alone. Zone B went dark at 9:51 PM CDT Mar 13 and has not returned.
 
 ## Knowledge Graph
 
