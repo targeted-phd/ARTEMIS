@@ -6,10 +6,12 @@ import json, glob, os, numpy as np
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
-CST = timezone(timedelta(hours=-6))
+# Use system local timezone (CDT in March = UTC-5, CST in Nov = UTC-6)
+# astimezone() handles DST automatically
+LOCAL_TZ = datetime.now().astimezone().tzinfo
 K_NOISE = 8.5
 TARGETS = [622,624,628,630,632,634,636,826,828,830,832,834,878]
-ZONE_A_START = datetime(2026, 3, 13, 16, 55, tzinfo=CST)
+ZONE_A_START = datetime(2026, 3, 13, 16, 55, tzinfo=LOCAL_TZ)
 
 # ── Load all cycles, deduplicate ──
 all_raw = []
@@ -20,7 +22,7 @@ for logf in sorted(glob.glob('results/sentinel_*.jsonl')):
                 c = json.loads(line)
                 ts_str = c.get('timestamp', '')
                 if ts_str:
-                    ts = datetime.fromisoformat(ts_str.replace('Z', '+00:00')).astimezone(CST)
+                    ts = datetime.fromisoformat(ts_str.replace('Z', '+00:00')).astimezone(LOCAL_TZ)
                     all_raw.append((ts, c))
             except: pass
 
@@ -98,7 +100,7 @@ try:
                 s=json.loads(line)
                 ts=s.get('alert_ts') or s.get('timestamp','')
                 if 'T' in ts:
-                    dt=datetime.fromisoformat(ts.replace('Z','+00:00')).astimezone(CST)
+                    dt=datetime.fromisoformat(ts.replace('Z','+00:00')).astimezone(LOCAL_TZ)
                     s['_cst']=dt.replace(tzinfo=None)
                     s['cst']=dt.strftime('%Y-%m-%d %H:%M:%S')
                     s['hour']=dt.hour
@@ -145,7 +147,7 @@ for r in dataset:
     r['symptom_total'] = sum(r.get(st, 0) for st in all_st)
 
 # ── Assemble master ──
-iq_meta=[{'file':f,'cst':datetime.fromtimestamp(os.path.getmtime(f),tz=CST).strftime('%Y-%m-%d %H:%M:%S'),
+iq_meta=[{'file':f,'cst':datetime.fromtimestamp(os.path.getmtime(f),tz=LOCAL_TZ).strftime('%Y-%m-%d %H:%M:%S'),
     'freq_mhz':next((float(p.replace('MHz','')) for p in Path(f).stem.split('_') if 'MHz' in p),None),
     'size_bytes':os.path.getsize(f)} for f in sorted(glob.glob('captures/*.iq'))]
 spec_data=[]
@@ -160,7 +162,7 @@ except: pass
 
 nw=sum(1 for r in dataset if r.get('any_symptom'))
 master={
-    'metadata':{'generated':datetime.now(CST).strftime('%Y-%m-%d %I:%M:%S %p CST'),'timezone':'CST (UTC-6)',
+    'metadata':{'generated':datetime.now(LOCAL_TZ).strftime('%Y-%m-%d %I:%M:%S %p %Z'),'timezone':'Local (auto-DST)',
         'symptoms_joined':True,'symptom_columns':{f'sym_{s}':f'binary: {s}' for s in sorted(all_st)}},
     'timeline':dataset,'symptoms':symptoms,'iq_captures':iq_meta,'spectrograms':spec_data,
     'wideband_survey':wideband,
