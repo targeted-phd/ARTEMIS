@@ -132,7 +132,8 @@ for s in symptoms:
         sev_key = f'sev_{sym}'
         dataset[bi][sev_key] = max(dataset[bi].get(sev_key, 0), sev)
 
-all_st=set()
+# All 7 symptom types — always present as columns even if unreported
+all_st={'speech','headache','tinnitus','paresthesia','pressure','sleep','nausea'}
 for r in dataset:
     for s in r.get('symptoms',[]): all_st.add(s)
 for r in dataset:
@@ -160,6 +161,46 @@ for r in dataset:
         r['any_symptom'] = 1 if has_symptoms else 0
         r['max_severity'] = max((r.get(st, 0) or 0 for st in all_st), default=0)
         r['symptom_total'] = sum((r.get(st, 0) or 0 for st in all_st))
+
+# ── Exponential back-fill interpolation ──
+# Symptoms are continuous. Back-fill from each response into preceding
+# 15 min with exponential decay (5-min half-life), biased toward past.
+HALF_LIFE=5.0; DECAY=np.log(2)/HALF_LIFE; MAX_BF=15.0
+tl_times=[]
+for r in dataset:
+    try: tl_times.append(datetime.strptime(r['cst'],'%Y-%m-%d %H:%M:%S'))
+    except: tl_times.append(None)
+# Parse symptom reports
+sym_reports=[]
+for s in symptoms:
+    if not s.get('symptom') or s['symptom']=='clear': continue
+    sv=s.get('severity',2) or 2
+    try: sv=int(sv)
+    except: sv=2
+    ts2=s.get('alert_ts') or s.get('timestamp','')
+    try:
+        if 'T' in ts2:
+            d2=datetime.fromisoformat(ts2.replace('Z','+00:00')).astimezone(LOCAL_TZ).replace(tzinfo=None)
+            sym_reports.append({'time':d2,'symptom':s['symptom'],'severity':sv})
+    except: pass
+
+for i,r in enumerate(dataset):
+    t=tl_times[i]
+    if t is None: continue
+    for st in all_st:
+        mx=0.0
+        for rpt in sym_reports:
+            if rpt['symptom']!=st: continue
+            dm=(rpt['time']-t).total_seconds()/60.0
+            if 0<dm<=MAX_BF:
+                mx=max(mx, rpt['severity']*np.exp(-DECAY*dm))
+            elif -1.0<=dm<=0:
+                mx=max(mx, float(rpt['severity']))
+        r[st+'_interp']=round(mx,2) if mx>0.05 else 0.0
+    iv=[r.get(st+'_interp',0) for st in all_st]
+    r['any_symptom_interp']=1 if any(v>0.05 for v in iv) else 0
+    r['max_severity_interp']=round(max(iv),2)
+    r['symptom_total_interp']=round(sum(iv),2)
 
 # ── Assemble master ──
 iq_meta=[{'file':f,'cst':datetime.fromtimestamp(os.path.getmtime(f),tz=LOCAL_TZ).strftime('%Y-%m-%d %H:%M:%S'),
