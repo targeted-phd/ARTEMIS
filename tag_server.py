@@ -274,22 +274,33 @@ class TagHandler(BaseHTTPRequestHandler):
 <style>
 * {{ margin:0; padding:0; box-sizing:border-box; }}
 body {{ background:#08080d; color:#ccc; font-family:-apple-system,sans-serif; padding:12px; -webkit-tap-highlight-color:transparent; }}
-h2 {{ color:#6af; font-size:13px; letter-spacing:2px; margin-bottom:10px; text-transform:uppercase; }}
-.row {{ display:flex; align-items:center; gap:6px; margin:6px 0; padding:8px; border-radius:6px; border:1px solid #1a1a2a; background:#0c0c14; }}
-.row.active {{ border-color:var(--c); }}
-.sym-name {{ flex:1; font-size:15px; font-weight:bold; }}
+h2 {{ color:#6af; font-size:13px; letter-spacing:2px; margin-bottom:6px; text-transform:uppercase; }}
+.labels {{ display:flex; justify-content:flex-end; gap:4px; margin-bottom:4px; padding-right:8px; font-size:9px; color:#556; }}
+.labels span {{ width:36px; text-align:center; }}
+.row {{ display:flex; align-items:center; gap:6px; margin:4px 0; padding:6px 8px; border-radius:6px; border:1px solid #1a1a2a; background:#0c0c14; }}
+.row.active {{ border-color:var(--c); background:#0c0c14; }}
+.sym-name {{ flex:1; font-size:14px; font-weight:bold; }}
 .sev {{ display:flex; gap:4px; }}
 .sev button {{
   width:36px; height:36px; border-radius:50%; border:2px solid #2a2a3a;
-  background:#111; color:#888; font-size:14px; font-weight:bold; cursor:pointer;
+  background:#111; color:#555; font-size:13px; font-weight:bold; cursor:pointer;
   transition: all 0.15s;
 }}
 .sev button.on {{ color:#fff; }}
-.status {{ text-align:center; padding:8px; margin-top:10px; font-size:13px; border-radius:4px; display:none; }}
-.status.ok {{ display:block; background:#0a2a08; color:#4a4; }}
+#submitBtn {{
+  display:block; width:100%; margin-top:14px; padding:16px;
+  background:#0a2a0a; color:#4a4; border:2px solid #2a4a2a;
+  font-size:17px; font-weight:bold; border-radius:8px; cursor:pointer;
+  letter-spacing:1px;
+}}
+#submitBtn:active {{ background:#1a3a1a; }}
+#submitBtn.sent {{ background:#082808; color:#6c6; border-color:#4a4; }}
+.status {{ text-align:center; padding:6px; margin-top:8px; font-size:12px; color:#556; }}
 </style></head><body>
 <h2>Tag Symptoms</h2>
+<div class="labels"><span>0</span><span>1</span><span>2</span><span>3</span></div>
 <div id="symptoms"></div>
+<button id="submitBtn" onclick="submit()">SUBMIT</button>
 <div class="status" id="status"></div>
 <script>
 const rf = '{rf_esc}';
@@ -314,29 +325,28 @@ syms.forEach(s => {{
 
   let sevBtns = '';
   for (let i = 0; i <= 3; i++) {{
-    const labels = ['—','Mild','Mod','Severe'];
-    sevBtns += '<button id="'+s.key+'-'+i+'" onclick="setSev(\\''+s.key+'\\','+i+')" title="'+labels[i]+'">'+i+'</button>';
+    sevBtns += '<button id="'+s.key+'-'+i+'" onclick="setSev(\\''+s.key+'\\','+i+')">'+i+'</button>';
   }}
 
   row.innerHTML = '<span class="sym-name" style="color:'+s.color+'">'+s.name+'</span><div class="sev">'+sevBtns+'</div>';
   container.appendChild(row);
-  // Highlight 0 as default
-  document.getElementById(s.key+'-0').style.borderColor = '#444';
+  // Start with 0 highlighted
+  const btn0 = document.getElementById(s.key+'-0');
+  btn0.classList.add('on');
+  btn0.style.borderColor = '#444';
+  btn0.style.background = '#1a1a1a';
 }});
 
 function setSev(key, level) {{
-  const prev = state[key];
   state[key] = level;
   const sym = syms.find(s => s.key === key);
   const row = document.getElementById('row-' + key);
-
-  // Update button styles
   for (let i = 0; i <= 3; i++) {{
     const btn = document.getElementById(key + '-' + i);
     if (i === level) {{
       btn.classList.add('on');
       btn.style.borderColor = sym.color;
-      btn.style.background = level > 0 ? sym.color + '33' : '#111';
+      btn.style.background = level > 0 ? sym.color + '33' : '#1a1a1a';
     }} else {{
       btn.classList.remove('on');
       btn.style.borderColor = '#2a2a3a';
@@ -344,18 +354,41 @@ function setSev(key, level) {{
     }}
   }}
   row.className = level > 0 ? 'row active' : 'row';
+}}
 
-  // Auto-submit on every change
-  if (level > 0) {{
-    const sevLabels = ['none','mild','moderate','severe'];
+function submit() {{
+  const sevLabels = ['none','mild','moderate','severe'];
+  const active = Object.entries(state).filter(([k,v]) => v > 0);
+  const btn = document.getElementById('submitBtn');
+  const st = document.getElementById('status');
+
+  if (active.length === 0) {{
+    // Submit "clear" — no symptoms
+    fetch('/tag?s=clear&severity=0&severity_label=none&rf=' + encodeURIComponent(rf), {{method:'POST'}})
+      .then(() => {{
+        btn.textContent = 'SUBMITTED — CLEAR';
+        btn.className = 'sent';
+        st.textContent = 'No symptoms reported';
+      }});
+    return;
+  }}
+
+  let count = 0;
+  const total = active.length;
+  const names = [];
+  active.forEach(([key, level]) => {{
+    const sym = syms.find(s => s.key === key);
+    names.push(sym.name + ' (' + sevLabels[level] + ')');
     fetch('/tag?s=' + key + '&severity=' + level + '&severity_label=' + sevLabels[level] + '&rf=' + encodeURIComponent(rf), {{method:'POST'}})
       .then(() => {{
-        const st = document.getElementById('status');
-        st.textContent = sym.name + ' — ' + sevLabels[level];
-        st.className = 'status ok';
-        setTimeout(() => {{ st.className = 'status'; }}, 2000);
+        count++;
+        if (count === total) {{
+          btn.textContent = 'SUBMITTED';
+          btn.className = 'sent';
+          st.textContent = names.join(', ');
+        }}
       }});
-  }}
+  }});
 }}
 </script></body></html>"""
             self.send_response(200)
