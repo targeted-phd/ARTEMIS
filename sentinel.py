@@ -85,8 +85,8 @@ def ntfy_push(level, max_kurt, active_freqs, cycle_num, stare_results=None):
 
         actions = "; ".join([
             btn("Speech", "speech"),
-            btn("Paresthesia", "paresthesia"),
             btn("Headache", "headache"),
+            btn("Tinnitus", "tinnitus"),
         ])
 
         subprocess.Popen([

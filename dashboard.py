@@ -203,10 +203,10 @@ HTML = r"""<!DOCTYPE html>
     <div class="chart-wrap"><canvas id="cv"></canvas></div>
   </div>
 
-  <!-- Time x Frequency Heatmap -->
-  <div class="card span4">
-    <h2>Frequency × Time Heatmap — Symptom markers at alert time</h2>
-    <div class="chart-wrap" style="height:280px"><canvas id="heatmap"></canvas></div>
+  <!-- Time x Frequency Heatmap (shared x-axis with timeline above) -->
+  <div class="card span4" style="margin-top:-6px; border-top:none; border-top-left-radius:0; border-top-right-radius:0;">
+    <h2>Frequency × Time — symptom markers at alert time</h2>
+    <div class="chart-wrap" style="height:240px"><canvas id="heatmap"></canvas></div>
   </div>
 
 </div>
@@ -312,12 +312,15 @@ function draw() {
   ctx.clearRect(0, 0, W, H);
   if (hist.length < 2) return;
 
+  const dpr = window.devicePixelRatio || 2;
   const n  = hist.length;
-  const dx = W / (n - 1);
-  const padTop    = H * 0.10;
+  const labelW = 55 * dpr;  // match heatmap left offset
+  const padTop    = H * 0.20;
   const padBottom = H * 0.14;
+  const plotW = W - labelW;
   const plotH = H - padTop - padBottom;
   const baseY = padTop + plotH;
+  const dx = plotW / (n - 1);
 
   // Compute per-series maxima (with floor)
   const maxK   = Math.max(50,  ...hist.map(h => h.k   || 0));
@@ -328,7 +331,7 @@ function draw() {
   const maxEI  = Math.max(maxEIA, maxEIB, maxEIU, 10);
 
   const yOf = (v, maxV) => padTop + plotH - Math.max(0, Math.min(1, (v || 0) / maxV)) * plotH;
-  const xi   = i => i * dx;
+  const xi   = i => labelW + i * dx;
 
   // Build point arrays
   const ptsA  = hist.map((h, i) => [xi(i), yOf(h.eiA  || 0, maxEI)]);
@@ -343,7 +346,7 @@ function draw() {
   for (let g = 0; g <= 4; g++) {
     const gy = padTop + (g / 4) * plotH;
     ctx.beginPath();
-    ctx.moveTo(0, gy);
+    ctx.moveTo(labelW, gy);
     ctx.lineTo(W, gy);
     ctx.stroke();
   }
@@ -375,41 +378,71 @@ function draw() {
   // Kurtosis line — bright white/silver on top of everything
   drawLine(ptsK, 'rgba(255,255,255,0.82)', 2.2, ctx);
 
-  // Symptom triangle markers
-  hist.forEach((h, i) => {
-    if (!h.sym) return;
-    const color = h.sym === 'speech' ? '#fb0'
-                : h.sym === 'headache' ? '#f55'
-                : h.sym === 'paresthesia' ? '#4bf'
-                : '#6d4';
-    const x = xi(i);
-    const y = padTop - 4;
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x - 6, y - 12);
-    ctx.lineTo(x + 6, y - 12);
-    ctx.closePath();
+  // Symptom labels on timeline (angled, stacked if overlapping)
+  const tlSymStacks = {};
+  symptomsData.forEach(s => {
+    if (!s.symptom) return;
+    const alertLocal = s.alertLocalTime || s.localTime || '';
+    if (!alertLocal) return;
+    let bestIdx = -1, bestDist = Infinity;
+    const toMin = (ts) => {
+      const m = ts.match(/(\d+):(\d+)\s*(AM|PM)/i);
+      if (!m) return -1;
+      let hr = parseInt(m[1]); const mn = parseInt(m[2]);
+      if (m[3].toUpperCase() === 'PM' && hr !== 12) hr += 12;
+      if (m[3].toUpperCase() === 'AM' && hr === 12) hr = 0;
+      return hr * 60 + mn;
+    };
+    hist.forEach((h, i) => {
+      if (!h.ts) return;
+      const d2 = Math.abs(toMin(h.ts) - toMin(alertLocal));
+      if (d2 < bestDist) { bestDist = d2; bestIdx = i; }
+    });
+    if (bestIdx < 0 || bestDist >= 10) return;
+
+    const sym = s.symptom;
+    const color = sym === 'speech' ? '#fb0'
+                : sym === 'headache' ? '#f55'
+                : sym === 'tinnitus' ? '#f8f'
+                : sym === 'paresthesia' ? '#4bf'
+                : sym === 'nausea' ? '#6d4' : '#888';
+    const x = xi(bestIdx);
+    if (!tlSymStacks[bestIdx]) tlSymStacks[bestIdx] = 0;
+    const stackN = tlSymStacks[bestIdx];
+    const lf = Math.round(dpr * 8);
+
+    ctx.save();
+    ctx.translate(x, padTop - 6 - stackN * (lf + 4));
+    ctx.rotate(-Math.PI / 4);
+    ctx.font = 'bold ' + lf + 'px monospace';
     ctx.fillStyle = color;
-    ctx.fill();
+    ctx.textAlign = 'left';
+    ctx.fillText(sym, 0, 0);
+    ctx.restore();
+    tlSymStacks[bestIdx]++;
   });
 
-  // Time labels along the bottom — CST (server sends local time strings)
-  const fontSize = Math.max(14, Math.round(W / 70));
+  // Y-axis labels on left
+  const fontSize = Math.max(12, Math.round(W / 80));
   ctx.font = fontSize + 'px monospace';
+  ctx.fillStyle = '#2a2a3a';
+  ctx.textAlign = 'right';
+  ctx.fillText('k=' + maxK.toFixed(0), labelW - 6, padTop + 10);
+  ctx.fillText('k=0', labelW - 6, baseY - 2);
+  ctx.textAlign = 'left';
+
+  // Time labels at bottom — shared x-axis for timeline + heatmap below
   ctx.fillStyle = '#3a3a50';
-  const labelIdxs = [0, Math.floor(n * 0.25), Math.floor(n * 0.5), Math.floor(n * 0.75), n - 1];
-  labelIdxs.forEach(i => {
+  ctx.textAlign = 'center';
+  const timeFontSize = Math.max(14, Math.round(W / 70));
+  ctx.font = timeFontSize + 'px monospace';
+  const tLabelIdxs = [0, Math.floor(n*0.25), Math.floor(n*0.5), Math.floor(n*0.75), n-1];
+  tLabelIdxs.forEach(i => {
     if (i >= 0 && i < n && hist[i] && hist[i].ts) {
-      const tx = Math.min(Math.max(xi(i), 4), W - 60);
-      ctx.fillText(hist[i].ts, tx, H - 4);
+      ctx.fillText(hist[i].ts, xi(i), H - 4);
     }
   });
-
-  // Y-axis labels
-  ctx.font = Math.max(12, Math.round(W / 80)) + 'px monospace';
-  ctx.fillStyle = '#2a2a3a';
-  ctx.fillText('k=' + maxK.toFixed(0), 4, padTop + 10);
-  ctx.fillText('k=0', 4, baseY - 2);
+  ctx.textAlign = 'left';
 }
 
 // ── Time × Frequency Heatmap ─────────────────────────────────────────────
@@ -449,8 +482,8 @@ function drawHeatmap() {
 
   // Layout
   const labelW = 55 * dpr;   // freq labels on left
-  const bottomH = 28 * dpr;  // time labels at bottom
-  const topH = 18 * dpr;     // symptom marker row
+  const bottomH = 40 * dpr;  // room for bottom symptom labels
+  const topH = 45 * dpr;     // room for angled symptom labels
   const plotW = W - labelW;
   const plotH = H - bottomH - topH;
   const cellW = plotW / nTime;
@@ -507,68 +540,95 @@ function drawHeatmap() {
     hmCtx.fillText(freq.toString(), labelW - 6 * dpr, y + cellH * 0.75);
   }
 
-  // Time labels at bottom
-  hmCtx.fillStyle = '#3a3a50';
-  hmCtx.textAlign = 'center';
-  const timeFont = Math.max(10, Math.round(dpr * 8));
-  hmCtx.font = timeFont + 'px monospace';
-  const step = Math.max(1, Math.floor(nTime / 6));
-  for (let ti = 0; ti < nTime; ti += step) {
-    if (hist[ti] && hist[ti].ts) {
-      hmCtx.fillText(hist[ti].ts, labelW + ti * cellW + cellW/2, H - 4 * dpr);
-    }
-  }
+  // No time labels — shared x-axis with timeline above
 
-  // Symptom markers at ALERT TIME — map to nearest column
-  // Symptoms have alert_ts which is the time the signal fired
+  // Symptom markers — collect per-column, dedupe, draw at bottom
+  const toMin = (ts) => {
+    const m = (ts||'').match(/(\d+):(\d+)\s*(AM|PM)/i);
+    if (!m) return -1;
+    let hr = parseInt(m[1]); const mn = parseInt(m[2]);
+    if (m[3].toUpperCase() === 'PM' && hr !== 12) hr += 12;
+    if (m[3].toUpperCase() === 'AM' && hr === 12) hr = 0;
+    return hr * 60 + mn;
+  };
+  const symColors = {
+    speech: '#fb0', headache: '#f55', tinnitus: '#f8f',
+    paresthesia: '#4bf', nausea: '#6d4', pressure: '#aaf'
+  };
+
+  // Group unique symptoms per column
+  const colSyms = {};  // colIdx -> Set of symptom names
   symptomsData.forEach(s => {
     if (!s.symptom) return;
-    // Match symptom alert_ts to the closest history entry ts
-    const alertTs = s.alert_ts || s.timestamp || '';
-    // Find nearest history column by comparing time strings
-    let bestIdx = -1, bestDist = Infinity;
     const alertLocal = s.alertLocalTime || s.localTime || '';
-    if (alertLocal) {
-      hist.forEach((h, i) => {
-        if (!h.ts) return;
-        // Simple string distance — both are "HH:MM PM" format
-        // Convert to minutes for comparison
-        const toMin = (ts) => {
-          const m = ts.match(/(\d+):(\d+)\s*(AM|PM)/i);
-          if (!m) return -1;
-          let hr = parseInt(m[1]); const mn = parseInt(m[2]);
-          if (m[3].toUpperCase() === 'PM' && hr !== 12) hr += 12;
-          if (m[3].toUpperCase() === 'AM' && hr === 12) hr = 0;
-          return hr * 60 + mn;
-        };
-        const d = Math.abs(toMin(h.ts) - toMin(alertLocal));
-        if (d < bestDist) { bestDist = d; bestIdx = i; }
-      });
-    }
+    if (!alertLocal) return;
+    let bestIdx = -1, bestDist = Infinity;
+    hist.forEach((h, i) => {
+      if (!h.ts) return;
+      const d = Math.abs(toMin(h.ts) - toMin(alertLocal));
+      if (d < bestDist) { bestDist = d; bestIdx = i; }
+    });
     if (bestIdx >= 0 && bestDist < 10) {
-      const x = labelW + bestIdx * cellW + cellW / 2;
-      const color = s.symptom === 'speech' ? '#fb0'
-                  : s.symptom === 'headache' ? '#f55'
-                  : s.symptom === 'paresthesia' ? '#4bf' : '#6d4';
-      // Triangle at top
-      hmCtx.beginPath();
-      hmCtx.moveTo(x, topH - 2);
-      hmCtx.lineTo(x - 5 * dpr, 2);
-      hmCtx.lineTo(x + 5 * dpr, 2);
-      hmCtx.closePath();
-      hmCtx.fillStyle = color;
-      hmCtx.fill();
-      // Vertical line through the column
-      hmCtx.strokeStyle = color;
-      hmCtx.globalAlpha = 0.3;
-      hmCtx.lineWidth = cellW;
-      hmCtx.beginPath();
-      hmCtx.moveTo(x, topH);
-      hmCtx.lineTo(x, topH + plotH);
-      hmCtx.stroke();
-      hmCtx.globalAlpha = 1.0;
+      if (!colSyms[bestIdx]) colSyms[bestIdx] = new Set();
+      colSyms[bestIdx].add(s.symptom);
     }
   });
+
+  // Draw labels at bottom of heatmap, stacked per column
+  const labelFont = Math.round(8 * dpr);
+  hmCtx.font = 'bold ' + labelFont + 'px monospace';
+  const bottomBase = topH + plotH + 4;
+
+  Object.entries(colSyms).forEach(([idxStr, symSet]) => {
+    const idx = parseInt(idxStr);
+    const x = labelW + idx * cellW + cellW / 2;
+    let offset = 0;
+    Array.from(symSet).forEach(sym => {
+      const color = symColors[sym] || '#888';
+      hmCtx.save();
+      hmCtx.translate(x, bottomBase + offset);
+      hmCtx.rotate(Math.PI / 5);
+      hmCtx.fillStyle = color;
+      hmCtx.textAlign = 'left';
+      hmCtx.fillText(sym, 2, 0);
+      hmCtx.restore();
+      offset += labelFont + 3;
+    });
+
+    // Small tick mark from heatmap bottom to labels
+    hmCtx.strokeStyle = '#333';
+    hmCtx.lineWidth = 1;
+    hmCtx.beginPath();
+    hmCtx.moveTo(x, topH + plotH);
+    hmCtx.lineTo(x, bottomBase);
+    hmCtx.stroke();
+  });
+
+  // Symptom legend at top-right
+  const legendSymptoms = [
+    ['speech', '#fb0'], ['headache', '#f55'], ['tinnitus', '#f8f'],
+    ['paresthesia', '#4bf'], ['nausea', '#6d4'], ['pressure', '#aaf']
+  ];
+  // Only show symptoms that actually appear in the data
+  const seenSymptoms = new Set(symptomsData.map(s => s.symptom).filter(Boolean));
+  const activeLegend = legendSymptoms.filter(([s]) => seenSymptoms.has(s));
+  if (activeLegend.length > 0) {
+    const legFont = Math.round(8 * dpr);
+    hmCtx.font = legFont + 'px monospace';
+    hmCtx.textAlign = 'right';
+    let lx = W - 8 * dpr;
+    let ly = topH - 4;
+    activeLegend.reverse().forEach(([label, color]) => {
+      const tw = hmCtx.measureText(label).width;
+      // Color dot + label
+      hmCtx.fillStyle = '#0c0c14';
+      hmCtx.fillRect(lx - tw - 14 * dpr, ly - legFont, tw + 16 * dpr, legFont + 4);
+      hmCtx.fillStyle = color;
+      hmCtx.fillRect(lx - tw - 12 * dpr, ly - legFont + 3, 6 * dpr, legFont - 2);
+      hmCtx.fillText(label, lx - 4 * dpr, ly);
+      ly -= legFont + 6;
+    });
+  }
 
   // Zone labels on right edge
   const zones = [{f: 622, label: 'A', color: '#28f'}, {f: 826, label: 'B', color: '#f80'}, {f: 878, label: 'UL', color: '#a4f'}];
@@ -694,6 +754,10 @@ def parse_cycle(cycle):
     zone_ul_max = 0
     freqs = []
 
+    NOMINAL_TARGETS = [622, 624, 628, 630, 632, 634, 636,
+                       826, 828, 830, 832, 834, 878]
+    active_targets = set()
+
     for freq_str, readings in cycle.get("stare", {}).items():
         for r in readings:
             k = r.get("kurtosis", 0)
@@ -701,8 +765,11 @@ def parse_cycle(cycle):
             f = r.get("freq_mhz", r.get("nominal_freq_mhz", 0))
             if k > max_k:
                 max_k = k
-            if k > 20:
-                n_active += 1
+            if k > 20 and isinstance(f, (int, float)):
+                # Bucket to nearest nominal target
+                nearest = min(NOMINAL_TARGETS, key=lambda t: abs(t - f))
+                if abs(nearest - f) < 4:
+                    active_targets.add(nearest)
             total_pulses += p
             if isinstance(f, (int, float)):
                 if 618 < f < 640 and k > zone_a_max:
@@ -718,7 +785,7 @@ def parse_cycle(cycle):
         "cycle": cycle.get("cycle"),
         "timestamp": cycle.get("timestamp", ""),
         "maxK": round(max_k, 1),
-        "nActive": n_active,
+        "nActive": len(active_targets),
         "pulses": total_pulses,
         "ei": cycle.get("exposure_index"),
         "eiA": cycle.get("ei_zone_a"),

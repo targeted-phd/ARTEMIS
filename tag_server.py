@@ -251,7 +251,59 @@ class TagHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         parsed = urlparse(self.path)
 
-        if parsed.path == "/tags":
+        if parsed.path == "/quick":
+            # Mobile quick-tap page with all symptom buttons
+            params = parse_qs(parsed.query)
+            rf = params.get("rf", [""])[0]
+            rf_esc = rf.replace("'", "\\'")
+            buttons = [
+                ("Speech", "speech", "#fa0", "#2a1800"),
+                ("Headache", "headache", "#f44", "#2a0808"),
+                ("Paresthesia", "paresthesia", "#4af", "#081828"),
+                ("Tinnitus", "tinnitus", "#f8f", "#280828"),
+                ("Nausea", "nausea", "#6d4", "#0a2808"),
+                ("Pressure", "pressure", "#aaf", "#0a0a28"),
+                ("Sleep", "sleep", "#88f", "#0a0828"),
+                ("Clear", "clear", "#4a4", "#082808"),
+            ]
+            btns_html = ""
+            for label, val, color, bg in buttons:
+                btns_html += (
+                    f'<button onclick="tag(\'{val}\')" '
+                    f'style="background:{bg};color:{color};border:2px solid {color};'
+                    f'padding:18px 0;font-size:18px;border-radius:8px;'
+                    f'font-weight:bold;cursor:pointer;width:100%">'
+                    f'{label}</button>\n'
+                )
+            page = f"""<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ARTEMIS — Tag Symptom</title>
+<style>
+body {{ background:#08080d; color:#ccc; font-family:sans-serif; padding:16px; }}
+h2 {{ color:#6af; font-size:14px; margin-bottom:12px; }}
+.grid {{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }}
+.done {{ text-align:center; color:#4a4; font-size:16px; margin-top:16px; display:none; }}
+</style></head><body>
+<h2>ARTEMIS — Tag Symptom</h2>
+<div class="grid">{btns_html}</div>
+<div class="done" id="done">Logged.</div>
+<script>
+const rf = '{rf_esc}';
+function tag(s) {{
+  fetch('/tag?s=' + s + '&rf=' + encodeURIComponent(rf), {{method:'POST'}})
+    .then(() => {{
+      document.getElementById('done').style.display = 'block';
+      setTimeout(() => {{ document.getElementById('done').style.display = 'none'; }}, 2000);
+    }});
+}}
+</script></body></html>"""
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html")
+            self.end_headers()
+            self.wfile.write(page.encode())
+
+        elif parsed.path == "/tags":
             # Return recent tags
             try:
                 with open(LOG_FILE) as f:
