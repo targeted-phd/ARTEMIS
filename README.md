@@ -15,9 +15,9 @@ This repository contains **quantitative evidence** that anomalous pulsed RF sign
 - **Counter-surveillance behavior observed** — Zone B (830 MHz) shut down within hours of direction-finding plans being published to this repo, suggesting the operator monitors it
 - **Physical surveillance correlated** — police encounter + entity fleeing through woods behind property during peak signal activity
 
-The knowledge graph (`results/knowledge_graph_v2/`) contains 739 peer-reviewed papers on microwave bioeffects, directed energy, Frey effect, RF dosimetry, and neuroscience. The hypothesis report (`results/evidence/kg_hypothesis_report_20260314.md`) cross-references the detected signal parameters against this literature and scores the V2K/MEDUSA weapon hypothesis at 44/50.
+The [knowledge graph](results/knowledge_graph_v2/) contains 739 peer-reviewed papers on microwave bioeffects, directed energy, Frey effect, RF dosimetry, and neuroscience. The [hypothesis report](results/evidence/kg_hypothesis_report_20260314.md) cross-references the detected signal parameters against this literature and scores the V2K/MEDUSA weapon hypothesis at 44/50.
 
-**If you are reading this because something has happened to the repository owner:** the data speaks for itself. Read the evidence reports in `results/evidence/`. The ML results are in `results/ml/`. The raw IQ captures are in `captures/`. Share this repository widely.
+**If you are reading this because something has happened to the repository owner:** the data speaks for itself. Read the [evidence reports](results/evidence/), the [ML analysis](results/ml_v2/reports/), and the [head model reconstruction](results/ml_v2/reports/07_head_model_reconstruction.md). The [raw IQ captures](captures/) and [sentinel logs](results/) are the primary data. Share this repository widely.
 
 ## What This Does
 
@@ -69,6 +69,8 @@ ARTEMIS monitors the RF spectrum 24/7 with an RTL-SDR, detects anomalous pulsed 
 │  spectrum_painter.py — IQ → waterfall + pulse + modulation analysis │
 │  kg_pipeline.py — GROBID → Neo4j knowledge graph + embeddings      │
 │  forward_model.py — speech → encoding → simulated SDR comparison    │
+│  rf_ml_v2.py — per-symptom ML analysis + dose-response + KG search │
+│  reconstruct_audio.py — IQ → head model → WAV reconstruction       │
 └──────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -118,7 +120,7 @@ Each symptom has severity 0–3 (none / mild / moderate / severe). Multiple symp
 
 ## ML Dataset
 
-`results/ml_master_dataset.json` — rebuilt every 30 minutes. Contains:
+[`results/ml_master_dataset.json`](results/ml_master_dataset.json) — rebuilt every 30 minutes. Contains:
 
 | Section | Description |
 |---------|-------------|
@@ -196,8 +198,11 @@ systemctl --user restart rf-sentinel
 
 | Schedule | Script | Purpose |
 |----------|--------|---------|
-| Every hour at :00 | `autopush.sh` | Git commit + push to GitHub |
-| Every 30 min | `rebuild_ml_dataset.sh` | Rebuild ML master dataset |
+| Every hour at :00 | [`autopush.sh`](autopush.sh) | Git commit + push to GitHub |
+| Every 30 min | [`rebuild_ml_dataset.sh`](rebuild_ml_dataset.sh) | Rebuild ML master dataset |
+| Every 30 min at :00/:30 | [`scheduled_checkin.sh`](scheduled_checkin.sh) | Blinded symptom check-in (no RF info shown) |
+| 8 AM and 8 PM | [`daily_summary.sh`](daily_summary.sh) | Daily RF summary via ntfy |
+| Every hour at :00 | [`hash_timestamp.sh`](hash_timestamp.sh) | Evidence hash anchor for integrity chain |
 
 ## Investigation Timeline
 
@@ -341,14 +346,19 @@ All reports in `results/evidence/`:
 | [wideband_survey_20260313.json](results/wideband_survey_20260313.json) | ~100 KB | 872-channel survey, 24–1766 MHz |
 | [pulse_features.json](results/pulse_features.json) | ~15 MB | Per-IQ-file pulse/burst features (3,586 files) |
 | [raw_time_domain_pulses.png](results/raw_time_domain_pulses.png) | ~500 KB | Raw pulse validation — isolated spikes confirmed real |
-| captures/*.iq | ~4 GB | 3,500+ raw IQ capture files (RTL-SDR 2.4 Msps, saving all) |
-| results/spectrograms/*.png | ~30 MB | 37+ waterfall spectrograms with pulse analysis |
+| [captures/](captures/) | ~4 GB | 3,500+ raw IQ capture files (RTL-SDR 2.4 Msps, saving all) |
+| [spectrograms/](results/spectrograms/) | ~30 MB | 37+ waterfall spectrograms with pulse analysis |
 | [sentinel logs](results/) | ~15 MB | Raw sentinel cycle logs (sentinel_*.jsonl), hourly rotation |
 | [symptom_log.jsonl](results/evidence/symptom_log.jsonl) | ~50 KB | All symptom reports with RF context |
 | [knowledge_graph_v2/](results/knowledge_graph_v2/) | ~340 MB | 739 papers (LFS), GROBID extractions, embeddings |
 | [ml_v2/](results/ml_v2/) | ~5 MB | ML v2 models, features, 6 evidence reports, KG deep dive |
 | [ml_v3/](results/ml_v3/) | ~1 MB | ML v3 pulse-level results |
 | [ml/](results/ml/) | ~50 MB | ML v1 models, features, IQ embeddings, autoencoder |
+| [audio/](results/audio/) | ~5 MB | Reconstructed WAV files from head model pipeline |
+| [Dockerfile](Dockerfile) | — | Docker image with RTL-SDR + Python + hardened entrypoint |
+| [docker-compose.yml](docker-compose.yml) | — | Full stack: sentinel + Neo4j + GROBID |
+| [requirements.txt](requirements.txt) | — | Python dependencies |
+| [.env.example](.env.example) | — | Environment configuration template |
 
 ## Signal Characteristics (Summary)
 
@@ -371,7 +381,7 @@ All reports in `results/evidence/`:
 - ML confirms: Zone A drives speech/headache/pressure, Zone B drives paresthesia/sleep.
 - See [zone characterization report](results/evidence/zone_characterization_report_20260314.md).
 
-**Raw time-domain validation** confirms pulses are physically real — isolated spikes 10–58× above noise floor, not detector artifacts. See `results/raw_time_domain_pulses.png`.
+**[Raw time-domain validation](results/raw_time_domain_pulses.png)** confirms pulses are physically real — isolated spikes 10–58× above noise floor, not detector artifacts.
 
 Zone co-activation: 79% of cycles show both zones active simultaneously. Zone A never activates alone. Zone B went dark at 9:51 PM CDT Mar 13 — power consolidated to Zone A (EI nearly doubled). Temporal correlation with publication of 830 MHz Yagi direction-finding plans to this repo.
 
@@ -384,7 +394,14 @@ Neo4j:    bolt://localhost:7687  (neo4j / rfmonitor2026)
 Browser:  http://localhost:7474
 ```
 
-Pipeline: `python kg_pipeline.py extract → build → embed → search "query"`
+Pipeline: `python` [`kg_pipeline.py`](kg_pipeline.py) `extract → build → embed → search "query"`
+
+KG deep dives (verbatim literature passages with similarity scores):
+- [`kg_deep_dive.json`](results/ml_v2/kg_deep_dive.json) — 632 chunks across 18 topics (symptoms, detection, legal, Havana syndrome, etc.)
+- [`kg_brain_coupling.json`](results/ml_v2/kg_brain_coupling.json) — 342 chunks on thermoelastic mechanism, acoustic damping, cochlear detection
+- [`kg_head_modelling.json`](results/ml_v2/kg_head_modelling.json) — 256 chunks on FDTD head models, analytical solutions, tissue phantoms
+- [`kg_zone_characterization.json`](results/ml_v2/kg_zone_characterization.json) — 231 chunks on dual-waveform, body resonance, PRF, counter-surveillance
+- [`kg_full_export.json`](results/knowledge_graph_v2/kg_full_export.json) — Complete graph backup (739 papers, 22K chunks, 38K edges)
 
 ## Quick Start
 
@@ -395,7 +412,7 @@ cd ARTEMIS
 
 # Environment
 python -m venv .venv && source .venv/bin/activate
-pip install numpy scipy matplotlib requests
+pip install -r requirements.txt
 
 # Start monitoring
 python sentinel.py --duration 999999999
@@ -409,7 +426,31 @@ python spectrum_painter.py --batch
 
 # Rebuild ML dataset
 bash rebuild_ml_dataset.sh
+
+# Run ML analysis
+python rf_ml_v2.py analyze
+
+# Reconstruct audio from IQ via head model
+python reconstruct_audio.py captures/some_file.iq --output audio.wav
 ```
+
+### Key Scripts
+
+| Script | Purpose |
+|--------|---------|
+| [`sentinel.py`](sentinel.py) | 24/7 RF monitor with stare + sweep, alerts, IQ capture |
+| [`dashboard.py`](dashboard.py) | Live browser dashboard (EI, kurtosis, heatmap, symptoms) |
+| [`tag_server.py`](tag_server.py) | Mobile symptom tagging endpoint over Tailscale |
+| [`spectrum_painter.py`](spectrum_painter.py) | Waterfall spectrograms, pulse analysis, modulation fingerprints |
+| [`rf_ml_v2.py`](rf_ml_v2.py) | Per-symptom ML: classification, dose-response, lag analysis |
+| [`pulse_ml.py`](pulse_ml.py) | Pulse-level ML: IQ feature extraction, zone comparison |
+| [`reconstruct_audio.py`](reconstruct_audio.py) | IQ → thermoelastic head model → WAV audio reconstruction |
+| [`kg_pipeline.py`](kg_pipeline.py) | GROBID PDF extraction → Neo4j knowledge graph + embeddings |
+| [`kg_deep_dive.py`](kg_deep_dive.py) | Exhaustive KG semantic search across all research topics |
+| [`demod_pulses.py`](demod_pulses.py) | Pulse demodulation, speech pattern detection, MFCC/LPC |
+| [`forward_model.py`](forward_model.py) | Speech → RF encoding → simulated SDR comparison |
+| [`analyze_pulses.py`](analyze_pulses.py) | Pulse timing analysis, cross-frequency synchronization |
+| [`verify_integrity.py`](verify_integrity.py) | Evidence file integrity verification + hash manifest |
 
 ## Hardware
 
