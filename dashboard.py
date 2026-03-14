@@ -267,7 +267,7 @@ HTML = r"""<!DOCTYPE html>
   .chart-wrap { width: 100%; position: relative; }
   .chart-wrap canvas { width: 100%; height: 100%; display: block; }
   .chart-wrap.timeline { height: 200px; }
-  .chart-wrap.heatmap  { height: 320px; overflow: visible; }
+  .chart-wrap.heatmap  { height: 400px; overflow: visible; margin-bottom: 40px; }
 </style>
 </head>
 <body>
@@ -355,6 +355,7 @@ HTML = r"""<!DOCTYPE html>
         <span class="legend-item"><span class="legend-dot" style="background:rgba(255,136,0,0.75)"></span>Zone B</span>
         <span class="legend-item"><span class="legend-dot" style="background:rgba(170,68,255,0.75)"></span>878 UL</span>
         <span class="legend-item"><span class="legend-dot" style="background:rgba(255,255,255,0.7); height:2px"></span>Kurtosis</span>
+        <span class="legend-item"><span class="legend-dot" style="background:rgba(0,255,140,0.7); height:2px; border:1px dashed rgba(0,255,140,0.5)"></span>Total EI</span>
       </div>
     </div>
     <div class="chart-wrap timeline"><canvas id="cv"></canvas></div>
@@ -492,10 +493,12 @@ function draw() {
   const xi   = i => labelW + i * dx;
 
   // Each zone gets its own vertical scale so B and UL aren't crushed
+  const maxEI  = Math.max(10, ...hist.map(h => (h.eiA||0) + (h.eiB||0) + (h.eiUL||0)));
   const ptsA  = hist.map((h, i) => [xi(i), yOf(h.eiA  || 0, maxEIA)]);
   const ptsB  = hist.map((h, i) => [xi(i), yOf(h.eiB  || 0, maxEIB)]);
   const ptsUL = hist.map((h, i) => [xi(i), yOf(h.eiUL || 0, maxEIU)]);
   const ptsK  = hist.map((h, i) => [xi(i), yOf(h.k    || 0, maxK)]);
+  const ptsEI = hist.map((h, i) => [xi(i), yOf((h.eiA||0)+(h.eiB||0)+(h.eiUL||0), maxEI)]);
 
   // Subtle grid lines
   ctx.save();
@@ -533,6 +536,12 @@ function draw() {
   drawLine(ptsB,  'rgba(255,160,0,0.65)',   1.5, ctx);
   drawLine(ptsUL, 'rgba(190,100,255,0.65)', 1.5, ctx);
 
+  // Total EI line — bright green, dashed
+  ctx.save();
+  ctx.setLineDash([6, 4]);
+  drawLine(ptsEI, 'rgba(0,255,140,0.7)', 1.8, ctx);
+  ctx.restore();
+
   // Kurtosis line — bright white/silver on top of everything
   drawLine(ptsK, 'rgba(255,255,255,0.82)', 2.2, ctx);
 
@@ -552,6 +561,9 @@ function draw() {
   // UL scale (purple)
   ctx.fillStyle = 'rgba(170,68,255,0.5)';
   ctx.fillText('UL:' + maxEIU.toFixed(0), labelW - 4, padTop + yFont * 5.5);
+  // Total EI scale (green)
+  ctx.fillStyle = 'rgba(0,255,140,0.5)';
+  ctx.fillText('EI:' + maxEI.toFixed(0), labelW - 4, padTop + yFont * 7);
   ctx.textAlign = 'left';
 
   // Time labels at TOP — shared x-axis for timeline + heatmap below
@@ -605,7 +617,7 @@ function drawHeatmap() {
 
   // Layout
   const labelW = 55 * dpr;   // freq labels on left
-  const bottomH = 40 * dpr;  // room for bottom symptom labels
+  const bottomH = 80 * dpr;  // room for stacked symptom labels at bottom
   const topH = 4 * dpr;      // minimal top — all labels at bottom
   const plotW = W - labelW;
   const plotH = H - bottomH - topH;
@@ -1012,11 +1024,41 @@ def get_state():
         except Exception:
             ts_short = ""
 
+        # Compute EI if not in the cycle data (old cycles)
+        ei = c.get("exposure_index")
+        eiA = c.get("ei_zone_a")
+        eiB = c.get("ei_zone_b")
+        if ei is None:
+            K_NOISE = 8.5
+            ei = 0.0
+            eiA = 0.0
+            eiB = 0.0
+            for freq_str2, readings2 in c.get("stare", {}).items():
+                for r2 in readings2:
+                    k2 = r2.get("kurtosis", K_NOISE)
+                    pdb = r2.get("mean_pwr_db", -44)
+                    pl = 10 ** (pdb / 10)
+                    pc = r2.get("pulse_count", 0)
+                    pls = r2.get("pulses", [])
+                    if isinstance(pls, list) and pls and isinstance(pls[0], dict):
+                        tw = sum(p.get("width_us", 0) for p in pls if isinstance(p, dict))
+                        nl = len([p for p in pls if isinstance(p, dict)])
+                        if nl > 0 and pc > nl:
+                            tw = (tw / nl) * pc
+                    else:
+                        tw = pc * 2.5
+                    ei_r = pl * tw * max(k2 / K_NOISE, 1.0)
+                    ei += ei_r
+                    f2 = r2.get("freq_mhz", r2.get("nominal_freq_mhz", 0))
+                    if isinstance(f2, (int, float)):
+                        if 618 < f2 < 640: eiA += ei_r
+                        elif 820 < f2 < 840: eiB += ei_r
+
         history.append({
             "maxK": round(max_k, 1),
-            "ei": c.get("exposure_index"),
-            "eiA": c.get("ei_zone_a"),
-            "eiB": c.get("ei_zone_b"),
+            "ei": round(ei, 1) if ei else 0,
+            "eiA": round(eiA, 1) if eiA else 0,
+            "eiB": round(eiB, 1) if eiB else 0,
             "ts": ts_short,
             "fh": freq_heat,
             "symptom": None,
