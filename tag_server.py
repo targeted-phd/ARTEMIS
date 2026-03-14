@@ -390,11 +390,65 @@ function submit() {{
       }});
   }});
 }}
+
+// Check if already submitted for this alert
+fetch('/check?rf=' + encodeURIComponent(rf))
+  .then(r => r.json())
+  .then(data => {{
+    if (data.submitted && data.submitted.length > 0) {{
+      const btn = document.getElementById('submitBtn');
+      btn.textContent = 'ALREADY SUBMITTED';
+      btn.style.background = '#1a2a1a';
+      btn.style.color = '#6a6';
+      btn.style.borderColor = '#3a5a3a';
+      const st = document.getElementById('status');
+      st.textContent = 'Previous: ' + [...new Set(data.submitted)].join(', ');
+      st.style.color = '#6a6';
+      st.style.display = 'block';
+      // Pre-highlight previously submitted symptoms
+      data.submitted.forEach(sym => {{
+        if (state.hasOwnProperty(sym) && state[sym] === 0) {{
+          setSev(sym, 1);
+        }}
+      }});
+    }}
+  }})
+  .catch(() => {{}});
 </script></body></html>"""
             self.send_response(200)
             self.send_header("Content-Type", "text/html")
             self.end_headers()
             self.wfile.write(page.encode())
+
+        elif parsed.path == "/check":
+            # Check if an alert_id already has submissions
+            params = parse_qs(parsed.query)
+            rf_param = params.get("rf", [""])[0]
+            aid = None
+            if rf_param:
+                try:
+                    snap = json.loads(rf_param)
+                    aid = snap.get("aid")
+                except:
+                    pass
+            found = []
+            if aid:
+                try:
+                    with open(LOG_FILE) as f:
+                        for line in f:
+                            try:
+                                s = json.loads(line)
+                                if s.get("alert_id") == aid:
+                                    found.append(s.get("symptom"))
+                            except:
+                                pass
+                except FileNotFoundError:
+                    pass
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.end_headers()
+            self.wfile.write(json.dumps({"submitted": found}).encode())
 
         elif parsed.path == "/tags":
             # Return recent tags
