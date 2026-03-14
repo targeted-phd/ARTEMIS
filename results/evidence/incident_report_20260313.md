@@ -94,6 +94,42 @@ Mar 13, ~11:30       SUBJECT REPORTS: headache onset, painful, correlated with
 
 Mar 13, 11:41        SIGNAL STILL ACTIVE — cycle 1158: 832 MHz kurt=145.0,
                      830 MHz kurt=101.3, total pulses=8996. No letup.
+
+Mar 13, ~12:10       WSL CRASH during evidence repo push. snapd + Hyper-V
+                     balloon reconfig killed WSL instance mid-git-push.
+                     USB SDR passthrough dropped. ~80 min data gap.
+                     All pre-crash data verified intact (SHA-256 match).
+
+Mar 13, 19:50 CDT    PHYSICAL INCIDENT: Subject left phone inside house,
+                     pretended to leave, went to backyard.
+                     Observed: police vehicles in vicinity of house.
+                     Heard: large entity/person fleeing through woods behind property.
+                     Sentinel at time of incident:
+                       19:38 — maxK=281, Zone A+B active (624=103, 826=68)
+                       19:43 — maxK=200, Zone A dominant (622=183, 624=152)
+                       19:46 — maxK=251, 28 active readings
+                       19:48 — maxK=200, Zone A+B active
+                     Signal pattern: BOTH zones active, evening activation confirmed.
+                     NOTE: Phone left inside = no phone-based tracking possible
+                     during observation. Presence detected by other means.
+
+                     OFFICER DESCRIPTION:
+                       - Heavyset male, not 300 lbs, clean-cut brown goatee
+                       - Vehicle: black Ford Explorer, SPD (local city PD)
+                       - Black decals on side (low-visibility/stealth markings)
+                       - Subject approached officer, asked if everything was alright
+                       - Officer response: "just monitoring the neighborhood"
+                       - Officer appeared SURPRISED when subject initiated contact
+                       - Subject has NEVER seen this officer before
+                       - Subject has NEVER seen any police static-monitoring this
+                         neighborhood — unprecedented for this area
+                       - Suspected second person (partner) fled through woods
+                         behind property when subject went to backyard
+
+                     ASSESSMENT: Low-vis vehicle + stealth decals + static
+                     surveillance + surprised reaction to contact + woods activity
+                     is inconsistent with routine patrol. Concurrent with active
+                     RF signal on both Zone A (622-636 MHz) and Zone B (826-834 MHz).
 ```
 
 ---
