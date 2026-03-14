@@ -359,6 +359,7 @@ def run_sentinel(target_freqs_mhz, sweep_start, sweep_stop, sweep_step,
     last_checkpoint = time.time()
 
     cycle = 0
+    ei_total, ei_zone_a, ei_zone_b = 0.0, 0.0, 0.0
     while not _stop:
         elapsed = time.time() - start_epoch
         if elapsed > duration_s:
@@ -482,17 +483,51 @@ def run_sentinel(target_freqs_mhz, sweep_start, sweep_stop, sweep_step,
                     print(f"  │  >>> TARGET DROPPED: {freq_mhz:.0f} MHz "
                           f"went from kurt={init_k:.1f} to {np.mean(kurts):.1f}")
 
-        # ── EXPOSURE INDEX (Buckingham Pi) ──
+        # ── EXPOSURE INDEX (Buckingham Pi, v2) ──
+        # EI = Σ_f [ P_linear × Σ_pulses(width_us) × (kurtosis / k_noise) ]
+        # Integrates power × total pulse duration × impulsiveness across all
+        # active frequencies. Monotonic with absorbed RF energy.
         K_NOISE = 8.5
-        ei_total, ei_zone_a, ei_zone_b = 0.0, 0.0, 0.0
+        ei_total = 0.0
+        ei_zone_a = 0.0
+        ei_zone_b = 0.0
         for fmhz, results in stare_results.items():
             for r in results:
                 k = r.get("kurtosis", K_NOISE)
-                p = r.get("pulse_count", 0)
                 pwr_db = r.get("mean_pwr_db", -44)
                 p_lin = 10 ** (pwr_db / 10)
-                ei_r = p_lin * p * max(k / K_NOISE, 1.0)
+
+                # Sum pulse widths from logged pulses (up to 15 per reading)
+                logged_pulses = r.get("pulses", [])
+                if isinstance(logged_pulses, list) and logged_pulses:
+                    total_width_us = sum(
+                        p.get("width_us", 0) for p in logged_pulses
+                        if isinstance(p, dict)
+                    )
+                    # Scale up: we log max 15 pulses but detect pulse_count
+                    n_logged = len(logged_pulses)
+                    n_total = r.get("pulse_count", n_logged)
+                    if n_logged > 0 and n_total > n_logged:
+                        # Extrapolate total width from sample
+                        avg_width = total_width_us / n_logged
+                        total_width_us = avg_width * n_total
+                else:
+                    # Fallback: estimate 2.5 μs avg width × pulse count
+                    total_width_us = r.get("pulse_count", 0) * 2.5
+
+                ei_r = p_lin * total_width_us * max(k / K_NOISE, 1.0)
                 ei_total += ei_r
+
+                # Add per-reading pulse width stats
+                if isinstance(logged_pulses, list) and logged_pulses:
+                    widths = [p.get("width_us", 0) for p in logged_pulses
+                              if isinstance(p, dict)]
+                    if widths:
+                        r["mean_pulse_width_us"] = round(
+                            float(np.mean(widths)), 2)
+                        r["total_pulse_duration_us"] = round(
+                            total_width_us, 1)
+
                 f_mhz = r.get("freq_mhz", r.get("nominal_freq_mhz", fmhz))
                 if isinstance(f_mhz, (int, float)):
                     if 618 < f_mhz < 640: ei_zone_a += ei_r
