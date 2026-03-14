@@ -203,10 +203,10 @@ HTML = r"""<!DOCTYPE html>
     <div class="chart-wrap"><canvas id="cv"></canvas></div>
   </div>
 
-  <!-- Waterfall Frequency Heatmap -->
+  <!-- Time x Frequency Heatmap -->
   <div class="card span4">
-    <h2>Frequency Heatmap — Kurtosis Intensity</h2>
-    <div class="waterfall" id="waterfall"></div>
+    <h2>Frequency × Time Heatmap — Symptom markers at alert time</h2>
+    <div class="chart-wrap" style="height:280px"><canvas id="heatmap"></canvas></div>
   </div>
 
 </div>
@@ -412,82 +412,174 @@ function draw() {
   ctx.fillText('k=0', 4, baseY - 2);
 }
 
-// ── Waterfall heatmap ─────────────────────────────────────────────────────
-const WATERFALL_FREQS = {
-  A:  [622.5, 625, 627.5, 630, 632.5, 635],
-  B:  [824, 826, 828, 830, 832, 834],
-  UL: [878]
-};
+// ── Time × Frequency Heatmap ─────────────────────────────────────────────
+const hmCv = document.getElementById('heatmap');
+const hmCtx = hmCv.getContext('2d');
+let freqBins = [];
+let symptomsData = [];
 
-function buildWaterfall(freqData) {
-  const wf = document.getElementById('waterfall');
-  wf.innerHTML = '';
+function heatColor(t, zoneRgb) {
+  // 0=black, 1=zone color at full brightness
+  t = Math.max(0, Math.min(1, t));
+  const [zr, zg, zb] = zoneRgb;
+  return 'rgb(' + Math.round(t*zr) + ',' + Math.round(t*zg) + ',' + Math.round(t*zb) + ')';
+}
 
-  // Build lookup from freq to kurtosis
-  const kMap = {};
-  (freqData || []).forEach(f => {
-    const key = f.freq;
-    kMap[key] = f.kurt;
+function freqZoneRgb(f) {
+  if (f < 640) return ZONE_A_RGB;
+  if (f < 870) return ZONE_B_RGB;
+  return ZONE_UL_RGB;
+}
+
+function freqZoneLabel(f) {
+  if (f < 640) return 'A';
+  if (f < 870) return 'B';
+  return 'UL';
+}
+
+function drawHeatmap() {
+  const dpr = window.devicePixelRatio || 2;
+  const W = hmCv.width = hmCv.offsetWidth * dpr;
+  const H = hmCv.height = hmCv.offsetHeight * dpr;
+  hmCtx.clearRect(0, 0, W, H);
+  if (!hist.length || !freqBins.length) return;
+
+  const nFreqs = freqBins.length;
+  const nTime = hist.length;
+
+  // Layout
+  const labelW = 55 * dpr;   // freq labels on left
+  const bottomH = 28 * dpr;  // time labels at bottom
+  const topH = 18 * dpr;     // symptom marker row
+  const plotW = W - labelW;
+  const plotH = H - bottomH - topH;
+  const cellW = plotW / nTime;
+  const cellH = plotH / nFreqs;
+
+  // Find global max kurtosis for normalization
+  let globalMaxK = 50;
+  hist.forEach(h => {
+    if (h.fh) {
+      Object.values(h.fh).forEach(k => { if (k > globalMaxK) globalMaxK = k; });
+    }
   });
 
-  // Helper: find closest freq in kMap within tolerance
-  const maxK = Math.max(50, ...Object.values(kMap));
+  // Draw cells
+  for (let fi = 0; fi < nFreqs; fi++) {
+    const freq = freqBins[fi];
+    const rgb = freqZoneRgb(freq);
+    const y = topH + fi * cellH;
 
-  function nearestKurt(targetFreq) {
-    let best = null, bestDist = Infinity;
-    for (const [fStr, k] of Object.entries(kMap)) {
-      const dist = Math.abs(parseFloat(fStr) - targetFreq);
-      if (dist < bestDist) { bestDist = dist; best = k; }
+    for (let ti = 0; ti < nTime; ti++) {
+      const h = hist[ti];
+      const x = labelW + ti * cellW;
+      const k = (h.fh && h.fh[freq]) ? h.fh[freq] : 0;
+      const t = Math.min(k / globalMaxK, 1);
+
+      hmCtx.fillStyle = heatColor(t, rgb);
+      hmCtx.fillRect(x, y, cellW + 0.5, cellH + 0.5);
     }
-    return bestDist < 3 ? (best || 0) : 0;
   }
 
-  const zones = [
-    { key: 'A',  label: 'Zone A  622–636 MHz', cls: 'za',  rgb: ZONE_A_RGB,  freqs: WATERFALL_FREQS.A  },
-    { key: 'B',  label: 'Zone B  824–834 MHz', cls: 'zb',  rgb: ZONE_B_RGB,  freqs: WATERFALL_FREQS.B  },
-    { key: 'UL', label: '878 UL',              cls: 'zul', rgb: ZONE_UL_RGB, freqs: WATERFALL_FREQS.UL },
-  ];
+  // Zone separator lines
+  let prevZone = '';
+  const fontSize = Math.max(10, Math.round(dpr * 9));
+  hmCtx.font = fontSize + 'px monospace';
+  for (let fi = 0; fi < nFreqs; fi++) {
+    const freq = freqBins[fi];
+    const zone = freqZoneLabel(freq);
+    const y = topH + fi * cellH;
 
-  // Use actual freqs from data for each zone bucket
-  const allFreqs = (freqData || []).map(f => f.freq);
+    if (zone !== prevZone && prevZone !== '') {
+      hmCtx.strokeStyle = '#333';
+      hmCtx.lineWidth = 1;
+      hmCtx.beginPath();
+      hmCtx.moveTo(labelW, y);
+      hmCtx.lineTo(W, y);
+      hmCtx.stroke();
+    }
+    prevZone = zone;
 
-  zones.forEach(zone => {
-    const sec = document.createElement('div');
-    sec.className = 'wf-zone';
+    // Freq label
+    const zoneColor = freq < 640 ? '#28f' : freq < 870 ? '#f80' : '#a4f';
+    hmCtx.fillStyle = '#445';
+    hmCtx.textAlign = 'right';
+    hmCtx.fillText(freq.toString(), labelW - 6 * dpr, y + cellH * 0.75);
+  }
 
-    const lbl = document.createElement('div');
-    lbl.className = 'wf-zone-label ' + zone.cls;
-    lbl.textContent = zone.label;
-    sec.appendChild(lbl);
+  // Time labels at bottom
+  hmCtx.fillStyle = '#3a3a50';
+  hmCtx.textAlign = 'center';
+  const timeFont = Math.max(10, Math.round(dpr * 8));
+  hmCtx.font = timeFont + 'px monospace';
+  const step = Math.max(1, Math.floor(nTime / 6));
+  for (let ti = 0; ti < nTime; ti += step) {
+    if (hist[ti] && hist[ti].ts) {
+      hmCtx.fillText(hist[ti].ts, labelW + ti * cellW + cellW/2, H - 4 * dpr);
+    }
+  }
 
-    // Collect freqs that fall into this zone from live data, supplemented by defaults
-    const inZone = allFreqs.filter(f => {
-      if (zone.key === 'A')  return f >= 618 && f < 640;
-      if (zone.key === 'B')  return f >= 820 && f < 840;
-      return f >= 870 && f < 890;
-    });
-    // Merge with defaults (deduplicate to nearest 0.5 MHz)
-    const freqSet = new Set([...zone.freqs, ...inZone].map(f => Math.round(f * 2) / 2));
-    const sortedFreqs = Array.from(freqSet).sort((a, b) => a - b);
+  // Symptom markers at ALERT TIME — map to nearest column
+  // Symptoms have alert_ts which is the time the signal fired
+  symptomsData.forEach(s => {
+    if (!s.symptom) return;
+    // Match symptom alert_ts to the closest history entry ts
+    const alertTs = s.alert_ts || s.timestamp || '';
+    // Find nearest history column by comparing time strings
+    let bestIdx = -1, bestDist = Infinity;
+    const alertLocal = s.alertLocalTime || s.localTime || '';
+    if (alertLocal) {
+      hist.forEach((h, i) => {
+        if (!h.ts) return;
+        // Simple string distance — both are "HH:MM PM" format
+        // Convert to minutes for comparison
+        const toMin = (ts) => {
+          const m = ts.match(/(\d+):(\d+)\s*(AM|PM)/i);
+          if (!m) return -1;
+          let hr = parseInt(m[1]); const mn = parseInt(m[2]);
+          if (m[3].toUpperCase() === 'PM' && hr !== 12) hr += 12;
+          if (m[3].toUpperCase() === 'AM' && hr === 12) hr = 0;
+          return hr * 60 + mn;
+        };
+        const d = Math.abs(toMin(h.ts) - toMin(alertLocal));
+        if (d < bestDist) { bestDist = d; bestIdx = i; }
+      });
+    }
+    if (bestIdx >= 0 && bestDist < 10) {
+      const x = labelW + bestIdx * cellW + cellW / 2;
+      const color = s.symptom === 'speech' ? '#fb0'
+                  : s.symptom === 'headache' ? '#f55'
+                  : s.symptom === 'paresthesia' ? '#4bf' : '#6d4';
+      // Triangle at top
+      hmCtx.beginPath();
+      hmCtx.moveTo(x, topH - 2);
+      hmCtx.lineTo(x - 5 * dpr, 2);
+      hmCtx.lineTo(x + 5 * dpr, 2);
+      hmCtx.closePath();
+      hmCtx.fillStyle = color;
+      hmCtx.fill();
+      // Vertical line through the column
+      hmCtx.strokeStyle = color;
+      hmCtx.globalAlpha = 0.3;
+      hmCtx.lineWidth = cellW;
+      hmCtx.beginPath();
+      hmCtx.moveTo(x, topH);
+      hmCtx.lineTo(x, topH + plotH);
+      hmCtx.stroke();
+      hmCtx.globalAlpha = 1.0;
+    }
+  });
 
-    sortedFreqs.forEach(freq => {
-      const k = nearestKurt(freq);
-      const t = Math.min(k / maxK, 1);
-      const bgColor = waterfallColor(t, zone.rgb);
-      const barWidth = (t * 100).toFixed(1) + '%';
-
-      const row = document.createElement('div');
-      row.className = 'wf-row';
-
-      row.innerHTML =
-        '<span class="wf-freq-label">' + freq.toFixed(1) + '</span>' +
-        '<div class="wf-bar-track"><div class="wf-bar-fill" style="width:' + barWidth + ';background:' + bgColor + '"></div></div>' +
-        '<span class="wf-val">' + (k > 0 ? k.toFixed(1) : '—') + '</span>';
-
-      sec.appendChild(row);
-    });
-
-    wf.appendChild(sec);
+  // Zone labels on right edge
+  const zones = [{f: 622, label: 'A', color: '#28f'}, {f: 826, label: 'B', color: '#f80'}, {f: 878, label: 'UL', color: '#a4f'}];
+  hmCtx.font = 'bold ' + (fontSize + 2) + 'px monospace';
+  hmCtx.textAlign = 'left';
+  zones.forEach(z => {
+    const fi = freqBins.indexOf(z.f);
+    if (fi >= 0) {
+      hmCtx.fillStyle = z.color;
+      hmCtx.fillText(z.label, W - 20 * dpr, topH + fi * cellH + cellH * 0.7);
+    }
   });
 }
 
@@ -554,20 +646,23 @@ function upd(data) {
   document.getElementById('dot').className = 'dot live';
   document.getElementById('st').textContent = c.localTime + '  |  cycle ' + c.cycle;
 
-  // Build history array for timeline
+  // Build history array for timeline + heatmap
   if (data.history) {
     hist = data.history.map(h => ({
       k:    h.maxK   || 0,
       eiA:  h.eiA    || 0,
       eiB:  h.eiB    || 0,
-      eiUL: 0,  // not in history yet
+      eiUL: 0,
       ts:   h.ts     || '',
       sym:  h.symptom || null,
+      fh:   h.fh     || {},
     }));
   }
+  if (data.freqBins) freqBins = data.freqBins;
+  symptomsData = data.symptoms || [];
 
   draw();
-  buildWaterfall(c.freqs || []);
+  drawHeatmap();
 }
 
 // ── Poll loop ─────────────────────────────────────────────────────────────
@@ -583,7 +678,7 @@ function poll() {
 }
 
 poll();
-window.addEventListener('resize', draw);
+window.addEventListener('resize', () => { draw(); drawHeatmap(); });
 </script>
 </body>
 </html>"""
@@ -692,15 +787,29 @@ def get_state():
     except Exception:
         latest["localTime"] = "—"
 
-    # History: last 60 cycles summarized for timeline
+    # Canonical frequency bins for heatmap (nominal targets, rounded)
+    FREQ_BINS = [622, 624, 628, 630, 632, 634, 636,
+                 826, 828, 830, 832, 834, 878]
+
+    # History: last 60 cycles with per-freq kurtosis for heatmap
     history = []
     for c in cycles[-60:]:
         max_k = 0
+        # Build per-bin max kurtosis
+        freq_heat = {f: 0.0 for f in FREQ_BINS}
         for freq_str, readings in c.get("stare", {}).items():
             for r in readings:
                 k = r.get("kurtosis", 0)
                 if k > max_k:
                     max_k = k
+                # Bucket into nearest nominal freq
+                f = r.get("nominal_freq_mhz",
+                          r.get("freq_mhz", 0))
+                if isinstance(f, (int, float)):
+                    nearest = min(FREQ_BINS, key=lambda b: abs(b - f))
+                    if abs(nearest - f) < 4:
+                        freq_heat[nearest] = max(freq_heat[nearest],
+                                                 round(k, 1))
         try:
             ts = c.get("timestamp", "")
             if ts:
@@ -719,6 +828,7 @@ def get_state():
             "eiA": c.get("ei_zone_a"),
             "eiB": c.get("ei_zone_b"),
             "ts": ts_short,
+            "fh": freq_heat,
             "symptom": None,
         })
 
@@ -729,7 +839,7 @@ def get_state():
             for line in f:
                 try:
                     s = json.loads(line)
-                    # Convert timestamp to local time for display
+                    # Convert timestamps to local time
                     if s.get("timestamp"):
                         try:
                             from datetime import datetime as dt
@@ -739,16 +849,38 @@ def get_state():
                             s["localTime"] = local_dt.strftime("%I:%M %p")
                         except Exception:
                             pass
+                    # Also convert alert_ts to local for heatmap placement
+                    if s.get("alert_ts"):
+                        try:
+                            from datetime import datetime as dt
+                            a_dt = dt.fromisoformat(
+                                s["alert_ts"].replace("Z", "+00:00"))
+                            a_local = a_dt.astimezone()
+                            s["alertLocalTime"] = a_local.strftime(
+                                "%I:%M %p")
+                        except Exception:
+                            pass
                     symptoms.append(s)
                 except json.JSONDecodeError:
                     pass
     except FileNotFoundError:
         pass
 
+    # Map symptoms onto history by alert_cycle (when signal fired, not button press)
+    sym_by_cycle = {}
+    for s in symptoms:
+        ac = s.get("alert_cycle")
+        if ac and s.get("symptom"):
+            sym_by_cycle[ac] = s.get("symptom")
+    for h_entry in history:
+        # Match by cycle number from the original cycle data
+        pass  # We'll send symptoms separately and let JS match by alert_ts
+
     return {
         "current": latest,
         "history": history,
-        "symptoms": symptoms[-15:],
+        "freqBins": FREQ_BINS,
+        "symptoms": symptoms[-20:],
     }
 
 
