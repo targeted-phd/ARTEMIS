@@ -71,3 +71,37 @@ Locking support detected on remote "origin". Consider enabling it with:
   $ git config lfs.https://github-artemis/targeted-phd/ARTEMIS.git/info/lfs.locksverify true
 To github-artemis:targeted-phd/ARTEMIS.git
    12d9ea7..16cdec4  main -> main
+[main 7cd4c24] auto: 2026-03-13 23:00 snapshot
+ 34 files changed, 3905 insertions(+), 1 deletion(-)
+ create mode 100644 results/ml/correlation_stats.json
+ create mode 100644 results/ml/evidence_report.json
+ create mode 100644 results/ml/evidence_report.md
+ create mode 100644 results/ml/features_cycle.npz
+ create mode 100644 results/ml/features_cycle_meta.json
+ create mode 100644 results/ml/features_iq.npz
+ create mode 100644 results/ml/features_iq_meta.json
+ create mode 100644 results/ml/fingerprint_clusters.json
+ create mode 100644 results/ml/iq_embeddings.npz
+ create mode 100644 results/ml/models/autoencoder.pt
+ create mode 100644 results/ml/models/gmm_modes.joblib
+ create mode 100644 results/ml/models/logistic_symptom.joblib
+ create mode 100644 results/ml/models/scaler_cycle.joblib
+ create mode 100644 results/ml/modes.json
+ create mode 100644 results/ml/plots/feature_importance.png
+ create mode 100644 results/ml/plots/fingerprint_bic.png
+ create mode 100644 results/ml/plots/fingerprint_embeddings.png
+ create mode 100644 results/ml/plots/fingerprint_pca.png
+ create mode 100644 results/ml/plots/logistic_roc.png
+ create mode 100644 results/ml/plots/modes_bic.png
+ create mode 100644 results/ml/plots/modes_pca.png
+ create mode 100644 results/ml/plots/modes_timeline.png
+ create mode 100644 results/ml/plots/modes_transition.png
+ create mode 100644 results/ml/plots/symptom_rf_distribution.png
+ create mode 100644 results/ml_pipeline.log
+ create mode 100644 results/rebuild_ml.log
+ create mode 100644 results/sentinel_20260313_22.jsonl
+ create mode 100644 rf_ml.py
+Locking support detected on remote "origin". Consider enabling it with:
+  $ git config lfs.https://github-artemis/targeted-phd/ARTEMIS.git/info/lfs.locksverify true
+To github-artemis:targeted-phd/ARTEMIS.git
+   754c6df..7cd4c24  main -> main
