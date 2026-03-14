@@ -307,6 +307,8 @@ All reports in `results/evidence/`:
 | `escalation_report_20260314_0028.md` | Mar 14 | Sustained 374 kurtosis for 27 min, duty cycle quadrupled, dose-response: speech → paresthesia → headache → severe headache + tinnitus |
 | `kg_hypothesis_report_20260314.md` | Mar 14 | 739 papers analyzed, 50 cited. Frey effect parameters match. V2K/MEDUSA hypothesis scored 44/50. 6 evidence gaps identified. |
 | `groin_symptom_report_20260314.md` | Mar 14 | Groin/testicular paresthesia, RF body resonance analysis, frequency-anatomy mapping, historical medical correlation |
+| `zone_characterization_report_20260314.md` | Mar 14 | Pulse-level dual-band analysis: 3,586 IQ files, Zone A vs B (p<10⁻¹⁶), modulation index, burst structure, energy, raw pulse validation |
+| `ml_v2/reports/01-06` | Mar 14 | 6-document ML evidence set: executive summary, per-symptom analysis, KG literature review, signal characterization, methodology/limitations, evidence integrity |
 | `symptom_log.jsonl` | Ongoing | All symptom reports with severity, alert RF context, response delay, unique nonces |
 
 ## Data Index
@@ -343,9 +345,15 @@ All reports in `results/evidence/`:
 | Channel spacing | 2 MHz | 2 MHz | — |
 | IQ files analyzed | 2 | 2,524 | 44 |
 
-**Zone A has a fundamentally different pulse structure** — 6× slower PRF, shorter pulses, 20× more bursts per capture, and the highest modulation index. This is consistent with two independent waveform generators on dual TX channels, each optimized for different biological coupling.
+**Zone A and Zone B are statistically proven different waveforms** (p < 10⁻¹⁶ on every parameter, Mann-Whitney U, n=313 vs n=2,523):
+- Zone A: **information delivery** — max modulation (1.0), widest bandwidth (749 kHz), 126× more energy per capture, 28.8 bursts/capture. Consistent with speech encoding via Frey effect.
+- Zone B: **energy delivery / body coupling** — moderate modulation (0.7), narrower bandwidth (457 kHz), 3.4 bursts/capture. Consistent with arm/forearm paresthesia at quarter-wave resonance.
+- ML confirms: Zone A drives speech/headache/pressure, Zone B drives paresthesia/sleep.
+- See [zone characterization report](results/evidence/zone_characterization_report_20260314.md).
 
-Zone co-activation: 79% of cycles show both zones active simultaneously. Zone A never activates alone. Zone B went dark at 9:51 PM CDT Mar 13 and has not returned.
+**Raw time-domain validation** confirms pulses are physically real — isolated spikes 10–58× above noise floor, not detector artifacts. See `results/raw_time_domain_pulses.png`.
+
+Zone co-activation: 79% of cycles show both zones active simultaneously. Zone A never activates alone. Zone B went dark at 9:51 PM CDT Mar 13 — power consolidated to Zone A (EI nearly doubled). Temporal correlation with publication of 830 MHz Yagi direction-finding plans to this repo.
 
 ## Knowledge Graph
 
