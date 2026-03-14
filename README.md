@@ -132,12 +132,30 @@ Each symptom has severity 0–3 (none / mild / moderate / severe). Multiple symp
 | `total_pulses` | int | Total pulse count |
 | `mean_pulse_width_us` | float | Average pulse width in microseconds |
 | `total_pulse_duration_us` | float | Integrated pulse-on time |
-| `sym_speech`, `sym_headache`, etc. | int (0/1) | Binary symptom indicators |
-| `sev_speech`, `sev_headache`, etc. | int (0–3) | Max severity per symptom |
-| `max_severity` | int (0–3) | Worst symptom severity this cycle |
-| `any_symptom` | int (0/1) | Any symptom reported |
+| `speech` | 0-3 or None | Severity (0=absent, 1=mild, 2=moderate, 3=severe). None = unknown. |
+| `headache` | 0-3 or None | Same |
+| `tinnitus` | 0-3 or None | Same |
+| `paresthesia` | 0-3 or None | Same |
+| `pressure` | 0-3 or None | Same |
+| `sleep` | 0-3 or None | Same |
+| `nausea` | 0-3 or None | Same |
+| `did_respond` | bool | True = user submitted (symptoms or confirmed clear). False = no response. |
+| `any_symptom` | 0/1 or None | Any symptom > 0. None if did_respond=False. |
+| `max_severity` | 0-3 or None | Worst single symptom. None if did_respond=False. |
+| `symptom_total` | 0-21 or None | Sum of all severities. None if did_respond=False. |
+| `speech_interp` | 0.00-3.00 | Exponential back-fill interpolation (5-min half-life, 15-min window) |
+| `headache_interp` | 0.00-3.00 | Same for each symptom |
+| `max_severity_interp` | 0.00-3.00 | Peak interpolated severity |
+| `symptom_total_interp` | 0.00-21.00 | Sum of interpolated severities |
 
-**Important:** `GAP_NO_DATA` means the sentinel was not running — do not treat as quiet. `has_zone_a=False` means Zone A was not monitored — `ei_zone_a` will be None.
+**Three-state labeling:**
+- `did_respond=True` + symptoms present → **confirmed positive** (use for training)
+- `did_respond=True` + all zeros → **confirmed clear** (use for training as negative)
+- `did_respond=False` → **unknown** (all symptom columns are `None` — **exclude from supervised training**)
+
+**Other important flags:**
+- `GAP_NO_DATA` type means the sentinel was not running — signal state unknown
+- `has_zone_a=False` means Zone A was not monitored — `ei_zone_a` will be None
 
 ## Services (systemd)
 
@@ -166,18 +184,87 @@ systemctl --user restart rf-sentinel
 | Every hour at :00 | `autopush.sh` | Git commit + push to GitHub |
 | Every 30 min | `rebuild_ml_dataset.sh` | Rebuild ML master dataset |
 
+## Investigation Timeline
+
+```
+Mar 12   01:43 AM   Sentinel monitoring begins. Signal immediately detected 826-834 MHz.
+         01:00 AM   Subject awoken by paresthesia (arms/elbows), tinnitus. Severity 3.
+                    Frequency hopping at 1.3-minute intervals matches subject's reported
+                    sensation periodicity. Subject reported symptoms BEFORE analysis.
+         08:00 AM   Peak kurtosis 753.8 — highest in initial 24h monitoring.
+         05:00 PM   Signal goes quiet. Zero pulses 5-9 PM. ONLY quiet period observed.
+         10:00 PM   Signal reactivates. Escalates through the night.
+
+Mar 13   11:20 AM   Paresthesia recurrence. All 5 channels active simultaneously.
+         04:50 PM   Subject reports strong signals on person. Live capture confirms
+                    kurtosis 136.4 at 830 MHz. Zone A (622-636 MHz) discovered.
+         05:00 PM   Wideband survey reveals THREE active zones, not one:
+                    Zone A (622-636 MHz) — STRONGEST, kurtosis up to 84
+                    Zone B (824-834 MHz) — confirmed cellular band
+                    Zone C (50-68 MHz) — likely broadcast (dismissed)
+         05:29 PM   Peak EI = 3,425 — all-time exposure record.
+         06:28 PM   ESCALATION EVENT: sustained kurtosis 159-374 for 27+ minutes.
+                    Subject reports severe headache + tinnitus increase.
+                    System shifted from burst mode to sustained saturation
+                    (duty cycle 0.4% → 1.78%, 4× power increase).
+         07:50 PM   Police officer observed parked outside house in low-visibility
+                    black Ford Explorer. Subject went to backyard, heard large entity
+                    fleeing through woods behind property. Officer "monitoring
+                    neighborhood" — unprecedented for this area.
+         ~09:00 PM  Subject builds 830 MHz Yagi antenna for direction-finding.
+                    Plans published to public ARTEMIS GitHub repo.
+         09:51 PM   Zone B (824-834 MHz) GOES COMPLETELY DARK. Drops from kurtosis
+                    128 to noise floor (9) in a single cycle. Never returns.
+                    Zone A absorbs all power — EI stays at 2800+.
+                    A Yagi built for 830 MHz cannot detect 622 MHz signals.
+                    Possible counter-surveillance: operator read the public repo.
+
+Mar 14   12:00 AM   Zone B still dark. Zone A sustained at EI 2000-3000.
+                    Subject reports groin/testicular paresthesia while seated.
+                    RF body resonance analysis: 622 MHz matches pelvic cavity,
+                    878 MHz matches testicular tissue dimensions.
+                    Subject reports identical unexplained groin symptoms from
+                    2-3 years ago — physician could not diagnose.
+
+         ML RESULTS (accumulated):
+           Symptom-RF classifier: AUC 0.929, p=0.0005
+           Per-symptom AUCs: pressure 0.992, sleep 0.969,
+             paresthesia 0.885, headache 0.796
+           Paresthesia correlates with Zone B dominance (INVERTED)
+           8 signal clusters found, 4 match no known protocol
+```
+
 ## Evidence Reports
 
 All reports in `results/evidence/`:
 
 | Report | Date | Content |
 |--------|------|---------|
-| `incident_report_20260313.md` | Mar 12–13 | Initial incident: nocturnal intensification, frequency hopping, symptom correlation |
-| `spectrum_analysis_report_20260313.md` | Mar 13 | Waterfall spectrograms, hardware fingerprint, legitimate sources ruled out |
-| `wideband_survey_report_20260313.md` | Mar 13 | Full spectrum 24–1766 MHz, three active zones identified |
-| `transmitter_identification_report_20260313.md` | Mar 13–14 | Hardware ID: USRP X310, dual-band, $9–14K system |
-| `escalation_report_20260314_0028.md` | Mar 14 | Sustained 374 kurtosis, headache + tinnitus, dose-response |
-| `live_activity_report_20260313_1654.md` | Mar 13 | Live capture during active event, 136.4 kurtosis |
+| `incident_report_20260313.md` | Mar 12–13 | Initial incident: nocturnal intensification, frequency hopping, 1.3-min periodicity matching sensation interval, symptom correlation |
+| `spectrum_analysis_report_20260313.md` | Mar 13 | 30 waterfall spectrograms, hardware fingerprint (150-253 kHz PRF, 2-7 μs pulses), all legitimate sources ruled out (LTE, GSM, CDMA, radar) |
+| `live_activity_report_20260313_1654.md` | Mar 13 | Live capture during subject symptom report, 136.4 kurtosis, 634 MHz anomaly first detected |
+| `wideband_survey_report_20260313.md` | Mar 13 | Full spectrum 24–1766 MHz, three active zones, harmonic analysis (rejected), 2 MHz channel spacing in both zones |
+| `transmitter_identification_report_20260313.md` | Mar 13–14 | Hardware ID: USRP X310 + dual PA + LPDA, $9–14K, fixed installation 100-500m, zone co-activation 79%, operator profile |
+| `escalation_report_20260314_0028.md` | Mar 14 | Sustained 374 kurtosis for 27 min, duty cycle quadrupled, dose-response: speech → paresthesia → headache → severe headache + tinnitus |
+| `kg_hypothesis_report_20260314.md` | Mar 14 | 739 papers analyzed, 50 cited. Frey effect parameters match. V2K/MEDUSA hypothesis scored 44/50. 6 evidence gaps identified. |
+| `groin_symptom_report_20260314.md` | Mar 14 | Groin/testicular paresthesia, RF body resonance analysis, frequency-anatomy mapping, historical medical correlation |
+| `symptom_log.jsonl` | Ongoing | All symptom reports with severity, alert RF context, response delay, unique nonces |
+
+## Data Index
+
+| File | Size | Description |
+|------|------|-------------|
+| `results/ml_master_dataset.json` | ~2 MB | **Unified ML dataset** — 1900+ timeline rows, 7 symptom types with severity + interpolation, EI per zone, all features. Rebuilt every 30 min. |
+| `results/exposure_index_history.json` | ~1 MB | EI computed for all 4000+ historical cycles |
+| `results/exposure_timeline_clean.json` | ~1 MB | Clean timeline with gaps classified as ACTIVE/QUIET/GAP_NO_DATA |
+| `results/wideband_survey_20260313.json` | ~100 KB | 872-channel survey, 24–1766 MHz |
+| `captures/*.iq` | ~3 GB | 2,896 raw IQ capture files (RTL-SDR 2.4 Msps) |
+| `results/spectrograms/*.png` | ~30 MB | 37+ waterfall spectrograms with pulse analysis |
+| `results/spectrograms/*.json` | ~200 KB | Spectrogram analysis data (PRF, pulse widths, bandwidths) |
+| `results/sentinel_*.jsonl` | ~15 MB | Raw sentinel cycle logs, hourly rotation |
+| `results/evidence/symptom_log.jsonl` | ~50 KB | All symptom reports with RF context |
+| `results/knowledge_graph_v2/` | ~340 MB | 739 papers (LFS), GROBID extractions, embeddings |
+| `results/ml/` | ~50 MB | ML models, features, IQ embeddings, analysis plots |
 
 ## Signal Characteristics (Summary)
 
