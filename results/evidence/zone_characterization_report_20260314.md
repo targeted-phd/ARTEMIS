@@ -155,13 +155,13 @@ The total EI increased by approximately 75%, while Zone B went to zero. This pro
 
 The following temporal correlations were observed but **cannot establish causal relationships** from single occurrences:
 
-**Observation 1:** Zone B shutdown occurred within hours of the subject publishing direction-finding plans (including 830 MHz Yagi antenna construction specifications) to the public ARTEMIS GitHub repository. An 830 MHz Yagi would be effective for direction-finding Zone B but not Zone A (622 MHz).
+**Observation 1:** Zone B shutdown occurred within hours of the subject publishing direction-finding plans (including 830 MHz Yagi antenna specifications) to the public ARTEMIS GitHub repository. An 830 MHz Yagi would be effective for direction-finding Zone B but not Zone A (622 MHz).
 
-**Observation 2:** Earlier that evening (~7:50 PM CDT), a police officer in a low-visibility vehicle was observed parked outside the subject's residence. The subject went to the backyard and heard a large entity moving rapidly through the woods behind the property. This occurred during peak signal activity (EI > 2000, Zone A + Zone B both active). The subject's phone was left inside the house during this observation.
+**Observation 2:** The subject had completed construction of an 830 MHz Yagi antenna approximately 1 hour before Zone B went dark.
 
-**Observation 3:** The subject had completed construction of an 830 MHz Yagi antenna approximately 1 hour before Zone B went dark.
+**Caveat:** These are single observations. Signals change for many reasons: propagation conditions, source equipment cycling, cellular network load, hardware maintenance at the source. A single temporal coincidence cannot establish causation. These observations are documented to inform future monitoring. If Zone B reactivation correlates with removal of direction-finding capability, or if repeated tests show consistent responses, the causal hypothesis would be strengthened.
 
-**Caveat:** These are single observations. Signals change for many reasons: propagation conditions, source equipment cycling, cellular network load, hardware maintenance at the source. A single temporal coincidence between a GitHub commit and a frequency change cannot establish causation. These observations are documented for completeness and to inform future monitoring. If Zone B reactivation correlates with removal of the Yagi plans, or if repeated tests show consistent responses, the causal hypothesis would be strengthened.
+*Note: Non-RF observations from the same evening (physical surveillance) are documented separately in the personal incident log (`results/evidence/symptom_log.jsonl`, entries with type "physical_incident") and are not included in this signal characterization document.*
 
 ---
 
