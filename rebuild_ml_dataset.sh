@@ -162,45 +162,76 @@ for r in dataset:
         r['max_severity'] = max((r.get(st, 0) or 0 for st in all_st), default=0)
         r['symptom_total'] = sum((r.get(st, 0) or 0 for st in all_st))
 
-# ── Exponential back-fill interpolation ──
-# Symptoms are continuous. Back-fill from each response into preceding
-# 15 min with exponential decay (5-min half-life), biased toward past.
-HALF_LIFE=5.0; DECAY=np.log(2)/HALF_LIFE; MAX_BF=15.0
+# ── Exponential back-fill interpolation with unknown rolloff ──
+# Back-fill: response severity decays into the PAST (5-min half-life, 15-min max)
+# Forward-rolloff: after a response, severity decays into the FUTURE (10-min half-life, 30-min max)
+# Beyond both windows: None (unknown) — NOT zero
+HALF_LIFE_BACK=5.0; DECAY_BACK=np.log(2)/HALF_LIFE_BACK; MAX_BACK=15.0
+HALF_LIFE_FWD=10.0; DECAY_FWD=np.log(2)/HALF_LIFE_FWD; MAX_FWD=30.0
 tl_times=[]
 for r in dataset:
     try: tl_times.append(datetime.strptime(r['cst'],'%Y-%m-%d %H:%M:%S'))
     except: tl_times.append(None)
-# Parse symptom reports
+
+# Parse all symptom reports + clear reports with timestamps
 sym_reports=[]
+clear_times=[]
 for s in symptoms:
-    if not s.get('symptom') or s['symptom']=='clear': continue
-    sv=s.get('severity',2) or 2
-    try: sv=int(sv)
-    except: sv=2
     ts2=s.get('alert_ts') or s.get('timestamp','')
     try:
         if 'T' in ts2:
             d2=datetime.fromisoformat(ts2.replace('Z','+00:00')).astimezone(LOCAL_TZ).replace(tzinfo=None)
-            sym_reports.append({'time':d2,'symptom':s['symptom'],'severity':sv})
-    except: pass
+        else: continue
+    except: continue
+    if s.get('symptom')=='clear':
+        clear_times.append(d2)
+        continue
+    if not s.get('symptom'): continue
+    sv=s.get('severity',2) or 2
+    try: sv=int(sv)
+    except: sv=2
+    sym_reports.append({'time':d2,'symptom':s['symptom'],'severity':sv})
 
+# For each row, determine if it's within reach of any response
+# If not, symptoms are unknown (None)
 for i,r in enumerate(dataset):
     t=tl_times[i]
     if t is None: continue
+
+    # Check if this row is within range of ANY symptom report or clear
+    all_report_times = [rpt['time'] for rpt in sym_reports] + clear_times
+    nearest_report_min = min((abs((rt-t).total_seconds()/60.0) for rt in all_report_times), default=999)
+    in_coverage = nearest_report_min <= MAX_FWD  # within 30 min of any response
+
     for st in all_st:
+        if not in_coverage:
+            r[st+'_interp'] = None
+            continue
         mx=0.0
         for rpt in sym_reports:
             if rpt['symptom']!=st: continue
             dm=(rpt['time']-t).total_seconds()/60.0
-            if 0<dm<=MAX_BF:
-                mx=max(mx, rpt['severity']*np.exp(-DECAY*dm))
+            # Back-fill: report is AFTER this row (dm > 0), decay into past
+            if 0<dm<=MAX_BACK:
+                mx=max(mx, rpt['severity']*np.exp(-DECAY_BACK*dm))
+            # At the report time
             elif -1.0<=dm<=0:
                 mx=max(mx, float(rpt['severity']))
+            # Forward-rolloff: report is BEFORE this row (dm < 0), decay into future
+            elif -MAX_FWD<=dm<-1.0:
+                mx=max(mx, rpt['severity']*np.exp(-DECAY_FWD*abs(dm)))
         r[st+'_interp']=round(mx,2) if mx>0.05 else 0.0
-    iv=[r.get(st+'_interp',0) for st in all_st]
-    r['any_symptom_interp']=1 if any(v>0.05 for v in iv) else 0
-    r['max_severity_interp']=round(max(iv),2)
-    r['symptom_total_interp']=round(sum(iv),2)
+
+    # Aggregates — None if out of coverage
+    if not in_coverage:
+        r['any_symptom_interp']=None
+        r['max_severity_interp']=None
+        r['symptom_total_interp']=None
+    else:
+        iv=[r.get(st+'_interp',0) or 0 for st in all_st]
+        r['any_symptom_interp']=1 if any(v>0.05 for v in iv) else 0
+        r['max_severity_interp']=round(max(iv),2)
+        r['symptom_total_interp']=round(sum(iv),2)
 
 # ── Assemble master ──
 iq_meta=[{'file':f,'cst':datetime.fromtimestamp(os.path.getmtime(f),tz=LOCAL_TZ).strftime('%Y-%m-%d %H:%M:%S'),
