@@ -536,7 +536,7 @@ def run_sentinel(target_freqs_mhz, sweep_start, sweep_stop, sweep_step,
 
         # Ensure EI is defined even if stare phase produced nothing
         try: ei_total
-        except NameError: ei_total = 0.0
+        except (NameError, UnboundLocalError): ei_total = 0.0
 
         # ── AUDIBLE ALERT (rate-limited: notify on state CHANGE only) ──
         all_cycle_kurts = []
