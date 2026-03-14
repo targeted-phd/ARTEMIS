@@ -299,36 +299,41 @@ All reports in `results/evidence/`:
 
 | Report | Date | Content |
 |--------|------|---------|
-| `incident_report_20260313.md` | Mar 12–13 | Initial incident: nocturnal intensification, frequency hopping, 1.3-min periodicity matching sensation interval, symptom correlation |
-| `spectrum_analysis_report_20260313.md` | Mar 13 | 30 waterfall spectrograms, hardware fingerprint (150-253 kHz PRF, 2-7 μs pulses), all legitimate sources ruled out (LTE, GSM, CDMA, radar) |
-| `live_activity_report_20260313_1654.md` | Mar 13 | Live capture during subject symptom report, 136.4 kurtosis, 634 MHz anomaly first detected |
-| `wideband_survey_report_20260313.md` | Mar 13 | Full spectrum 24–1766 MHz, three active zones, harmonic analysis (rejected), 2 MHz channel spacing in both zones |
-| `transmitter_identification_report_20260313.md` | Mar 13–14 | Hardware ID: USRP X310 + dual PA + LPDA, $9–14K, fixed installation 100-500m, zone co-activation 79%, operator profile |
-| `escalation_report_20260314_0028.md` | Mar 14 | Sustained 374 kurtosis for 27 min, duty cycle quadrupled, dose-response: speech → paresthesia → headache → severe headache + tinnitus |
-| `kg_hypothesis_report_20260314.md` | Mar 14 | 739 papers analyzed, 50 cited. Frey effect parameters match. V2K/MEDUSA hypothesis scored 44/50. 6 evidence gaps identified. |
-| `groin_symptom_report_20260314.md` | Mar 14 | Groin/testicular paresthesia, RF body resonance analysis, frequency-anatomy mapping, historical medical correlation |
-| `zone_characterization_report_20260314.md` | Mar 14 | Pulse-level dual-band analysis: 3,586 IQ files, Zone A vs B (p<10⁻¹⁶), modulation index, burst structure, energy, raw pulse validation |
-| `ml_v2/reports/01-06` | Mar 14 | 6-document ML evidence set: executive summary, per-symptom analysis, KG literature review, signal characterization, methodology/limitations, evidence integrity |
-| `symptom_log.jsonl` | Ongoing | All symptom reports with severity, alert RF context, response delay, unique nonces |
+| [incident_report_20260313.md](results/evidence/incident_report_20260313.md) | Mar 12–13 | Initial incident: nocturnal intensification, frequency hopping, 1.3-min periodicity matching sensation interval, symptom correlation |
+| [spectrum_analysis_report_20260313.md](results/evidence/spectrum_analysis_report_20260313.md) | Mar 13 | 30 waterfall spectrograms, hardware fingerprint (150-253 kHz PRF, 2-7 μs pulses), all legitimate sources ruled out (LTE, GSM, CDMA, radar) |
+| [live_activity_report_20260313_1654.md](results/evidence/live_activity_report_20260313_1654.md) | Mar 13 | Live capture during subject symptom report, 136.4 kurtosis, 634 MHz anomaly first detected |
+| [wideband_survey_report_20260313.md](results/evidence/wideband_survey_report_20260313.md) | Mar 13 | Full spectrum 24–1766 MHz, three active zones, harmonic analysis (rejected), 2 MHz channel spacing in both zones |
+| [transmitter_identification_report_20260313.md](results/evidence/transmitter_identification_report_20260313.md) | Mar 13–14 | Probable hardware: USRP X310 + dual PA + LPDA, $9–14K, fixed installation 100-500m, zone co-activation 79%, operator profile |
+| [escalation_report_20260314_0028.md](results/evidence/escalation_report_20260314_0028.md) | Mar 14 | Sustained 374 kurtosis for 27 min, duty cycle quadrupled, dose-response: speech → paresthesia → headache → severe headache + tinnitus |
+| [kg_hypothesis_report_20260314.md](results/evidence/kg_hypothesis_report_20260314.md) | Mar 14 | 739 papers analyzed, 50 cited. Frey effect parameters match. V2K/MEDUSA hypothesis scored 44/50. 6 evidence gaps identified. |
+| [groin_symptom_report_20260314.md](results/evidence/groin_symptom_report_20260314.md) | Mar 14 | Groin/testicular paresthesia, RF body resonance analysis, frequency-anatomy mapping, historical medical correlation |
+| [zone_characterization_report_20260314.md](results/evidence/zone_characterization_report_20260314.md) | Mar 14 | Pulse-level dual-band analysis: 3,586 IQ files, Zone A vs B (p<10⁻¹⁶), modulation index, burst structure, energy, raw pulse validation |
+| [ML v2 Executive Summary](results/ml_v2/reports/01_executive_summary.md) | Mar 14 | Per-symptom AUCs, zone differentials, lag analysis, dose-response, limitations |
+| [ML v2 Per-Symptom Analysis](results/ml_v2/reports/02_per_symptom_analysis.md) | Mar 14 | Detailed results for all 7 symptoms with feature rankings and correlations |
+| [ML v2 KG Literature Review](results/ml_v2/reports/03_kg_literature_review.md) | Mar 14 | 632 KG chunks across 18 research topics, verbatim passages from 739 papers |
+| [ML v2 Signal Characterization](results/ml_v2/reports/04_signal_characterization.md) | Mar 14 | Signal parameters, zone architecture, frequency hopping, protocol matching |
+| [ML v2 Methodology & Limitations](results/ml_v2/reports/05_methodology_and_limitations.md) | Mar 14 | Full methodology, statistical corrections, confounders, notification bias |
+| [ML v2 Evidence Integrity](results/ml_v2/reports/06_evidence_integrity.md) | Mar 14 | Hash chains, data provenance, git history, file integrity |
+| [symptom_log.jsonl](results/evidence/symptom_log.jsonl) | Ongoing | All symptom reports with severity, alert RF context, response delay, unique nonces |
 
 ## Data Index
 
 | File | Size | Description |
 |------|------|-------------|
-| `results/ml_master_dataset.json` | ~2 MB | **Unified ML dataset** — 1900+ timeline rows, 7 symptom types with severity + interpolation, EI per zone, all features. Rebuilt every 30 min. |
-| `results/exposure_index_history.json` | ~1 MB | EI computed for all 4000+ historical cycles |
-| `results/exposure_timeline_clean.json` | ~1 MB | Clean timeline with gaps classified as ACTIVE/QUIET/GAP_NO_DATA |
-| `results/wideband_survey_20260313.json` | ~100 KB | 872-channel survey, 24–1766 MHz |
-| `captures/*.iq` | ~3 GB | 2,896 raw IQ capture files (RTL-SDR 2.4 Msps) |
-| `results/spectrograms/*.png` | ~30 MB | 37+ waterfall spectrograms with pulse analysis |
-| `results/spectrograms/*.json` | ~200 KB | Spectrogram analysis data (PRF, pulse widths, bandwidths) |
-| `results/sentinel_*.jsonl` | ~15 MB | Raw sentinel cycle logs, hourly rotation |
-| `results/evidence/symptom_log.jsonl` | ~50 KB | All symptom reports with RF context |
-| `results/knowledge_graph_v2/` | ~340 MB | 739 papers (LFS), GROBID extractions, embeddings |
-| `results/ml_v2/` | ~2 MB | ML v2 models, features, analysis results, 6 evidence reports |
-| `results/ml_v2/reports/` | 176 KB | Six-document evidence package (3,273 lines) |
-| `results/ml_v2/kg_deep_dive.json` | 1.3 MB | 632 KG literature chunks across 18 research topics |
-| `results/ml/` | ~50 MB | ML v1 models, features, IQ embeddings, autoencoder |
+| [ml_master_dataset.json](results/ml_master_dataset.json) | ~2 MB | **Unified ML dataset** — 1900+ timeline rows, 7 symptom types with severity + interpolation, EI per zone, all features. Rebuilt every 30 min. |
+| [exposure_index_history.json](results/exposure_index_history.json) | ~1 MB | EI computed for all 4000+ historical cycles |
+| [exposure_timeline_clean.json](results/exposure_timeline_clean.json) | ~1 MB | Clean timeline with gaps classified as ACTIVE/QUIET/GAP_NO_DATA |
+| [wideband_survey_20260313.json](results/wideband_survey_20260313.json) | ~100 KB | 872-channel survey, 24–1766 MHz |
+| [pulse_features.json](results/pulse_features.json) | ~15 MB | Per-IQ-file pulse/burst features (3,586 files) |
+| [raw_time_domain_pulses.png](results/raw_time_domain_pulses.png) | ~500 KB | Raw pulse validation — isolated spikes confirmed real |
+| captures/*.iq | ~4 GB | 3,500+ raw IQ capture files (RTL-SDR 2.4 Msps, saving all) |
+| results/spectrograms/*.png | ~30 MB | 37+ waterfall spectrograms with pulse analysis |
+| [sentinel logs](results/) | ~15 MB | Raw sentinel cycle logs (sentinel_*.jsonl), hourly rotation |
+| [symptom_log.jsonl](results/evidence/symptom_log.jsonl) | ~50 KB | All symptom reports with RF context |
+| [knowledge_graph_v2/](results/knowledge_graph_v2/) | ~340 MB | 739 papers (LFS), GROBID extractions, embeddings |
+| [ml_v2/](results/ml_v2/) | ~5 MB | ML v2 models, features, 6 evidence reports, KG deep dive |
+| [ml_v3/](results/ml_v3/) | ~1 MB | ML v3 pulse-level results |
+| [ml/](results/ml/) | ~50 MB | ML v1 models, features, IQ embeddings, autoencoder |
 
 ## Signal Characteristics (Summary)
 
