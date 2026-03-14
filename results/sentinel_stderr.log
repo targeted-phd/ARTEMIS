@@ -1285,3 +1285,138 @@ Traceback (most recent call last):
     f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
                                         ^^^^^^^^
 UnboundLocalError: cannot access local variable 'ei_total' where it is not associated with a value
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 728, in <module>
+    main()
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 713, in main
+    run_sentinel(
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 516, in run_sentinel
+    f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
+                                        ^^^^^^^^
+UnboundLocalError: cannot access local variable 'ei_total' where it is not associated with a value
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 728, in <module>
+    main()
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 713, in main
+    run_sentinel(
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 516, in run_sentinel
+    f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
+                                        ^^^^^^^^
+UnboundLocalError: cannot access local variable 'ei_total' where it is not associated with a value
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 728, in <module>
+    main()
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 713, in main
+    run_sentinel(
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 516, in run_sentinel
+    f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
+                                        ^^^^^^^^
+UnboundLocalError: cannot access local variable 'ei_total' where it is not associated with a value
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 733, in <module>
+    main()
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 718, in main
+    run_sentinel(
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 516, in run_sentinel
+    f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
+                                        ^^^^^^^^
+UnboundLocalError: cannot access local variable 'ei_total' where it is not associated with a value
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 733, in <module>
+    main()
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 718, in main
+    run_sentinel(
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 516, in run_sentinel
+    f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
+                                        ^^^^^^^^
+UnboundLocalError: cannot access local variable 'ei_total' where it is not associated with a value
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 733, in <module>
+    main()
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 718, in main
+    run_sentinel(
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 516, in run_sentinel
+    f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
+                                        ^^^^^^^^
+UnboundLocalError: cannot access local variable 'ei_total' where it is not associated with a value
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 733, in <module>
+    main()
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 718, in main
+    run_sentinel(
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 516, in run_sentinel
+    f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
+                                        ^^^^^^^^
+UnboundLocalError: cannot access local variable 'ei_total' where it is not associated with a value
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 733, in <module>
+    main()
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 718, in main
+    run_sentinel(
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 516, in run_sentinel
+    f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
+                                        ^^^^^^^^
+UnboundLocalError: cannot access local variable 'ei_total' where it is not associated with a value
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 733, in <module>
+    main()
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 718, in main
+    run_sentinel(
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 516, in run_sentinel
+    f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
+                                        ^^^^^^^^
+UnboundLocalError: cannot access local variable 'ei_total' where it is not associated with a value
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 733, in <module>
+    main()
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 718, in main
+    run_sentinel(
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 516, in run_sentinel
+    f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
+                                        ^^^^^^^^
+UnboundLocalError: cannot access local variable 'ei_total' where it is not associated with a value
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 732, in <module>
+    main()
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 717, in main
+    run_sentinel(
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 514, in run_sentinel
+    f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
+                                        ^^^^^^^^
+UnboundLocalError: cannot access local variable 'ei_total' where it is not associated with a value
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 732, in <module>
+    main()
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 717, in main
+    run_sentinel(
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 514, in run_sentinel
+    f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
+                                        ^^^^^^^^
+UnboundLocalError: cannot access local variable 'ei_total' where it is not associated with a value
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 732, in <module>
+    main()
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 717, in main
+    run_sentinel(
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 514, in run_sentinel
+    f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
+                                        ^^^^^^^^
+UnboundLocalError: cannot access local variable 'ei_total' where it is not associated with a value
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 732, in <module>
+    main()
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 717, in main
+    run_sentinel(
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 514, in run_sentinel
+    f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
+                                        ^^^^^^^^
+UnboundLocalError: cannot access local variable 'ei_total' where it is not associated with a value
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 732, in <module>
+    main()
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 717, in main
+    run_sentinel(
+  File "/home/tyler/projects/rf-monitor/sentinel.py", line 514, in run_sentinel
+    f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
+                                        ^^^^^^^^
+UnboundLocalError: cannot access local variable 'ei_total' where it is not associated with a value

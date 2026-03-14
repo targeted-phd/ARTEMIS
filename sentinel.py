@@ -482,6 +482,22 @@ def run_sentinel(target_freqs_mhz, sweep_start, sweep_stop, sweep_step,
                     print(f"  │  >>> TARGET DROPPED: {freq_mhz:.0f} MHz "
                           f"went from kurt={init_k:.1f} to {np.mean(kurts):.1f}")
 
+        # ── EXPOSURE INDEX (Buckingham Pi) ──
+        K_NOISE = 8.5
+        ei_total, ei_zone_a, ei_zone_b = 0.0, 0.0, 0.0
+        for fmhz, results in stare_results.items():
+            for r in results:
+                k = r.get("kurtosis", K_NOISE)
+                p = r.get("pulse_count", 0)
+                pwr_db = r.get("mean_pwr_db", -44)
+                p_lin = 10 ** (pwr_db / 10)
+                ei_r = p_lin * p * max(k / K_NOISE, 1.0)
+                ei_total += ei_r
+                f_mhz = r.get("freq_mhz", r.get("nominal_freq_mhz", fmhz))
+                if isinstance(f_mhz, (int, float)):
+                    if 618 < f_mhz < 640: ei_zone_a += ei_r
+                    elif 820 < f_mhz < 840: ei_zone_b += ei_r
+
         # ── AUDIBLE ALERT (rate-limited: notify on state CHANGE only) ──
         all_cycle_kurts = []
         for results in stare_results.values():
@@ -509,16 +525,20 @@ def run_sentinel(target_freqs_mhz, sweep_start, sweep_stop, sweep_step,
             run_sentinel._prev_level = current_level
 
             if current_level != "quiet":
-                # Always beep locally (short, non-intrusive)
-                alert_sound(current_level)
                 print(f"  │  {'🔴' if current_level=='critical' else '🟡' if current_level=='high' else '🟢'} "
                       f"{current_level.upper()}: max_kurt={max_kurt:.0f} "
                       f"active_freqs={n_active_freqs} EI={ei_total:.0f}")
 
-                # Only push ntfy notification on state change
-                if level_changed:
+                # Push ntfy + beep on state change OR every 10 min
+                last_ntfy = getattr(run_sentinel, '_last_ntfy_time', 0)
+                ntfy_interval = 600  # 10 minutes
+                due_for_reminder = (time.time() - last_ntfy) > ntfy_interval
+
+                if level_changed or due_for_reminder:
+                    alert_sound(current_level)
                     ntfy_push(current_level, max_kurt, active_freqs,
                               cycle + cycle_offset)
+                    run_sentinel._last_ntfy_time = time.time()
         else:
             if getattr(run_sentinel, '_prev_level', 'quiet') != 'quiet':
                 # Notify de-activation
@@ -590,24 +610,6 @@ def run_sentinel(target_freqs_mhz, sweep_start, sweep_stop, sweep_step,
         print(f"  └─ cycle time: {time.time() - cycle_start:.1f}s")
 
         # ── Log cycle (fsync'd) ──
-        # ── EXPOSURE INDEX (Buckingham Pi) ──
-        # EI = Σ_f [ P_linear × N_pulses × (kurtosis / k_noise) ]
-        # Dimensionless, monotonic with actual RF exposure
-        K_NOISE = 8.5
-        ei_total, ei_zone_a, ei_zone_b = 0.0, 0.0, 0.0
-        for fmhz, results in stare_results.items():
-            for r in results:
-                k = r.get("kurtosis", K_NOISE)
-                p = r.get("pulse_count", 0)
-                pwr_db = r.get("mean_pwr_db", -44)
-                p_lin = 10 ** (pwr_db / 10)
-                ei_r = p_lin * p * max(k / K_NOISE, 1.0)
-                ei_total += ei_r
-                f = r.get("freq_mhz", r.get("nominal_freq_mhz", fmhz))
-                if isinstance(f, (int, float)):
-                    if 618 < f < 640: ei_zone_a += ei_r
-                    elif 820 < f < 840: ei_zone_b += ei_r
-
         cycle_entry = {
             "cycle": cycle + cycle_offset,
             "timestamp": datetime.now(timezone.utc).isoformat(),
