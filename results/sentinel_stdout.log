@@ -23170,3 +23170,283 @@
     832 MHz: baseline=13.74  initial=75.16
     834 MHz: no data
     878 MHz: baseline=20.45  initial=0.00
+
+  [05:05:29] CYCLE 1379  (0.00h / 277778h)
+  ├─ STARE:
+  │  622 MHz: kurt=5.7 (range 5.0–7.0)  total_pulses=508
+  │  624 MHz: kurt=190.6 (range 40.3–318.2)  total_pulses=1517
+  │  628 MHz: kurt=118.0 (range 75.3–187.1)  total_pulses=3514
+  │  630 MHz: kurt=66.9 (range 42.1–88.8)  total_pulses=5532
+  │  632 MHz: kurt=65.0 (range 57.8–83.9)  total_pulses=5342
+  │  634 MHz: kurt=101.4 (range 56.8–192.2)  total_pulses=4441
+  │  636 MHz: kurt=176.8 (range 100.1–311.5)  total_pulses=3008
+  │  826 MHz: kurt=8.1 (range 7.6–8.5)  total_pulses=0
+  │  >>> TARGET DROPPED: 826 MHz went from kurt=52.8 to 8.1
+  │  828 MHz: kurt=8.4 (range 8.2–8.5)  total_pulses=0
+  │  830 MHz: kurt=8.5 (range 8.4–8.6)  total_pulses=0
+  │  832 MHz: kurt=8.4 (range 8.1–8.7)  total_pulses=0
+  │  >>> TARGET DROPPED: 832 MHz went from kurt=75.2 to 8.4
+  │  834 MHz: kurt=8.3 (range 8.2–8.4)  total_pulses=0
+  │  878 MHz: kurt=32.0 (range 9.2–52.2)  total_pulses=5038
+  │  🔴 CRITICAL: max_kurt=318 active_freqs=7 EI=2786
+  ├─ SWEEP: 53 channels scanned
+  └─ cycle time: 411.3s
+
+────────────────────────────────────────────────────────────────────────
+  HOURLY SUMMARY — hour ending 05:06
+  Cycles: 2  |  Errors: 0
+  IQ captures: 4961 MB / 500000 MB budget
+  Disk free: 30328 MB
+────────────────────────────────────────────────────────────────────────
+
+  [LOG] Rotated to results/sentinel_20260314_05.jsonl
+
+========================================================================
+  RF SENTINEL — 24h Hardened Run
+  Targets: 622, 624, 628, 630, 632, 634, 636, 826, 828, 830, 832, 834, 878 MHz
+  Sweep: 50–1000 MHz (159 ch)
+  Stare: 5 pairs/cycle @ 200ms
+  Duration: 277777.8h  |  Gain: 28.0dB
+  IQ budget: 500000 MB  |  Disk free: 30327 MB
+  Log: results/sentinel_20260314_05.jsonl (rotates hourly)
+  Checkpoint: results/sentinel_checkpoint.json
+  Started: 2026-03-14 05:09:49
+========================================================================
+
+  [RESUME] Found checkpoint, loading baseline...
+  [RESUME] Baseline loaded (154 channels), resuming from cycle 1379
+  [INIT] Target baseline kurtosis:
+    622 MHz: baseline=8.22
+    624 MHz: no data
+    628 MHz: baseline=45.23
+    630 MHz: no data
+    632 MHz: no data
+    634 MHz: baseline=40.13
+    636 MHz: no data
+    826 MHz: baseline=52.83
+    828 MHz: no data
+    830 MHz: no data
+    832 MHz: baseline=13.74  initial=75.16
+    834 MHz: no data
+    878 MHz: baseline=21.94  initial=0.00
+
+  [05:14:59] CYCLE 1380  (0.00h / 277778h)
+  ├─ STARE:
+  │  622 MHz: kurt=83.1 (range 4.7–355.4)  total_pulses=1142
+  │  624 MHz: kurt=179.2 (range 76.1–269.9)  total_pulses=1569
+  │  628 MHz: kurt=120.1 (range 61.8–192.7)  total_pulses=3575
+  │  630 MHz: kurt=84.6 (range 50.3–111.2)  total_pulses=4824
+  │  632 MHz: kurt=84.9 (range 62.1–110.3)  total_pulses=4976
+  │  634 MHz: kurt=86.2 (range 54.6–138.5)  total_pulses=4804
+  │  636 MHz: kurt=148.6 (range 109.3–171.2)  total_pulses=2315
+  │  826 MHz: kurt=7.5 (range 5.7–8.6)  total_pulses=1
+  │  >>> TARGET DROPPED: 826 MHz went from kurt=52.8 to 7.5
+  │  828 MHz: kurt=8.6 (range 8.5–8.7)  total_pulses=0
+  │  830 MHz: kurt=8.6 (range 8.5–8.7)  total_pulses=0
+  │  832 MHz: kurt=8.6 (range 8.5–8.7)  total_pulses=0
+  │  >>> TARGET DROPPED: 832 MHz went from kurt=75.2 to 8.6
+  │  834 MHz: kurt=8.5 (range 8.5–8.6)  total_pulses=0
+  │  878 MHz: kurt=45.6 (range 6.1–87.6)  total_pulses=3629
+  │  🔴 CRITICAL: max_kurt=355 active_freqs=8 EI=2585
+  ├─ SWEEP: 53 channels scanned
+  └─ cycle time: 368.5s
+
+========================================================================
+  RF SENTINEL — 24h Hardened Run
+  Targets: 622, 624, 628, 630, 632, 634, 636, 826, 828, 830, 832, 834, 878 MHz
+  Sweep: 50–1000 MHz (159 ch)
+  Stare: 5 pairs/cycle @ 200ms
+  Duration: 277777.8h  |  Gain: 28.0dB
+  IQ budget: 500000 MB  |  Disk free: 30326 MB
+  Log: results/sentinel_20260314_05.jsonl (rotates hourly)
+  Checkpoint: results/sentinel_checkpoint.json
+  Started: 2026-03-14 05:20:00
+========================================================================
+
+  [RESUME] Found checkpoint, loading baseline...
+  [RESUME] Baseline loaded (154 channels), resuming from cycle 1380
+  [INIT] Target baseline kurtosis:
+    622 MHz: baseline=8.22
+    624 MHz: no data
+    628 MHz: baseline=45.23
+    630 MHz: no data
+    632 MHz: no data
+    634 MHz: baseline=40.13
+    636 MHz: no data
+    826 MHz: baseline=52.83
+    828 MHz: no data
+    830 MHz: no data
+    832 MHz: baseline=13.74  initial=75.16
+    834 MHz: no data
+    878 MHz: baseline=22.96  initial=0.00
+
+  [05:25:15] CYCLE 1381  (0.00h / 277778h)
+  ├─ STARE:
+  │  622 MHz: kurt=79.4 (range 4.8–257.1)  total_pulses=615
+  │  624 MHz: kurt=292.6 (range 187.3–345.4)  total_pulses=1376
+  │  628 MHz: kurt=137.1 (range 76.5–199.6)  total_pulses=3262
+  │  630 MHz: kurt=78.0 (range 51.4–95.1)  total_pulses=5108
+  │  632 MHz: kurt=83.9 (range 60.1–99.5)  total_pulses=4852
+  │  634 MHz: kurt=91.9 (range 66.3–110.5)  total_pulses=4379
+  │  636 MHz: kurt=185.8 (range 113.5–251.1)  total_pulses=2369
+  │  826 MHz: kurt=7.9 (range 5.7–8.6)  total_pulses=0
+  │  >>> TARGET DROPPED: 826 MHz went from kurt=52.8 to 7.9
+  │  828 MHz: kurt=8.6 (range 8.5–8.7)  total_pulses=0
+  │  830 MHz: kurt=8.7 (range 8.6–8.7)  total_pulses=0
+  │  832 MHz: kurt=8.6 (range 8.5–8.7)  total_pulses=0
+  │  >>> TARGET DROPPED: 832 MHz went from kurt=75.2 to 8.6
+  │  834 MHz: kurt=8.5 (range 8.2–8.6)  total_pulses=0
+  │  878 MHz: kurt=30.5 (range 6.7–60.3)  total_pulses=4279
+  │  🔴 CRITICAL: max_kurt=345 active_freqs=8 EI=2701
+  ├─ SWEEP: 53 channels scanned
+  └─ cycle time: 373.3s
+
+========================================================================
+  RF SENTINEL — 24h Hardened Run
+  Targets: 622, 624, 628, 630, 632, 634, 636, 826, 828, 830, 832, 834, 878 MHz
+  Sweep: 50–1000 MHz (159 ch)
+  Stare: 5 pairs/cycle @ 200ms
+  Duration: 277777.8h  |  Gain: 28.0dB
+  IQ budget: 500000 MB  |  Disk free: 30325 MB
+  Log: results/sentinel_20260314_05.jsonl (rotates hourly)
+  Checkpoint: results/sentinel_checkpoint.json
+  Started: 2026-03-14 05:30:11
+========================================================================
+
+  [RESUME] Found checkpoint, loading baseline...
+  [RESUME] Baseline loaded (154 channels), resuming from cycle 1381
+  [INIT] Target baseline kurtosis:
+    622 MHz: baseline=8.22
+    624 MHz: no data
+    628 MHz: baseline=45.23
+    630 MHz: no data
+    632 MHz: no data
+    634 MHz: baseline=40.13
+    636 MHz: no data
+    826 MHz: baseline=52.83
+    828 MHz: no data
+    830 MHz: no data
+    832 MHz: baseline=13.74  initial=75.16
+    834 MHz: no data
+    878 MHz: baseline=25.12  initial=0.00
+
+  [05:36:42] CYCLE 1382  (0.00h / 277778h)
+  ├─ STARE:
+  │  622 MHz: kurt=75.2 (range 4.5–180.4)  total_pulses=625
+  │  624 MHz: kurt=225.0 (range 71.8–339.3)  total_pulses=1321
+  │  628 MHz: kurt=128.2 (range 52.7–186.6)  total_pulses=3673
+  │  630 MHz: kurt=65.1 (range 43.5–96.9)  total_pulses=5344
+  │  632 MHz: kurt=68.7 (range 53.4–81.0)  total_pulses=5436
+  │  634 MHz: kurt=131.0 (range 73.2–191.5)  total_pulses=3309
+  │  636 MHz: kurt=240.9 (range 211.0–287.3)  total_pulses=1593
+  │  826 MHz: kurt=8.6 (range 8.5–8.7)  total_pulses=0
+  │  >>> TARGET DROPPED: 826 MHz went from kurt=52.8 to 8.6
+  │  828 MHz: kurt=8.6 (range 8.4–8.7)  total_pulses=0
+  │  830 MHz: kurt=8.6 (range 8.6–8.7)  total_pulses=0
+  │  832 MHz: kurt=8.6 (range 8.5–8.6)  total_pulses=0
+  │  >>> TARGET DROPPED: 832 MHz went from kurt=75.2 to 8.6
+  │  834 MHz: kurt=8.6 (range 8.5–8.7)  total_pulses=0
+  │  878 MHz: kurt=31.7 (range 12.4–75.1)  total_pulses=5034
+  │  🔴 CRITICAL: max_kurt=339 active_freqs=8 EI=2371
+  ├─ SWEEP: 53 channels scanned
+  └─ cycle time: 448.9s
+
+========================================================================
+  RF SENTINEL — 24h Hardened Run
+  Targets: 622, 624, 628, 630, 632, 634, 636, 826, 828, 830, 832, 834, 878 MHz
+  Sweep: 50–1000 MHz (159 ch)
+  Stare: 5 pairs/cycle @ 200ms
+  Duration: 277777.8h  |  Gain: 28.0dB
+  IQ budget: 500000 MB  |  Disk free: 30317 MB
+  Log: results/sentinel_20260314_05.jsonl (rotates hourly)
+  Checkpoint: results/sentinel_checkpoint.json
+  Started: 2026-03-14 05:40:23
+========================================================================
+
+  [RESUME] Found checkpoint, loading baseline...
+  [RESUME] Baseline loaded (154 channels), resuming from cycle 1382
+  [INIT] Target baseline kurtosis:
+    622 MHz: baseline=8.22
+    624 MHz: no data
+    628 MHz: baseline=45.23
+    630 MHz: no data
+    632 MHz: no data
+    634 MHz: baseline=40.13
+    636 MHz: no data
+    826 MHz: baseline=52.83
+    828 MHz: no data
+    830 MHz: no data
+    832 MHz: baseline=13.74  initial=75.16
+    834 MHz: no data
+    878 MHz: baseline=25.09  initial=0.00
+
+  [05:47:00] CYCLE 1383  (0.00h / 277778h)
+  ├─ STARE:
+  │  622 MHz: kurt=46.0 (range 4.7–206.3)  total_pulses=845
+  │  624 MHz: kurt=242.4 (range 140.7–320.3)  total_pulses=1666
+  │  628 MHz: kurt=125.0 (range 56.4–190.3)  total_pulses=3590
+  │  630 MHz: kurt=81.5 (range 58.3–118.2)  total_pulses=5153
+  │  632 MHz: kurt=65.6 (range 54.0–92.2)  total_pulses=5349
+  │  634 MHz: kurt=104.2 (range 74.4–185.6)  total_pulses=3923
+  │  636 MHz: kurt=128.4 (range 111.0–147.2)  total_pulses=2160
+  │  826 MHz: kurt=6.9 (range 5.7–8.5)  total_pulses=0
+  │  >>> TARGET DROPPED: 826 MHz went from kurt=52.8 to 6.9
+  │  828 MHz: kurt=8.5 (range 8.0–8.6)  total_pulses=0
+  │  830 MHz: kurt=8.6 (range 8.5–8.7)  total_pulses=0
+  │  832 MHz: kurt=8.6 (range 8.6–8.7)  total_pulses=0
+  │  >>> TARGET DROPPED: 832 MHz went from kurt=75.2 to 8.6
+  │  834 MHz: kurt=8.6 (range 8.5–8.6)  total_pulses=0
+  │  878 MHz: kurt=33.9 (range 8.7–56.7)  total_pulses=4260
+  │  🔴 CRITICAL: max_kurt=320 active_freqs=8 EI=2610
+  ├─ SWEEP: 53 channels scanned
+  └─ cycle time: 455.2s
+
+========================================================================
+  RF SENTINEL — 24h Hardened Run
+  Targets: 622, 624, 628, 630, 632, 634, 636, 826, 828, 830, 832, 834, 878 MHz
+  Sweep: 50–1000 MHz (159 ch)
+  Stare: 5 pairs/cycle @ 200ms
+  Duration: 277777.8h  |  Gain: 28.0dB
+  IQ budget: 500000 MB  |  Disk free: 30316 MB
+  Log: results/sentinel_20260314_05.jsonl (rotates hourly)
+  Checkpoint: results/sentinel_checkpoint.json
+  Started: 2026-03-14 05:50:34
+========================================================================
+
+  [RESUME] Found checkpoint, loading baseline...
+  [RESUME] Baseline loaded (154 channels), resuming from cycle 1383
+  [INIT] Target baseline kurtosis:
+    622 MHz: baseline=8.22
+    624 MHz: no data
+    628 MHz: baseline=45.23
+    630 MHz: no data
+    632 MHz: no data
+    634 MHz: baseline=40.13
+    636 MHz: no data
+    826 MHz: baseline=52.83
+    828 MHz: no data
+    830 MHz: no data
+    832 MHz: baseline=13.74  initial=75.16
+    834 MHz: no data
+    878 MHz: baseline=25.16  initial=0.00
+
+  [05:57:15] CYCLE 1384  (0.00h / 277778h)
+  ├─ STARE:
+  │  622 MHz: kurt=109.6 (range 4.8–311.4)  total_pulses=1164
+  │  624 MHz: kurt=235.3 (range 103.8–298.4)  total_pulses=1486
+  │  628 MHz: kurt=139.1 (range 72.4–219.1)  total_pulses=3423
+  │  630 MHz: kurt=60.9 (range 25.4–102.5)  total_pulses=4809
+  │  632 MHz: kurt=62.3 (range 5.2–86.2)  total_pulses=4068
+  │  634 MHz: kurt=75.4 (range 52.6–113.5)  total_pulses=5260
+  │  636 MHz: kurt=130.5 (range 71.4–209.1)  total_pulses=2725
+  │  826 MHz: kurt=8.4 (range 7.7–8.6)  total_pulses=2
+  │  >>> TARGET DROPPED: 826 MHz went from kurt=52.8 to 8.4
+  │  828 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  830 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  832 MHz: kurt=8.6 (range 8.5–8.7)  total_pulses=0
+  │  >>> TARGET DROPPED: 832 MHz went from kurt=75.2 to 8.6
+  │  834 MHz: kurt=8.6 (range 8.5–8.8)  total_pulses=0
+  │  878 MHz: kurt=22.1 (range 7.3–40.5)  total_pulses=3787
+  │  🔴 CRITICAL: max_kurt=311 active_freqs=8 EI=2778
+  ├─ SWEEP: 53 channels scanned
+  └─ cycle time: 458.7s

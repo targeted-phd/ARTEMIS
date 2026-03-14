@@ -266,6 +266,21 @@ Six-document evidence package in `results/ml_v2/reports/` — per-symptom ML ana
 | [`05_methodology_and_limitations.md`](results/ml_v2/reports/05_methodology_and_limitations.md) | 540 | Confounders (notification bias, nocebo, circadian), small sample sizes, overclaiming risks — "reads like it was written by a hostile reviewer" |
 | [`06_evidence_integrity.md`](results/ml_v2/reports/06_evidence_integrity.md) | 311 | SHA-256 hash chains, data provenance, git commit history, custody limitations |
 
+### Head Model & Acoustic Reconstruction (Documents 07a-07e)
+
+Complete physics-based pipeline for transforming raw IQ captures into reconstructed audio WAV files representing what the subject would perceive via the thermoelastic (Frey) mechanism. Derived entirely from first principles with every parameter sourced from published literature. **5,081 lines across 6 documents.** Independently reviewed: *"07a is the strongest document in the set."*
+
+| Document | Lines | Content |
+|----------|-------|---------|
+| [`07_head_model_reconstruction.md`](results/ml_v2/reports/07_head_model_reconstruction.md) | 406 | Overview — 5-stage physical chain (RF→SAR→pressure→skull resonance→cochlea), pipeline architecture, feasibility assessment |
+| [`07a_thermoelastic_mechanism.md`](results/ml_v2/reports/07a_thermoelastic_mechanism.md) | 817 | **Core physics** — Foster & Finch 4°C proof (definitive), pressure amplitude equations, energy per pulse derivation, every constant from literature |
+| [`07b_acoustic_propagation_skull.md`](results/ml_v2/reports/07b_acoustic_propagation_skull.md) | 814 | Tissue attenuation tables (skin/skull/CSF/brain), skull cavity resonance eigenmode analysis (7-9 kHz), proof that BRF envelope passes intact while PRF is damped |
+| [`07c_cochlear_detection.md`](results/ml_v2/reports/07c_cochlear_detection.md) | 600 | Bone conduction pathway — otosclerosis patient evidence, earplugs ineffective, cochlear microphonic recordings from guinea pigs, every alternative mechanism ruled out |
+| [`07d_reconstruction_pipeline.md`](results/ml_v2/reports/07d_reconstruction_pipeline.md) | 1,404 | **Full implementation spec** — transfer functions H(f), RLC equivalent circuit with component values, Python pseudocode, parameter tables, error budget (including 8-bit quantization), validation strategy |
+| [`07e_kg_tissue_parameters.md`](results/ml_v2/reports/07e_kg_tissue_parameters.md) | 1,040 | Raw KG evidence appendix — all verbatim passages on tissue properties, organized by tissue type, with paper titles and similarity scores |
+
+**Key result:** The brain acts as a low-pass acoustic filter. Individual pulses at 200 kHz PRF are damped, but burst envelopes at 646-1,139 Hz BRF pass through intact (<0.03 dB attenuation). The skull imposes a resonant carrier at 7-9 kHz (head-size dependent). The subject perceives a high-pitched tone amplitude-modulated by the BRF pattern — analogous to AM radio where the skull resonance is the carrier and the burst timing is the audio.
+
 ### Key ML Results (v2, with interpolation)
 
 | Symptom | N+ | N- | AUC | p | Sig Features | Sev R² | Peak Hour | Dominant Zone |
