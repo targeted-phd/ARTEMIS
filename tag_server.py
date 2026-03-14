@@ -262,7 +262,216 @@ class TagHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         parsed = urlparse(self.path)
 
-        if parsed.path == "/quick":
+        if parsed.path == "/live":
+            # Always-open live symptom tagger — bookmark this on your phone
+            # Pulls latest RF context from sentinel, no nonce needed
+            page = f"""<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>ARTEMIS Live</title>
+<style>
+* {{ margin:0; padding:0; box-sizing:border-box; }}
+body {{ background:#06060b; color:#ccc; font-family:-apple-system,sans-serif; padding:0; -webkit-tap-highlight-color:transparent; }}
+.rf-bar {{
+  background:#0a0a14; padding:8px 12px; border-bottom:1px solid #1a1a2a;
+  display:flex; justify-content:space-between; align-items:center;
+  position:sticky; top:0; z-index:10;
+}}
+.rf-bar .ei {{ font-size:24px; font-weight:bold; font-variant-numeric:tabular-nums; }}
+.rf-bar .meta {{ font-size:10px; color:#556; text-align:right; }}
+.rf-bar .dot {{ display:inline-block; width:6px; height:6px; border-radius:50%; margin-right:4px; }}
+.syms {{ padding:8px 12px; }}
+.sym-row {{
+  display:flex; align-items:center; gap:8px; margin:5px 0; padding:8px 10px;
+  border-radius:6px; border:1px solid #1a1a2a; background:#0c0c14;
+  transition: border-color 0.2s;
+}}
+.sym-row.active {{ border-color: var(--c); }}
+.sym-name {{ flex:1; font-size:15px; font-weight:bold; }}
+.sev {{ display:flex; gap:5px; }}
+.sev button {{
+  width:40px; height:40px; border-radius:50%; border:2px solid #2a2a3a;
+  background:#111; color:#555; font-size:14px; font-weight:bold; cursor:pointer;
+}}
+.sev button.on {{ color:#fff; }}
+.submit-area {{ padding:8px 12px; position:sticky; bottom:0; background:#06060b; }}
+#submitBtn {{
+  display:block; width:100%; padding:14px; font-size:16px; font-weight:bold;
+  border-radius:8px; cursor:pointer; letter-spacing:1px; border:2px solid #2a4a2a;
+  background:#0a2a0a; color:#4a4;
+}}
+#submitBtn.sent {{ background:#082808; color:#6c6; border-color:#4a4; }}
+.toast {{
+  position:fixed; bottom:70px; left:50%; transform:translateX(-50%);
+  background:#1a2a1a; color:#6c6; padding:8px 16px; border-radius:6px;
+  font-size:13px; opacity:0; transition:opacity 0.3s; pointer-events:none;
+}}
+.toast.show {{ opacity:1; }}
+.labels {{ display:flex; justify-content:flex-end; gap:5px; padding:0 12px; font-size:9px; color:#445; }}
+.labels span {{ width:40px; text-align:center; }}
+</style></head><body>
+<div class="rf-bar">
+  <div>
+    <div class="ei" id="eiVal" style="color:#334">—</div>
+    <div style="font-size:9px;color:#556">EXPOSURE INDEX</div>
+  </div>
+  <div class="meta">
+    <div><span class="dot" id="rfDot" style="background:#333"></span><span id="rfKurt">—</span></div>
+    <div id="rfTime">—</div>
+    <div id="rfActive">—</div>
+  </div>
+</div>
+<div class="labels"><span>0</span><span>1</span><span>2</span><span>3</span></div>
+<div class="syms" id="syms"></div>
+<div class="submit-area">
+  <button id="submitBtn" onclick="submit()">SUBMIT</button>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const syms = [
+  {{name:'Speech',key:'speech',color:'#fa0'}},
+  {{name:'Headache',key:'headache',color:'#f44'}},
+  {{name:'Tinnitus',key:'tinnitus',color:'#f8f'}},
+  {{name:'Paresthesia',key:'paresthesia',color:'#4af'}},
+  {{name:'Nausea',key:'nausea',color:'#6d4'}},
+  {{name:'Pressure',key:'pressure',color:'#aaf'}},
+  {{name:'Sleep',key:'sleep',color:'#88f'}},
+];
+const state = {{}};
+const container = document.getElementById('syms');
+
+syms.forEach(s => {{
+  state[s.key] = 0;
+  const row = document.createElement('div');
+  row.className = 'sym-row';
+  row.style.setProperty('--c', s.color);
+  row.id = 'row-' + s.key;
+  let btns = '';
+  for (let i = 0; i <= 3; i++) {{
+    btns += '<button id="'+s.key+'-'+i+'" onclick="sev(\\''+s.key+'\\','+i+')">'+i+'</button>';
+  }}
+  row.innerHTML = '<span class="sym-name" style="color:'+s.color+'">'+s.name+'</span><div class="sev">'+btns+'</div>';
+  container.appendChild(row);
+  const b0 = document.getElementById(s.key+'-0');
+  b0.classList.add('on'); b0.style.borderColor='#444'; b0.style.background='#1a1a1a';
+}});
+
+function sev(key, level) {{
+  state[key] = level;
+  const sym = syms.find(s => s.key === key);
+  const row = document.getElementById('row-' + key);
+  for (let i = 0; i <= 3; i++) {{
+    const btn = document.getElementById(key + '-' + i);
+    if (i === level) {{
+      btn.classList.add('on');
+      btn.style.borderColor = sym.color;
+      btn.style.background = level > 0 ? sym.color + '33' : '#1a1a1a';
+    }} else {{
+      btn.classList.remove('on');
+      btn.style.borderColor = '#2a2a3a';
+      btn.style.background = '#111';
+    }}
+  }}
+  row.className = level > 0 ? 'sym-row active' : 'sym-row';
+  // Reset submit button if previously sent
+  const btn = document.getElementById('submitBtn');
+  if (btn.classList.contains('sent')) {{
+    btn.textContent = 'SUBMIT'; btn.className = '';
+  }}
+}}
+
+function toast(msg) {{
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show';
+  setTimeout(() => {{ t.className = 'toast'; }}, 2500);
+}}
+
+function submit() {{
+  const sevLabels = ['none','mild','moderate','severe'];
+  const active = Object.entries(state).filter(([k,v]) => v > 0);
+  const btn = document.getElementById('submitBtn');
+
+  if (active.length === 0) {{
+    fetch('/tag?s=clear&severity=0&severity_label=none', {{method:'POST'}})
+      .then(() => {{ btn.textContent = 'CLEAR'; btn.className = 'sent'; toast('No symptoms — logged'); }});
+    return;
+  }}
+
+  let count = 0;
+  const total = active.length;
+  const names = [];
+  active.forEach(([key, level]) => {{
+    const sym = syms.find(s => s.key === key);
+    names.push(sym.name + ' ' + level);
+    fetch('/tag?s=' + key + '&severity=' + level + '&severity_label=' + sevLabels[level], {{method:'POST'}})
+      .then(() => {{
+        count++;
+        if (count === total) {{
+          btn.textContent = 'SENT'; btn.className = 'sent';
+          toast(names.join(', '));
+        }}
+      }});
+  }});
+}}
+
+// Poll RF state every 10 seconds
+function pollRF() {{
+  fetch('/rf_state')
+    .then(r => r.json())
+    .then(d => {{
+      const eiEl = document.getElementById('eiVal');
+      eiEl.textContent = d.ei != null ? Math.round(d.ei) : '—';
+      const k = d.max_kurt || 0;
+      eiEl.style.color = k > 200 ? '#f43' : k > 80 ? '#fa0' : k > 30 ? '#4c4' : '#334';
+      document.getElementById('rfKurt').textContent = 'k=' + (d.max_kurt||0).toFixed(0);
+      document.getElementById('rfTime').textContent = d.time || '—';
+      document.getElementById('rfActive').textContent = (d.n_active||0) + ' freqs';
+      const dot = document.getElementById('rfDot');
+      dot.style.background = k > 80 ? '#f43' : k > 30 ? '#fa0' : k > 10 ? '#4c4' : '#333';
+    }})
+    .catch(() => {{}});
+  setTimeout(pollRF, 10000);
+}}
+pollRF();
+</script></body></html>"""
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html")
+            self.end_headers()
+            self.wfile.write(page.encode())
+
+        elif parsed.path == "/rf_state":
+            # Return latest RF state for the live page
+            state = get_latest_sentinel_context()
+            rf = {}
+            if state:
+                rf = {
+                    "ei": state.get("max_kurt", 0),  # Quick proxy
+                    "max_kurt": state.get("max_kurt", 0),
+                    "n_active": state.get("n_active", 0),
+                    "time": datetime.now().strftime("%I:%M %p"),
+                }
+                # Try to get real EI from latest cycle
+                try:
+                    import glob as g
+                    logs = sorted(g.glob(f"{RESULTS_DIR}/sentinel_*.jsonl"))
+                    if logs:
+                        with open(logs[-1]) as f2:
+                            lines = f2.readlines()
+                        if lines:
+                            last = json.loads(lines[-1])
+                            rf["ei"] = last.get("exposure_index", 0)
+                            rf["cycle"] = last.get("cycle")
+                except Exception:
+                    pass
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.end_headers()
+            self.wfile.write(json.dumps(rf).encode())
+
+        elif parsed.path == "/quick":
             # Mobile symptom tagging page — multi-select with severity
             params = parse_qs(parsed.query)
             rf = params.get("rf", [""])[0]
