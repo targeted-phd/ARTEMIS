@@ -191,6 +191,11 @@ def log_symptom(symptom, note="", rf_snap=None, severity=None, severity_label=No
         f.write(line + "\n")
         f.flush()
         os.fsync(f.fileno())
+    # Trigger ML dataset rebuild in background (takes ~3s)
+    subprocess.Popen(
+        ["bash", "rebuild_ml_dataset.sh"],
+        cwd=os.path.dirname(os.path.abspath(__file__)),
+        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     return entry
 
 
