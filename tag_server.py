@@ -94,30 +94,96 @@ def get_latest_sentinel_context():
         return None
 
 
+def get_rf_context_for_cycle(target_cycle):
+    """Look up a specific cycle number from sentinel logs."""
+    try:
+        import glob
+        logs = sorted(glob.glob(f"{RESULTS_DIR}/sentinel_*.jsonl"))
+        # Search backwards through logs for the target cycle
+        for logf in reversed(logs):
+            with open(logf) as f:
+                for line in f:
+                    try:
+                        cycle = json.loads(line)
+                        if cycle.get("cycle") == target_cycle:
+                            return _extract_rf_context(cycle)
+                    except json.JSONDecodeError:
+                        continue
+        # Cycle not found, fall back to latest
+        return get_latest_sentinel_context()
+    except Exception:
+        return get_latest_sentinel_context()
+
+
+def _extract_rf_context(cycle):
+    """Extract RF context dict from a sentinel cycle entry."""
+    freq_summary = {}
+    max_kurt = 0
+    active_freqs = []
+    for freq_str, readings in cycle.get("stare", {}).items():
+        for r in readings:
+            k = r.get("kurtosis", 0)
+            if k > max_kurt:
+                max_kurt = k
+            fmhz = r.get("freq_mhz", r.get("nominal_freq_mhz", freq_str))
+            key = str(fmhz)
+            if key not in freq_summary or k > freq_summary[key].get("max_kurt", 0):
+                freq_summary[key] = {
+                    "max_kurt": round(k, 1),
+                    "pulses": r.get("pulse_count", 0),
+                    "pwr_db": r.get("mean_pwr_db", 0),
+                    "papr_db": r.get("papr_db", 0),
+                }
+            if k > 20 and fmhz not in active_freqs:
+                active_freqs.append(fmhz)
+    return {
+        "cycle": cycle.get("cycle"),
+        "cycle_ts": cycle.get("timestamp"),
+        "max_kurt": round(max_kurt, 1),
+        "active_freqs": sorted(active_freqs),
+        "n_active": len(active_freqs),
+        "freq_summary": freq_summary,
+    }
+
+
 _last_tag = {"symptom": None, "time": 0}
 DEDUP_WINDOW_S = 30  # ignore same symptom within 30 seconds
 
 
-def log_symptom(symptom, note="", alert_data=None):
-    """Append symptom entry with RF context to JSONL log.
-    Deduplicates: same symptom within 30s is ignored."""
+def log_symptom(symptom, note="", rf_snap=None):
+    """Append symptom entry to JSONL log. RF context is self-contained
+    from the notification button URL — no lookups needed.
+    Deduplicates: same symptom+alert_id within 30s is ignored."""
     now = time.time()
-    if symptom == _last_tag["symptom"] and (now - _last_tag["time"]) < DEDUP_WINDOW_S:
+    alert_id = rf_snap.get("aid") if rf_snap else None
+    dedup_key = f"{symptom}:{alert_id}" if alert_id else symptom
+    if dedup_key == _last_tag["symptom"] and (now - _last_tag["time"]) < DEDUP_WINDOW_S:
         return None  # duplicate, skip
-    _last_tag["symptom"] = symptom
+    _last_tag["symptom"] = dedup_key
     _last_tag["time"] = now
 
-    rf_context = get_latest_sentinel_context()
     entry = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "symptom": symptom,
-        "note": note,
         "reporter": "subject",
+        "alert_id": alert_id,
+        "alert_cycle": rf_snap.get("c") if rf_snap else None,
+        "alert_ts": rf_snap.get("ts") if rf_snap else None,
+        "alert_max_kurt": rf_snap.get("mk") if rf_snap else None,
+        "alert_n_active": rf_snap.get("nf") if rf_snap else None,
+        "alert_active_freqs": rf_snap.get("af") if rf_snap else None,
+        "response_delay_s": None,
     }
-    if rf_context:
-        entry["rf_context"] = rf_context
-    if alert_data:
-        entry["alert_data"] = alert_data
+    if note:
+        entry["note"] = note
+    # Calculate response delay
+    if rf_snap and rf_snap.get("ts"):
+        try:
+            alert_dt = datetime.fromisoformat(rf_snap["ts"].replace('Z', '+00:00'))
+            entry["response_delay_s"] = round(
+                (datetime.now(timezone.utc) - alert_dt).total_seconds(), 1)
+        except (ValueError, TypeError):
+            pass
     line = json.dumps(entry)
     with open(LOG_FILE, "a") as f:
         f.write(line + "\n")
@@ -154,7 +220,16 @@ class TagHandler(BaseHTTPRequestHandler):
                     f"Bad symptom. Valid: {', '.join(sorted(VALID_SYMPTOMS))}".encode())
                 return
 
-            entry = log_symptom(symptom, note)
+            # Unpack self-contained RF snapshot from button URL
+            rf_param = params.get("rf", [None])[0]
+            rf_snap = None
+            if rf_param:
+                try:
+                    rf_snap = json.loads(rf_param)
+                except (json.JSONDecodeError, TypeError):
+                    pass
+
+            entry = log_symptom(symptom, note, rf_snap=rf_snap)
             if entry is None:
                 # Duplicate within dedup window
                 self.send_response(200)

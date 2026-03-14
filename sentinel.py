@@ -49,21 +49,46 @@ _stop = False
 
 # ── IO helpers ──────────────────────────────────────────────────────────────
 
-def ntfy_push(level, max_kurt, active_freqs, cycle_num):
-    """Push alert to ntfy with symptom tagging action buttons.
-    Uses subprocess curl because requests lib can't handle emoji in headers."""
+def ntfy_push(level, max_kurt, active_freqs, cycle_num, stare_results=None):
+    """Push alert to ntfy with self-contained RF context in button URLs.
+    Each notification has a unique alert_id (nonce). Button URLs carry
+    the alert_id + RF snapshot so the tag server needs no lookups."""
     try:
+        import urllib.parse
         priorities = {"detect": "default", "high": "high", "critical": "urgent"}
         labels = {"detect": "DETECT", "high": "HIGH", "critical": "CRITICAL"}
         freq_str = ", ".join(f"{f:.0f}" for f in sorted(active_freqs)[:6])
         title = f"{labels.get(level, level)} — {len(active_freqs)} freqs active"
         body = (f"max_kurt={max_kurt:.0f} | freqs: {freq_str}\n"
                 f"cycle {cycle_num} @ {datetime.now().strftime('%H:%M:%S')}")
-        actions = (
-            f"http, Speech, {TAG_URL}?s=speech, method=POST, clear=true; "
-            f"http, Paresthesia, {TAG_URL}?s=paresthesia, method=POST, clear=true; "
-            f"http, Headache, {TAG_URL}?s=headache, method=POST, clear=true"
-        )
+
+        # Unique alert ID (nonce) — prevents replay, identifies event
+        alert_id = hashlib.sha256(
+            f"{cycle_num}-{time.time()}-{os.urandom(8).hex()}".encode()
+        ).hexdigest()[:16]
+        alert_ts = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+
+        # Compact RF snapshot to embed in URL
+        rf_snap = json.dumps({
+            "c": cycle_num,
+            "ts": alert_ts,
+            "aid": alert_id,
+            "mk": round(max_kurt, 1),
+            "nf": len(active_freqs),
+            "af": [round(f, 1) for f in sorted(active_freqs)[:10]],
+        }, separators=(',', ':'))
+        rf_encoded = urllib.parse.quote(rf_snap)
+
+        def btn(label, symptom):
+            return (f"http, {label}, {TAG_URL}?s={symptom}&rf={rf_encoded}, "
+                    f"method=POST, clear=true")
+
+        actions = "; ".join([
+            btn("Speech", "speech"),
+            btn("Paresthesia", "paresthesia"),
+            btn("Headache", "headache"),
+        ])
+
         subprocess.Popen([
             "curl", "-s", "-X", "POST", NTFY_URL,
             "-H", f"Title: {title}",
