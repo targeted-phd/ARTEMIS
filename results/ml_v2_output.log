@@ -1,0 +1,164 @@
+
+============================================================
+  RF-SYMPTOM ML ANALYSIS v2
+============================================================
+
+  Loaded 1883 data rows (1907 total with gaps)
+  Responded rows: 58
+  Symptom rows: 58
+  Interpolated: 147
+  Feature matrix: 1883 × 50
+  Features: 11 RF + 3 temporal + 22 lag + 8 rolling + 3 delta + 3 zone = 50
+
+────────────────────────────────────────────────────────────
+  PER-SYMPTOM CLASSIFICATION
+────────────────────────────────────────────────────────────
+
+  === HEADACHE (54 positive / 26 negative / 80 labeled of 1883 total) ===
+    Significant features (Bonferroni α=0.05): 0/50
+      roll10_total_pulses                 p=1.24e-01 d=+0.86 ↑ sym=28862.1 null=24163.4 
+      roll10_total_pulse_duration_us      p=1.29e-01 d=+0.93 ↑ sym=70789.9 null=56458.1 
+      lag2_max_kurt_zone_b                p=9.98e-01 d=+0.58 ↑ sym=164.7 null=102.0 
+      delta_ei_total                      p=1.00e+00 d=+0.56 ↑ sym=97.6 null=-284.2 
+      total_pulses                        p=1.00e+00 d=+0.70 ↑ sym=27912.7 null=23836.1 
+    Random Forest AUC (5-fold CV): 0.796
+    Top RF features:
+      roll10_max_kurt                     importance=0.053
+      delta_ei_total                      importance=0.052
+      roll10_total_pulse_duration_us      importance=0.047
+      roll10_total_pulses                 importance=0.045
+      total_pulses                        importance=0.041
+      hour                                importance=0.032
+      lag1_ei_zone_a                      importance=0.030
+      total_pulse_duration_us             importance=0.029
+      ei_total                            importance=0.026
+      ei_zone_a                           importance=0.025
+    Permutation p-value: 0.0020 (AUC 0.796 vs null 0.503)
+    Severity regression (GBR): MAE=0.70, R²=-0.762
+
+  === PARESTHESIA (57 positive / 39 negative / 96 labeled of 1883 total) ===
+    Significant features (Bonferroni α=0.05): 26/50
+      zone_ratio_kurt                     p=1.27e-08 d=-0.80 ↓ sym=3.4 null=15.2 ***
+      zone_ratio_ei                       p=8.70e-07 d=-0.65 ↓ sym=248754933.4 null=869180325.0 ***
+      lag1_ei_total                       p=1.37e-05 d=-1.36 ↓ sym=823.3 null=2116.6 ***
+      roll5_ei_total                      p=1.68e-05 d=-1.51 ↓ sym=817.9 null=2070.2 ***
+      ei_total                            p=3.38e-05 d=-1.38 ↓ sym=809.1 null=2011.7 ***
+    Random Forest AUC (5-fold CV): 0.885
+    Top RF features:
+      zone_ratio_kurt                     importance=0.068
+      roll10_total_pulses                 importance=0.067
+      roll10_ei_total                     importance=0.066
+      roll10_total_pulse_duration_us      importance=0.063
+      ei_total                            importance=0.051
+      roll5_total_pulse_duration_us       importance=0.048
+      roll5_ei_total                      importance=0.040
+      lag2_ei_total                       importance=0.040
+      total_pulse_duration_us             importance=0.036
+      total_pulses                        importance=0.032
+    Permutation p-value: 0.0020 (AUC 0.885 vs null 0.510)
+    Severity regression (GBR): MAE=0.41, R²=0.486
+
+  === PRESSURE (13 positive / 51 negative / 64 labeled of 1883 total) ===
+    Significant features (Bonferroni α=0.05): 1/50
+      is_night                            p=5.34e-03 d=+1.76 ↑ sym=1.0 null=0.4 **
+      hour                                p=6.13e-02 d=+0.85 ↑ sym=21.5 null=18.1 
+      lag2_max_kurt_zone_a                p=3.52e-01 d=+0.87 ↑ sym=260.6 null=190.7 
+      roll10_ei_total                     p=4.40e-01 d=+0.99 ↑ sym=2331.4 null=1844.0 
+      lag2_max_kurt                       p=4.51e-01 d=+0.88 ↑ sym=299.1 null=239.2 
+    Random Forest AUC (5-fold CV): 0.992
+    Top RF features:
+      hour                                importance=0.080
+      roll5_total_pulse_duration_us       importance=0.076
+      minute                              importance=0.058
+      is_night                            importance=0.050
+      roll10_max_kurt                     importance=0.043
+      roll5_total_pulses                  importance=0.039
+      lag2_max_kurt_zone_a                importance=0.039
+      roll10_total_pulse_duration_us      importance=0.037
+      roll10_ei_total                     importance=0.036
+      roll10_total_pulses                 importance=0.035
+    Permutation p-value: 0.0020 (AUC 0.992 vs null 0.504)
+    Severity regression (GBR): MAE=0.33, R²=0.041
+
+  === SLEEP (20 positive / 50 negative / 70 labeled of 1883 total) ===
+    Significant features (Bonferroni α=0.05): 9/50
+      minute                              p=1.25e-04 d=+1.48 ↑ sym=49.9 null=28.8 ***
+      is_night                            p=1.46e-04 d=+1.81 ↑ sym=1.0 null=0.4 ***
+      n_active_targets                    p=5.05e-04 d=-1.42 ↓ sym=6.5 null=9.7 ***
+      total_pulse_duration_us             p=1.30e-03 d=-1.19 ↓ sym=44230.5 null=65102.0 **
+      lag1_n_active_targets               p=2.46e-03 d=-1.21 ↓ sym=6.6 null=9.5 **
+    Random Forest AUC (5-fold CV): 0.969
+    Top RF features:
+      minute                              importance=0.129
+      roll10_total_pulse_duration_us      importance=0.088
+      roll10_total_pulses                 importance=0.067
+      roll5_total_pulse_duration_us       importance=0.058
+      is_night                            importance=0.052
+      total_pulse_duration_us             importance=0.033
+      roll10_ei_total                     importance=0.029
+      lag1_total_pulse_duration_us        importance=0.028
+      hour                                importance=0.026
+      ei_total                            importance=0.024
+    Permutation p-value: 0.0020 (AUC 0.969 vs null 0.518)
+    Severity regression (GBR): MAE=0.85, R²=-0.957
+
+  === SPEECH (108 positive / 6 negative / 114 labeled of 1883 total) ===
+    Significant features (Bonferroni α=0.05): 3/50
+      total_pulses                        p=2.33e-02 d=+1.83 ↑ sym=28131.1 null=15885.3 *
+      roll5_total_pulses                  p=3.79e-02 d=+1.64 ↑ sym=27784.8 null=17074.7 *
+      roll5_total_pulse_duration_us       p=4.33e-02 d=+1.61 ↑ sym=66182.1 null=40870.2 *
+      total_pulse_duration_us             p=8.54e-02 d=+1.71 ↑ sym=66508.7 null=38267.5 
+      lag2_total_pulse_duration_us        p=9.59e-02 d=+1.45 ↑ sym=66712.6 null=41479.8 
+    Random Forest AUC (5-fold CV): 0.769
+    Top RF features:
+      total_pulses                        importance=0.101
+      delta_max_kurt                      importance=0.062
+      roll5_total_pulse_duration_us       importance=0.058
+      lag2_total_pulse_duration_us        importance=0.051
+      total_pulse_duration_us             importance=0.045
+      ei_total                            importance=0.044
+      max_kurt                            importance=0.041
+      n_active_targets                    importance=0.039
+      lag1_total_pulse_duration_us        importance=0.034
+      roll5_total_pulses                  importance=0.032
+    Permutation p-value: 0.0299 (AUC 0.769 vs null 0.481)
+    Severity regression (GBR): MAE=0.39, R²=0.287
+
+  === TINNITUS (66 positive / 30 negative / 96 labeled of 1883 total) ===
+    Significant features (Bonferroni α=0.05): 19/50
+      is_night                            p=3.80e-11 d=+2.23 ↑ sym=0.9 null=0.2 ***
+      max_kurt_zone_a                     p=9.50e-07 d=+1.41 ↑ sym=262.6 null=159.2 ***
+      lag1_max_kurt_zone_a                p=1.48e-05 d=+1.23 ↑ sym=259.6 null=158.7 ***
+      lag2_max_kurt_zone_a                p=1.42e-04 d=+1.17 ↑ sym=259.6 null=165.6 ***
+      max_kurt_zone_b                     p=2.87e-04 d=-1.12 ↓ sym=82.5 null=191.2 ***
+    Random Forest AUC (5-fold CV): 0.934
+    Top RF features:
+      is_night                            importance=0.091
+      max_kurt_zone_a                     importance=0.068
+      roll5_total_pulse_duration_us       importance=0.061
+      roll5_max_kurt                      importance=0.046
+      roll10_total_pulse_duration_us      importance=0.041
+      roll10_max_kurt                     importance=0.034
+      n_active_targets                    importance=0.032
+      lag1_max_kurt_zone_a                importance=0.030
+      zone_ratio_kurt                     importance=0.029
+      roll10_total_pulses                 importance=0.029
+    Permutation p-value: 0.0020 (AUC 0.934 vs null 0.506)
+    Severity regression (GBR): MAE=0.43, R²=0.060
+  nausea: 0 events in 58 labeled rows — skipping
+
+────────────────────────────────────────────────────────────
+  DOSE-RESPONSE ANALYSIS
+────────────────────────────────────────────────────────────
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/rf_ml_v2.py", line 790, in <module>
+    main()
+  File "/home/tyler/projects/rf-monitor/rf_ml_v2.py", line 786, in main
+    cmd_analyze(args)
+  File "/home/tyler/projects/rf-monitor/rf_ml_v2.py", line 680, in cmd_analyze
+    dose_results = dose_response(data, X, feature_names)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tyler/projects/rf-monitor/rf_ml_v2.py", line 339, in dose_response
+    if max(severities) < 1:
+       ^^^^^^^^^^^^^^^
+TypeError: '>' not supported between instances of 'NoneType' and 'NoneType'
