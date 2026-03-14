@@ -457,8 +457,6 @@ def run_sentinel(target_freqs_mhz, sweep_start, sweep_stop, sweep_step,
                     iq_f = f"{IQ_DUMP_DIR}/sentinel_{r['freq_mhz']:.0f}MHz_{ts}.iq"
                     with open(iq_f, "wb") as f:
                         f.write(raw)
-                        f.flush()
-                        os.fsync(f.fileno())
 
         # Print stare summary
         ts_now = datetime.now().strftime("%H:%M:%S")
