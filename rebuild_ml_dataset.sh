@@ -135,10 +135,14 @@ for r in dataset:
     for s in r.get('symptoms',[]): all_st.add(s)
 for r in dataset:
     for st in sorted(all_st):
-        r[f'sym_{st}'] = 1 if st in r.get('symptoms',[]) else 0
-        r[f'sev_{st}'] = r.get(f'sev_{st}', 0)
+        # Single column per symptom: 0=absent, 1=mild, 2=moderate, 3=severe
+        r[st] = r.get(f'sev_{st}', 0)
+        # Clean up redundant columns
+        r.pop(f'sym_{st}', None)
+        r.pop(f'sev_{st}', None)
     r['any_symptom'] = 1 if r.get('symptoms') else 0
-    r['max_severity'] = max((r.get(f'sev_{st}', 0) for st in all_st), default=0)
+    r['max_severity'] = max((r.get(st, 0) for st in all_st), default=0)
+    r['symptom_total'] = sum(r.get(st, 0) for st in all_st)
 
 # ── Assemble master ──
 iq_meta=[{'file':f,'cst':datetime.fromtimestamp(os.path.getmtime(f),tz=CST).strftime('%Y-%m-%d %H:%M:%S'),
