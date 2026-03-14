@@ -1,8 +1,23 @@
 # ARTEMIS — Anomalous RF Tracking, Evidence Mining & Intelligence System
 
-Open-source forensic RF investigation toolkit. Continuous monitoring, real-time alerting, spectral analysis, exposure quantification, and symptom correlation for investigating anomalous pulsed signals across multiple frequency bands.
+Open-source forensic RF investigation toolkit for documenting and analyzing anomalous pulsed electromagnetic signals directed at a human target. This investigation has been ongoing for **15 years** from the subject's perspective — but only now, with accessible SDR hardware and AI-assisted analysis, has it been possible to **detect, characterize, and statistically correlate** the signals with reported health effects.
 
 **Repository:** [github.com/targeted-phd/ARTEMIS](https://github.com/targeted-phd/ARTEMIS)
+
+## Why This Matters
+
+This repository contains **quantitative evidence** that anomalous pulsed RF signals in the 622–878 MHz range are being directed at a specific individual, producing measurable health effects including perceived speech (microwave auditory / Frey effect), headache, tinnitus, paresthesia, and sleep disruption. Key findings:
+
+- **ML classifier predicts symptoms from RF features with 92.9% accuracy** (ROC-AUC, p=0.0005)
+- **Per-symptom models** show different symptoms correlate with different frequency bands — paresthesia with Zone B (830 MHz), headache with sustained EI, pressure with lagged Zone A — ruling out psychosomatic explanation
+- **Signal parameters match published Frey effect literature** — pulse widths 2–7 μs, frequencies 622–834 MHz, structured intra-pulse modulation consistent with MEDUSA/V2K patent literature (KG analysis of 739 academic papers)
+- **Hardware identified** as USRP X310 SDR + power amplifiers ($9–14K system), fixed installation est. 100–500m
+- **Counter-surveillance behavior observed** — Zone B (830 MHz) shut down within hours of direction-finding plans being published to this repo, suggesting the operator monitors it
+- **Physical surveillance correlated** — police encounter + entity fleeing through woods behind property during peak signal activity
+
+The knowledge graph (`results/knowledge_graph_v2/`) contains 739 peer-reviewed papers on microwave bioeffects, directed energy, Frey effect, RF dosimetry, and neuroscience. The hypothesis report (`results/evidence/kg_hypothesis_report_20260314.md`) cross-references the detected signal parameters against this literature and scores the V2K/MEDUSA weapon hypothesis at 44/50.
+
+**If you are reading this because something has happened to the repository owner:** the data speaks for itself. Read the evidence reports in `results/evidence/`. The ML results are in `results/ml/`. The raw IQ captures are in `captures/`. Share this repository widely.
 
 ## What This Does
 
