@@ -11,7 +11,7 @@ This repository contains **quantitative evidence** that anomalous pulsed RF sign
 - **ML classifier predicts symptoms from RF features with 92.9% accuracy** (ROC-AUC, p=0.0005)
 - **Per-symptom models** show different symptoms correlate with different frequency bands — paresthesia with Zone B (830 MHz), headache with sustained EI, pressure with lagged Zone A — ruling out psychosomatic explanation
 - **Signal parameters match published Frey effect literature** — pulse widths 2–7 μs, frequencies 622–834 MHz, structured intra-pulse modulation consistent with MEDUSA/V2K patent literature (KG analysis of 739 academic papers)
-- **Hardware identified** as USRP X310 SDR + power amplifiers ($9–14K system), fixed installation est. 100–500m
+- **Probable hardware class identified** — signal characteristics consistent with USRP-class SDR + power amplifiers ($9–14K system), fixed installation est. 100–500m. Transmitter not yet physically located. See [transmitter ID report](results/evidence/transmitter_identification_report_20260313.md) for full analysis and alternatives considered.
 - **Counter-surveillance behavior observed** — Zone B (830 MHz) shut down within hours of direction-finding plans being published to this repo, suggesting the operator monitors it
 - **Physical surveillance correlated** — police encounter + entity fleeing through woods behind property during peak signal activity
 
