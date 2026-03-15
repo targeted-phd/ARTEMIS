@@ -186,3 +186,23 @@ ARTEMIS Tag Server — http://100.96.113.92:8091
   [TAG] 2026-03-14T07:18:36.968792+00:00 — tinnitus 
   [TAG] 2026-03-14T07:29:14.250664+00:00 — speech 
   [TAG] 2026-03-14T07:29:14.255070+00:00 — tinnitus 
+Traceback (most recent call last):
+  File "/home/tyler/projects/rf-monitor/tag_server.py", line 724, in <module>
+    main()
+  File "/home/tyler/projects/rf-monitor/tag_server.py", line 711, in main
+    server = HTTPServer((host, args.port), TagHandler)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socketserver.py", line 457, in __init__
+    self.server_bind()
+  File "/usr/lib/python3.12/http/server.py", line 136, in server_bind
+    socketserver.TCPServer.server_bind(self)
+  File "/usr/lib/python3.12/socketserver.py", line 473, in server_bind
+    self.socket.bind(self.server_address)
+OSError: [Errno 99] Cannot assign requested address
+ARTEMIS Tag Server — http://100.96.113.92:8091
+  POST /tag?s=speech    — log symptom
+  GET  /tags            — view recent tags
+  Log: results/evidence/symptom_log.jsonl
+  [TAG] 2026-03-15T17:37:46.864686+00:00 — speech 
+  [TAG] 2026-03-15T17:37:46.871924+00:00 — headache 
+  [TAG] 2026-03-15T17:37:46.874400+00:00 — tinnitus 
