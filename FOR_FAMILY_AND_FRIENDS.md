@@ -219,7 +219,7 @@ The idea that pulsed radio signals can be heard by humans was discovered in **19
 - **1982** — Chou and Guy publish the definitive review paper in the *Journal of the Acoustical Society of America*. They summarize 20 years of research and establish the thermoelastic mechanism beyond reasonable doubt.
 - **2000** — Watanabe et al. publish a detailed computer simulation of the effect using anatomically accurate head models. The simulation matches experimental measurements.
 - **2003** — The U.S. Navy files a patent for "MEDUSA" (Mob Excess Deterrent Using Silent Audio) — a weapon that uses pulsed microwaves to project sound into a person's head. Patent number US 6,470,214.
-- **2017–2021** — U.S. diplomats in Cuba and China report sudden onset of headaches, ear pressure, tinnitus, and perceived sounds. The National Academy of Sciences concludes that "directed, pulsed radiofrequency energy" is the most plausible explanation.
+- **2017–2021** — U.S. diplomats in Cuba and China report sudden onset of headaches, ear pressure, tinnitus, and perceived sounds. Early news reports described diplomats hearing **"anomalous voices, almost like whispers in their own heads"** — the same description Tyler gives of his experience. The National Academy of Sciences concludes that "directed, pulsed radiofrequency energy" is the most plausible explanation.
 - **2021** — The ODNI (Office of the Director of National Intelligence) expert panel states: "these individuals may have been exposed to some form of directed energy."
 - **2022** — James Lin, one of the original researchers, publishes "Directed Energy Weapons Research Becomes Official" noting that the U.S. military continues active research programs.
 
