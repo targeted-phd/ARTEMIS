@@ -31808,3 +31808,3031 @@
   │  834 MHz: no data
   │  878 MHz: no data
   ├─ SWEEP: 
+========================================================================
+  RF SENTINEL — 24h Hardened Run
+  Targets: 622, 624, 628, 630, 632, 634, 636, 826, 828, 830, 832, 834, 878 MHz
+  Sweep: 50–1000 MHz (159 ch)
+  Stare: 5 pairs/cycle @ 200ms
+  Duration: 720.0h  |  Gain: 28.0dB
+  IQ budget: 500000 MB  |  Disk free: 7074 MB
+  Log: results/sentinel_20260315_13.jsonl (rotates hourly)
+  Checkpoint: results/sentinel_checkpoint.json
+  Started: 2026-03-15 13:33:04
+========================================================================
+
+  [RESUME] Found checkpoint, loading baseline...
+  [RESUME] Baseline loaded (154 channels), resuming from cycle 17365
+  [INIT] Target baseline kurtosis:
+    622 MHz: baseline=8.22
+    624 MHz: no data
+    628 MHz: baseline=45.23
+    630 MHz: no data
+    632 MHz: no data
+    634 MHz: baseline=40.13
+    636 MHz: no data
+    826 MHz: baseline=52.83
+    828 MHz: no data
+    830 MHz: no data
+    832 MHz: baseline=13.74  initial=75.16
+    834 MHz: no data
+    878 MHz: baseline=95.41  initial=0.00
+
+  [13:33:16] CYCLE 17366  (0.00h / 720h)
+  ├─ STARE:
+  │  622 MHz: kurt=5.9 (range 5.9–5.9)  total_pulses=0
+  │  624 MHz: kurt=36.0 (range 2.5–69.5)  total_pulses=905
+  │  628 MHz: kurt=7.6 (range 7.6–7.6)  total_pulses=18
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: kurt=9.1 (range 9.1–9.1)  total_pulses=64
+  │  >>> TARGET DROPPED: 826 MHz went from kurt=52.8 to 9.1
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  >>> TARGET DROPPED: 832 MHz went from kurt=75.2 to 8.6
+  │  834 MHz: no data
+  │  878 MHz: kurt=20.8 (range 20.8–20.8)  total_pulses=558
+  │  🟢 DETECT: max_kurt=70 active_freqs=2 EI=66
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 15.2s
+
+  [13:33:22] CYCLE 17367  (0.00h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 5.9s
+
+  [13:33:30] CYCLE 17368  (0.01h / 720h)
+  ├─ STARE:
+  │  622 MHz: kurt=7.9 (range 7.9–7.9)  total_pulses=26
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: kurt=52.2 (range 52.2–52.2)  total_pulses=1241
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=52 active_freqs=1 EI=111
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:33:36] CYCLE 17369  (0.01h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: kurt=12.5 (range 12.5–12.5)  total_pulses=243
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:33:44] CYCLE 17370  (0.01h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: kurt=3.7 (range 3.7–3.7)  total_pulses=0
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: kurt=8.5 (range 8.5–8.5)  total_pulses=0
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 8.0s
+
+  [13:33:50] CYCLE 17371  (0.01h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: kurt=8.4 (range 8.4–8.4)  total_pulses=0
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:33:58] CYCLE 17372  (0.01h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: kurt=8.4 (range 8.4–8.4)  total_pulses=0
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.8s
+
+  [13:34:04] CYCLE 17373  (0.02h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: kurt=23.4 (range 23.4–23.4)  total_pulses=668
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:34:12] CYCLE 17374  (0.02h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: kurt=17.2 (range 17.2–17.2)  total_pulses=812
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: kurt=8.5 (range 8.5–8.5)  total_pulses=0
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 8.1s
+
+  [13:34:19] CYCLE 17375  (0.02h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: kurt=52.0 (range 52.0–52.0)  total_pulses=1366
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=52 active_freqs=1 EI=101
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:34:27] CYCLE 17376  (0.02h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: kurt=29.0 (range 8.7–49.2)  total_pulses=1355
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=49 active_freqs=1 EI=98
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.7s
+
+  [13:34:33] CYCLE 17377  (0.02h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:34:41] CYCLE 17378  (0.03h / 720h)
+  ├─ STARE:
+  │  622 MHz: kurt=7.3 (range 7.3–7.3)  total_pulses=28
+  │  624 MHz: no data
+  │  628 MHz: kurt=11.0 (range 11.0–11.0)  total_pulses=200
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.8s
+
+  [13:34:47] CYCLE 17379  (0.03h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: kurt=23.7 (range 23.7–23.7)  total_pulses=659
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.3s
+
+  [13:34:55] CYCLE 17380  (0.03h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: kurt=8.5 (range 8.5–8.5)  total_pulses=0
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.8s
+
+  [13:35:01] CYCLE 17381  (0.03h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: kurt=22.2 (range 22.2–22.2)  total_pulses=1268
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:35:07] CYCLE 17382  (0.03h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: kurt=8.5 (range 8.5–8.5)  total_pulses=0
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:35:15] CYCLE 17383  (0.03h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: kurt=5.6 (range 5.6–5.6)  total_pulses=153
+  │  636 MHz: no data
+  │  826 MHz: kurt=11.6 (range 11.6–11.6)  total_pulses=34
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:35:21] CYCLE 17384  (0.04h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: kurt=8.7 (range 8.7–8.7)  total_pulses=0
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:35:29] CYCLE 17385  (0.04h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: kurt=20.5 (range 4.5–36.5)  total_pulses=1025
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=36 active_freqs=1 EI=54
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.8s
+
+  [13:35:35] CYCLE 17386  (0.04h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: kurt=213.6 (range 213.6–213.6)  total_pulses=392
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🔴 CRITICAL: max_kurt=214 active_freqs=1 EI=35
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:35:43] CYCLE 17387  (0.04h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: kurt=44.9 (range 28.9–60.8)  total_pulses=1529
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=61 active_freqs=1 EI=79
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.8s
+
+  [13:35:49] CYCLE 17388  (0.04h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:35:57] CYCLE 17389  (0.05h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: kurt=31.5 (range 4.0–58.9)  total_pulses=913
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=59 active_freqs=1 EI=52
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:36:03] CYCLE 17390  (0.05h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: kurt=57.5 (range 57.5–57.5)  total_pulses=185
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=57 active_freqs=1 EI=5
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.3s
+
+  [13:36:11] CYCLE 17391  (0.05h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: kurt=8.5 (range 8.5–8.5)  total_pulses=0
+  │  >>> TARGET DROPPED: 826 MHz went from kurt=52.8 to 8.5
+  │  828 MHz: no data
+  │  830 MHz: kurt=8.7 (range 8.7–8.7)  total_pulses=0
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.8s
+
+  [13:36:16] CYCLE 17392  (0.05h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: kurt=3.0 (range 3.0–3.0)  total_pulses=0
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 5.8s
+
+  [13:36:23] CYCLE 17393  (0.05h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:36:31] CYCLE 17394  (0.06h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: kurt=35.4 (range 4.1–66.8)  total_pulses=444
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=67 active_freqs=1 EI=21
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 8.0s
+
+  [13:36:37] CYCLE 17395  (0.06h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: kurt=10.0 (range 10.0–10.0)  total_pulses=42
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:36:45] CYCLE 17396  (0.06h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: kurt=32.8 (range 32.8–32.8)  total_pulses=832
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  >>> TARGET DROPPED: 832 MHz went from kurt=75.2 to 8.6
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=33 active_freqs=1 EI=20
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:36:51] CYCLE 17397  (0.06h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  >>> TARGET DROPPED: 826 MHz went from kurt=52.8 to 8.6
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.0s
+
+  [13:36:58] CYCLE 17398  (0.06h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: kurt=12.8 (range 2.5–23.0)  total_pulses=831
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.8s
+
+  [13:37:05] CYCLE 17399  (0.07h / 720h)
+  ├─ STARE:
+  │  622 MHz: kurt=32.4 (range 32.4–32.4)  total_pulses=1060
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=32 active_freqs=1 EI=76
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:37:13] CYCLE 17400  (0.07h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: kurt=74.3 (range 74.3–74.3)  total_pulses=504
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: kurt=8.5 (range 8.5–8.5)  total_pulses=0
+  │  >>> TARGET DROPPED: 826 MHz went from kurt=52.8 to 8.5
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=74 active_freqs=1 EI=43
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:37:19] CYCLE 17401  (0.07h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: kurt=20.5 (range 20.5–20.5)  total_pulses=1460
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:37:27] CYCLE 17402  (0.07h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: kurt=94.5 (range 28.7–160.2)  total_pulses=1572
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟡 HIGH: max_kurt=160 active_freqs=1 EI=119
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.7s
+
+  [13:37:33] CYCLE 17403  (0.07h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  >>> TARGET DROPPED: 826 MHz went from kurt=52.8 to 8.6
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:37:40] CYCLE 17404  (0.08h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.7s
+
+  [13:37:47] CYCLE 17405  (0.08h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: kurt=161.2 (range 161.2–161.2)  total_pulses=462
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟡 HIGH: max_kurt=161 active_freqs=1 EI=76
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.3s
+
+  [13:37:53] CYCLE 17406  (0.08h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: kurt=3.0 (range 3.0–3.0)  total_pulses=0
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 5.9s
+
+  [13:38:01] CYCLE 17407  (0.08h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: kurt=4.5 (range 2.7–6.3)  total_pulses=33
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 8.1s
+
+  [13:38:09] CYCLE 17408  (0.08h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: kurt=8.4 (range 8.3–8.5)  total_pulses=0
+  │  >>> TARGET DROPPED: 832 MHz went from kurt=75.2 to 8.4
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:38:15] CYCLE 17409  (0.09h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: kurt=36.1 (range 36.1–36.1)  total_pulses=1207
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=36 active_freqs=1 EI=105
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.4s
+
+  [13:38:21] CYCLE 17410  (0.09h / 720h)
+  ├─ STARE:
+  │  622 MHz: kurt=7.4 (range 7.4–7.4)  total_pulses=67
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:38:29] CYCLE 17411  (0.09h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: kurt=40.1 (range 18.2–62.0)  total_pulses=1625
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=62 active_freqs=1 EI=82
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.8s
+
+  [13:38:35] CYCLE 17412  (0.09h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: kurt=10.2 (range 10.2–10.2)  total_pulses=302
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:38:43] CYCLE 17413  (0.09h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: kurt=12.6 (range 2.8–22.5)  total_pulses=778
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:38:49] CYCLE 17414  (0.10h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: kurt=14.0 (range 14.0–14.0)  total_pulses=588
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:38:57] CYCLE 17415  (0.10h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: kurt=16.8 (range 16.8–16.8)  total_pulses=532
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: kurt=4.6 (range 4.6–4.6)  total_pulses=0
+  │  >>> TARGET DROPPED: 826 MHz went from kurt=52.8 to 4.6
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.8s
+
+  [13:39:03] CYCLE 17416  (0.10h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:39:11] CYCLE 17417  (0.10h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: kurt=58.4 (range 12.1–104.6)  total_pulses=640
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟡 HIGH: max_kurt=105 active_freqs=1 EI=42
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:39:17] CYCLE 17418  (0.10h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:39:25] CYCLE 17419  (0.10h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: kurt=50.4 (range 50.4–50.4)  total_pulses=1252
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=50 active_freqs=1 EI=32
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:39:31] CYCLE 17420  (0.11h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: kurt=2.7 (range 2.7–2.7)  total_pulses=0
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:39:39] CYCLE 17421  (0.11h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: kurt=85.0 (range 85.0–85.0)  total_pulses=678
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: kurt=8.5 (range 8.5–8.5)  total_pulses=0
+  │  >>> TARGET DROPPED: 826 MHz went from kurt=52.8 to 8.5
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟡 HIGH: max_kurt=85 active_freqs=1 EI=36
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.7s
+
+  [13:39:45] CYCLE 17422  (0.11h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: kurt=126.7 (range 126.7–126.7)  total_pulses=286
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟡 HIGH: max_kurt=127 active_freqs=1 EI=9
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.3s
+
+  [13:39:52] CYCLE 17423  (0.11h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: kurt=49.5 (range 49.5–49.5)  total_pulses=1121
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=50 active_freqs=1 EI=58
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.4s
+
+  [13:40:00] CYCLE 17424  (0.11h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:40:06] CYCLE 17425  (0.12h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: kurt=21.5 (range 21.5–21.5)  total_pulses=1296
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.0s
+
+  [13:40:13] CYCLE 17426  (0.12h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: kurt=8.6 (range 8.6–8.7)  total_pulses=0
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:40:20] CYCLE 17427  (0.12h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: kurt=73.8 (range 73.8–73.8)  total_pulses=828
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=74 active_freqs=1 EI=48
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:40:28] CYCLE 17428  (0.12h / 720h)
+  ├─ STARE:
+  │  622 MHz: kurt=6.3 (range 6.3–6.3)  total_pulses=103
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:40:34] CYCLE 17429  (0.12h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: kurt=11.6 (range 11.6–11.6)  total_pulses=139
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:40:41] CYCLE 17430  (0.13h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: kurt=8.5 (range 8.5–8.5)  total_pulses=74
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: kurt=8.7 (range 8.7–8.7)  total_pulses=0
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.7s
+
+  [13:40:48] CYCLE 17431  (0.13h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: kurt=8.5 (range 8.5–8.5)  total_pulses=0
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:40:55] CYCLE 17432  (0.13h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: kurt=8.5 (range 8.5–8.5)  total_pulses=0
+  │  832 MHz: no data
+  │  834 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:41:02] CYCLE 17433  (0.13h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: kurt=180.1 (range 180.1–180.1)  total_pulses=417
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟡 HIGH: max_kurt=180 active_freqs=1 EI=37
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.3s
+
+  [13:41:09] CYCLE 17434  (0.13h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: kurt=3.7 (range 3.7–3.7)  total_pulses=10
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: kurt=8.7 (range 8.7–8.7)  total_pulses=0
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.8s
+
+  [13:41:16] CYCLE 17435  (0.14h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.0s
+
+  [13:41:23] CYCLE 17436  (0.14h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: kurt=21.7 (range 21.7–21.7)  total_pulses=369
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  >>> TARGET DROPPED: 832 MHz went from kurt=75.2 to 8.6
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:41:30] CYCLE 17437  (0.14h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: kurt=34.4 (range 34.4–34.4)  total_pulses=335
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=34 active_freqs=1 EI=5
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:41:38] CYCLE 17438  (0.14h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: kurt=131.7 (range 131.7–131.7)  total_pulses=630
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: kurt=8.4 (range 8.4–8.4)  total_pulses=0
+  │  878 MHz: no data
+  │  🟡 HIGH: max_kurt=132 active_freqs=1 EI=123
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 8.0s
+
+  [13:41:44] CYCLE 17439  (0.14h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: kurt=99.1 (range 99.1–99.1)  total_pulses=883
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟡 HIGH: max_kurt=99 active_freqs=1 EI=51
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.0s
+
+  [13:41:52] CYCLE 17440  (0.15h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: kurt=60.0 (range 60.0–60.0)  total_pulses=238
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: kurt=8.3 (range 8.3–8.3)  total_pulses=0
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=60 active_freqs=1 EI=9
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:41:58] CYCLE 17441  (0.15h / 720h)
+  ├─ STARE:
+  │  622 MHz: kurt=33.3 (range 33.3–33.3)  total_pulses=388
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=33 active_freqs=1 EI=12
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:42:06] CYCLE 17442  (0.15h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: kurt=78.5 (range 78.5–78.5)  total_pulses=907
+  │  630 MHz: kurt=6.8 (range 6.8–6.8)  total_pulses=1
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=78 active_freqs=1 EI=22
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:42:12] CYCLE 17443  (0.15h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: kurt=126.8 (range 126.8–126.8)  total_pulses=527
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟡 HIGH: max_kurt=127 active_freqs=1 EI=16
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.0s
+
+  [13:42:19] CYCLE 17444  (0.15h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: kurt=197.9 (range 197.9–197.9)  total_pulses=489
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: kurt=14.5 (range 14.5–14.5)  total_pulses=1274
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟡 HIGH: max_kurt=198 active_freqs=1 EI=122
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.8s
+
+  [13:42:26] CYCLE 17445  (0.16h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: kurt=2.6 (range 2.6–2.6)  total_pulses=0
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:42:34] CYCLE 17446  (0.16h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: kurt=81.7 (range 56.0–107.4)  total_pulses=938
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟡 HIGH: max_kurt=107 active_freqs=1 EI=39
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 8.0s
+
+  [13:42:40] CYCLE 17447  (0.16h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: kurt=98.6 (range 98.6–98.6)  total_pulses=779
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟡 HIGH: max_kurt=99 active_freqs=1 EI=51
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:42:48] CYCLE 17448  (0.16h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: kurt=8.6 (range 8.5–8.6)  total_pulses=0
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.7s
+
+  [13:42:54] CYCLE 17449  (0.16h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: kurt=8.5 (range 8.5–8.5)  total_pulses=0
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:43:02] CYCLE 17450  (0.16h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: kurt=7.5 (range 2.9–12.2)  total_pulses=170
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 8.0s
+
+  [13:43:08] CYCLE 17451  (0.17h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: kurt=93.5 (range 93.5–93.5)  total_pulses=616
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟡 HIGH: max_kurt=94 active_freqs=1 EI=21
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.3s
+
+  [13:43:16] CYCLE 17452  (0.17h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: kurt=8.5 (range 8.5–8.5)  total_pulses=0
+  │  >>> TARGET DROPPED: 826 MHz went from kurt=52.8 to 8.5
+  │  828 MHz: no data
+  │  830 MHz: kurt=8.5 (range 8.5–8.5)  total_pulses=0
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.7s
+
+  [13:43:22] CYCLE 17453  (0.17h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: kurt=8.4 (range 8.4–8.4)  total_pulses=0
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:43:30] CYCLE 17454  (0.17h / 720h)
+  ├─ STARE:
+  │  622 MHz: kurt=8.7 (range 7.1–10.4)  total_pulses=506
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.7s
+
+  [13:43:36] CYCLE 17455  (0.17h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: kurt=8.2 (range 8.2–8.2)  total_pulses=355
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.3s
+
+  [13:43:44] CYCLE 17456  (0.18h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: kurt=8.6 (range 8.6–8.7)  total_pulses=0
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.8s
+
+  [13:43:50] CYCLE 17457  (0.18h / 720h)
+  ├─ STARE:
+  │  622 MHz: kurt=10.1 (range 10.1–10.1)  total_pulses=350
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:43:58] CYCLE 17458  (0.18h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: kurt=20.1 (range 18.8–21.5)  total_pulses=1565
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.7s
+
+  [13:44:04] CYCLE 17459  (0.18h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.3s
+
+  [13:44:12] CYCLE 17460  (0.18h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: kurt=44.5 (range 35.6–53.5)  total_pulses=2197
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=53 active_freqs=1 EI=152
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.8s
+
+  [13:44:18] CYCLE 17461  (0.19h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: kurt=8.7 (range 8.7–8.7)  total_pulses=0
+  │  >>> TARGET DROPPED: 826 MHz went from kurt=52.8 to 8.7
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:44:24] CYCLE 17462  (0.19h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: kurt=10.6 (range 10.6–10.6)  total_pulses=468
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.0s
+
+  [13:44:32] CYCLE 17463  (0.19h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: kurt=18.0 (range 8.6–27.4)  total_pulses=1526
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:44:38] CYCLE 17464  (0.19h / 720h)
+  ├─ STARE:
+  │  622 MHz: kurt=9.3 (range 9.3–9.3)  total_pulses=352
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:44:46] CYCLE 17465  (0.19h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  830 MHz: no data
+  │  832 MHz: kurt=8.4 (range 8.4–8.4)  total_pulses=0
+  │  >>> TARGET DROPPED: 832 MHz went from kurt=75.2 to 8.4
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:44:52] CYCLE 17466  (0.20h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.0s
+
+  [13:45:00] CYCLE 17467  (0.20h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: kurt=65.3 (range 65.3–65.3)  total_pulses=940
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  >>> TARGET DROPPED: 832 MHz went from kurt=75.2 to 8.6
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=65 active_freqs=1 EI=31
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.8s
+
+  [13:45:06] CYCLE 17468  (0.20h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  >>> TARGET DROPPED: 832 MHz went from kurt=75.2 to 8.6
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:45:14] CYCLE 17469  (0.20h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: kurt=52.0 (range 52.0–52.0)  total_pulses=244
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: kurt=8.7 (range 8.7–8.7)  total_pulses=0
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=52 active_freqs=1 EI=5
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:45:20] CYCLE 17470  (0.20h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:45:28] CYCLE 17471  (0.21h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: kurt=8.6 (range 8.5–8.6)  total_pulses=0
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.7s
+
+  [13:45:34] CYCLE 17472  (0.21h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: kurt=9.6 (range 9.6–9.6)  total_pulses=39
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.3s
+
+  [13:45:42] CYCLE 17473  (0.21h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: kurt=59.1 (range 53.2–64.9)  total_pulses=2140
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=65 active_freqs=1 EI=212
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:45:48] CYCLE 17474  (0.21h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: kurt=8.5 (range 8.5–8.5)  total_pulses=0
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.3s
+
+  [13:45:56] CYCLE 17475  (0.21h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  >>> TARGET DROPPED: 826 MHz went from kurt=52.8 to 8.6
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  >>> TARGET DROPPED: 832 MHz went from kurt=75.2 to 8.6
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.6s
+
+  [13:46:02] CYCLE 17476  (0.22h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: kurt=32.8 (range 32.8–32.8)  total_pulses=1034
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=33 active_freqs=1 EI=80
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:46:10] CYCLE 17477  (0.22h / 720h)
+  ├─ STARE:
+  │  622 MHz: kurt=6.1 (range 6.1–6.1)  total_pulses=69
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.7s
+
+  [13:46:16] CYCLE 17478  (0.22h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: kurt=2.8 (range 2.8–2.8)  total_pulses=0
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.3s
+
+  [13:46:24] CYCLE 17479  (0.22h / 720h)
+  ├─ STARE:
+  │  622 MHz: kurt=35.6 (range 35.6–35.6)  total_pulses=438
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: kurt=30.1 (range 30.1–30.1)  total_pulses=1214
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=36 active_freqs=2 EI=120
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 8.0s
+
+  [13:46:30] CYCLE 17480  (0.22h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: kurt=85.7 (range 85.7–85.7)  total_pulses=259
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟡 HIGH: max_kurt=86 active_freqs=1 EI=4
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:46:38] CYCLE 17481  (0.22h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: kurt=18.9 (range 18.9–18.9)  total_pulses=807
+  │  634 MHz: no data
+  │  636 MHz: kurt=42.8 (range 42.8–42.8)  total_pulses=1138
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=43 active_freqs=1 EI=176
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:46:44] CYCLE 17482  (0.23h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  >>> TARGET DROPPED: 832 MHz went from kurt=75.2 to 8.6
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.0s
+
+  [13:46:52] CYCLE 17483  (0.23h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: kurt=27.9 (range 27.9–27.9)  total_pulses=926
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: kurt=8.5 (range 8.5–8.5)  total_pulses=0
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 8.0s
+
+  [13:46:58] CYCLE 17484  (0.23h / 720h)
+  ├─ STARE:
+  │  622 MHz: kurt=8.0 (range 8.0–8.0)  total_pulses=292
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:47:06] CYCLE 17485  (0.23h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: kurt=8.5 (range 8.5–8.5)  total_pulses=0
+  │  >>> TARGET DROPPED: 826 MHz went from kurt=52.8 to 8.5
+  │  828 MHz: no data
+  │  830 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.7s
+
+  [13:47:12] CYCLE 17486  (0.23h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: kurt=7.6 (range 7.6–7.6)  total_pulses=64
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:47:20] CYCLE 17487  (0.24h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: kurt=15.7 (range 15.7–15.7)  total_pulses=319
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 8.0s
+
+  [13:47:26] CYCLE 17488  (0.24h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: kurt=8.5 (range 8.5–8.5)  total_pulses=0
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:47:34] CYCLE 17489  (0.24h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  >>> TARGET DROPPED: 826 MHz went from kurt=52.8 to 8.6
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  >>> TARGET DROPPED: 832 MHz went from kurt=75.2 to 8.6
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.7s
+
+  [13:47:40] CYCLE 17490  (0.24h / 720h)
+  ├─ STARE:
+  │  622 MHz: kurt=4.3 (range 4.3–4.3)  total_pulses=80
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:47:48] CYCLE 17491  (0.24h / 720h)
+  ├─ STARE:
+  │  622 MHz: kurt=28.7 (range 28.7–28.7)  total_pulses=264
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: kurt=8.5 (range 8.5–8.5)  total_pulses=0
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.8s
+
+  [13:47:54] CYCLE 17492  (0.25h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: kurt=9.2 (range 9.2–9.2)  total_pulses=39
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:48:02] CYCLE 17493  (0.25h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: kurt=125.6 (range 114.6–136.6)  total_pulses=1302
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟡 HIGH: max_kurt=137 active_freqs=1 EI=65
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.8s
+
+  [13:48:08] CYCLE 17494  (0.25h / 720h)
+  ├─ STARE:
+  │  622 MHz: kurt=6.4 (range 6.4–6.4)  total_pulses=72
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:48:16] CYCLE 17495  (0.25h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: kurt=8.5 (range 8.5–8.5)  total_pulses=0
+  │  >>> TARGET DROPPED: 826 MHz went from kurt=52.8 to 8.5
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.7s
+
+  [13:48:22] CYCLE 17496  (0.25h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: kurt=8.7 (range 8.7–8.7)  total_pulses=0
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.3s
+
+  [13:48:30] CYCLE 17497  (0.26h / 720h)
+  ├─ STARE:
+  │  622 MHz: kurt=6.8 (range 6.8–6.8)  total_pulses=70
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: kurt=44.6 (range 44.6–44.6)  total_pulses=313
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=45 active_freqs=1 EI=6
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.8s
+
+  [13:48:36] CYCLE 17498  (0.26h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: kurt=76.4 (range 76.4–76.4)  total_pulses=559
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=76 active_freqs=1 EI=9
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:48:42] CYCLE 17499  (0.26h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: kurt=3.8 (range 3.8–3.8)  total_pulses=0
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 5.9s
+
+  [13:48:50] CYCLE 17500  (0.26h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: kurt=3.6 (range 3.6–3.6)  total_pulses=4
+  │  636 MHz: kurt=192.0 (range 192.0–192.0)  total_pulses=338
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟡 HIGH: max_kurt=192 active_freqs=1 EI=28
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:48:56] CYCLE 17501  (0.26h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: kurt=5.8 (range 5.8–5.8)  total_pulses=16
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:49:04] CYCLE 17502  (0.27h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: kurt=4.7 (range 4.7–4.7)  total_pulses=0
+  │  >>> TARGET DROPPED: 826 MHz went from kurt=52.8 to 4.7
+  │  828 MHz: no data
+  │  830 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:49:10] CYCLE 17503  (0.27h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.0s
+
+  [13:49:18] CYCLE 17504  (0.27h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: kurt=7.2 (range 7.2–7.2)  total_pulses=1
+  │  630 MHz: kurt=33.6 (range 33.6–33.6)  total_pulses=878
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=34 active_freqs=1 EI=24
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.8s
+
+  [13:49:24] CYCLE 17505  (0.27h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: kurt=5.2 (range 5.2–5.2)  total_pulses=3
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:49:32] CYCLE 17506  (0.27h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: kurt=107.0 (range 106.2–107.7)  total_pulses=717
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟡 HIGH: max_kurt=108 active_freqs=1 EI=31
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 8.0s
+
+  [13:49:38] CYCLE 17507  (0.28h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: kurt=82.5 (range 82.5–82.5)  total_pulses=687
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟡 HIGH: max_kurt=82 active_freqs=1 EI=222
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:49:46] CYCLE 17508  (0.28h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: kurt=48.7 (range 48.7–48.7)  total_pulses=1256
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: kurt=8.5 (range 8.5–8.5)  total_pulses=0
+  │  >>> TARGET DROPPED: 832 MHz went from kurt=75.2 to 8.5
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=49 active_freqs=1 EI=164
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.6s
+
+  [13:49:53] CYCLE 17509  (0.28h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: kurt=34.3 (range 34.3–34.3)  total_pulses=1128
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=34 active_freqs=1 EI=80
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.7s
+
+  [13:50:01] CYCLE 17510  (0.28h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: kurt=52.6 (range 52.6–52.6)  total_pulses=1118
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: kurt=16.3 (range 16.3–16.3)  total_pulses=469
+  │  🟢 DETECT: max_kurt=53 active_freqs=1 EI=58
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:50:07] CYCLE 17511  (0.28h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: kurt=8.4 (range 8.4–8.4)  total_pulses=0
+  │  >>> TARGET DROPPED: 832 MHz went from kurt=75.2 to 8.4
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:50:15] CYCLE 17512  (0.29h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: kurt=22.5 (range 22.1–22.9)  total_pulses=2056
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.7s
+
+  [13:50:21] CYCLE 17513  (0.29h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: kurt=12.1 (range 12.1–12.1)  total_pulses=240
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:50:29] CYCLE 17514  (0.29h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: kurt=31.3 (range 27.0–35.5)  total_pulses=1996
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=36 active_freqs=1 EI=140
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.8s
+
+  [13:50:35] CYCLE 17515  (0.29h / 720h)
+  ├─ STARE:
+  │  622 MHz: kurt=8.0 (range 8.0–8.0)  total_pulses=119
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.3s
+
+  [13:50:43] CYCLE 17516  (0.29h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: kurt=20.9 (range 16.6–25.2)  total_pulses=1053
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.7s
+
+  [13:50:49] CYCLE 17517  (0.29h / 720h)
+  ├─ STARE:
+  │  622 MHz: kurt=11.2 (range 11.2–11.2)  total_pulses=133
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.1s
+
+  [13:50:55] CYCLE 17518  (0.30h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: kurt=16.1 (range 16.1–16.1)  total_pulses=946
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.0s
+
+  [13:51:03] CYCLE 17519  (0.30h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: kurt=28.6 (range 27.3–30.0)  total_pulses=2388
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=30 active_freqs=1 EI=295
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:51:09] CYCLE 17520  (0.30h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=0
+  │  >>> TARGET DROPPED: 832 MHz went from kurt=75.2 to 8.6
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:51:17] CYCLE 17521  (0.30h / 720h)
+  ├─ STARE:
+  │  622 MHz: kurt=6.7 (range 6.7–6.7)  total_pulses=276
+  │  624 MHz: kurt=9.4 (range 9.4–9.4)  total_pulses=220
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.9s
+
+  [13:51:23] CYCLE 17522  (0.30h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: kurt=8.6 (range 8.6–8.6)  total_pulses=434
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.0s
+
+  [13:51:31] CYCLE 17523  (0.31h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: kurt=8.4 (range 8.4–8.4)  total_pulses=0
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 7.8s
+
+  [13:51:37] CYCLE 17524  (0.31h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: kurt=49.3 (range 49.3–49.3)  total_pulses=1006
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=49 active_freqs=1 EI=55
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.3s
+
+  [13:51:45] CYCLE 17525  (0.31h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: kurt=10.8 (range 3.9–17.8)  total_pulses=564
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 8.0s
+
+  [13:51:51] CYCLE 17526  (0.31h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: no data
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: kurt=84.2 (range 84.2–84.2)  total_pulses=963
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟡 HIGH: max_kurt=84 active_freqs=1 EI=67
+  ├─ SWEEP: 1 channels scanned
+  └─ cycle time: 6.2s
+
+  [13:51:59] CYCLE 17527  (0.31h / 720h)
+  ├─ STARE:
+  │  622 MHz: no data
+  │  624 MHz: no data
+  │  628 MHz: kurt=54.1 (range 41.8–66.4)  total_pulses=522
+  │  630 MHz: no data
+  │  632 MHz: no data
+  │  634 MHz: no data
+  │  636 MHz: no data
+  │  826 MHz: no data
+  │  828 MHz: no data
+  │  830 MHz: no data
+  │  832 MHz: no data
+  │  834 MHz: no data
+  │  878 MHz: no data
+  │  🟢 DETECT: max_kurt=66 active_freqs=1 EI=11
+  ├─ SWEEP: 

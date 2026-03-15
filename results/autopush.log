@@ -16,3 +16,12 @@ To github-artemis:targeted-phd/ARTEMIS.git
  create mode 100644 results/sentinel_20260315_01.jsonl
 To github-artemis:targeted-phd/ARTEMIS.git
    ba1b8cf..eb42469  main -> main
+[main ca2e621] auto: 2026-03-15 13:00 snapshot
+ 14 files changed, 141469 insertions(+), 2 deletions(-)
+ create mode 100644 docs/ORANGE_PI_4A_SETUP.md
+ create mode 100644 docs/orange-pi-cm4-setup.md
+ create mode 100644 results/sentinel_20260315_02.jsonl
+ create mode 100644 results/sentinel_20260315_12.jsonl
+ create mode 100644 results/sentinel_20260315_13.jsonl
+To github-artemis:targeted-phd/ARTEMIS.git
+   eb42469..ca2e621  main -> main

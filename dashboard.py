@@ -492,40 +492,62 @@ function drawLine(pts, strokeStyle, lineWidth, ctx2d) {
   }
 }
 
+// ── Shared time parsing — used by both timeline and heatmap ──────────────
+function tsToMin(ts) {
+  if (!ts) return null;
+  const m = ts.match(/(\d+):(\d+)\s*(AM|PM)/i);
+  if (!m) return null;
+  let hr = parseInt(m[1]); const mn = parseInt(m[2]);
+  if (m[3].toUpperCase() === 'PM' && hr !== 12) hr += 12;
+  if (m[3].toUpperCase() === 'AM' && hr === 12) hr = 0;
+  return hr * 60 + mn;
+}
+
+// Compute time-proportional x positions for the current hist array
+// Returns { tMins, tMin, tMax, tRange } — shared between charts
+function computeTimeAxis() {
+  const tMins = hist.map(h => tsToMin(h.ts));
+  const t0 = tMins.find(t => t !== null);
+  if (t0 == null) return { tMins, tMin: 0, tMax: 1, tRange: 1 };
+  // Handle midnight wrap
+  for (let i = 0; i < tMins.length; i++) {
+    if (tMins[i] !== null && tMins[i] < t0 - 120) tMins[i] += 1440;
+  }
+  const validTimes = tMins.filter(t => t !== null);
+  if (!validTimes.length) return { tMins, tMin: 0, tMax: 1, tRange: 1 };
+  const tMin = Math.min(...validTimes);
+  const tMax = Math.max(...validTimes);
+  return { tMins, tMin, tMax, tRange: Math.max(tMax - tMin, 1) };
+}
+
+// ── Canvas DPR helper — call once per draw, returns { W, H, dpr } ────────
+function setupCanvas(canvas) {
+  const dpr = window.devicePixelRatio || 2;
+  const rect = canvas.getBoundingClientRect();
+  const W = Math.round(rect.width * dpr);
+  const H = Math.round(rect.height * dpr);
+  if (canvas.width !== W || canvas.height !== H) {
+    canvas.width = W;
+    canvas.height = H;
+  }
+  return { W, H, dpr };
+}
+
 // ── Main timeline draw ────────────────────────────────────────────────────
 function draw() {
-  const W = cv.width  = cv.offsetWidth  * (window.devicePixelRatio || 2);
-  const H = cv.height = cv.offsetHeight * (window.devicePixelRatio || 2);
+  const { W, H, dpr } = setupCanvas(cv);
   ctx.clearRect(0, 0, W, H);
   if (hist.length < 2) return;
 
-  const dpr = window.devicePixelRatio || 2;
   const n  = hist.length;
-  const labelW = 55 * dpr;  // match heatmap left offset
+  const labelW = 55 * dpr;
   const padTop    = H * 0.10;
   const padBottom = H * 0.14;
   const plotW = W - labelW;
   const plotH = H - padTop - padBottom;
   const baseY = padTop + plotH;
-  // Time-proportional x positioning
-  function tsToMin(ts) {
-    const m = (ts||'').match(/(\d+):(\d+)\s*(AM|PM)/i);
-    if (!m) return null;
-    let hr = parseInt(m[1]); const mn = parseInt(m[2]);
-    if (m[3].toUpperCase() === 'PM' && hr !== 12) hr += 12;
-    if (m[3].toUpperCase() === 'AM' && hr === 12) hr = 0;
-    return hr * 60 + mn;
-  }
-  const tMins = hist.map(h => tsToMin(h.ts));
-  // Handle midnight wrap: if any time < first time, add 24h
-  const t0 = tMins.find(t => t !== null) || 0;
-  for (let i = 0; i < tMins.length; i++) {
-    if (tMins[i] !== null && tMins[i] < t0 - 120) tMins[i] += 1440;
-  }
-  const validTimes = tMins.filter(t => t !== null);
-  const tMin = Math.min(...validTimes);
-  const tMax = Math.max(...validTimes);
-  const tRange = Math.max(tMax - tMin, 1);
+
+  const { tMins, tMin, tRange } = computeTimeAxis();
 
   // Compute per-series maxima (with floor)
   const maxK   = Math.max(50,  ...hist.map(h => h.k   || 0));
@@ -656,9 +678,7 @@ function freqZoneLabel(f) {
 }
 
 function drawHeatmap() {
-  const dpr = window.devicePixelRatio || 2;
-  const W = hmCv.width = hmCv.offsetWidth * dpr;
-  const H = hmCv.height = hmCv.offsetHeight * dpr;
+  const { W, H, dpr } = setupCanvas(hmCv);
   hmCtx.clearRect(0, 0, W, H);
   if (!hist.length || !freqBins.length) return;
 
@@ -666,31 +686,15 @@ function drawHeatmap() {
   const nTime = hist.length;
 
   // Layout
-  const labelW = 55 * dpr;   // freq labels on left
-  const bottomH = 80 * dpr;  // room for stacked symptom labels at bottom
-  const topH = 4 * dpr;      // minimal top — all labels at bottom
+  const labelW = 55 * dpr;
+  const bottomH = 80 * dpr;
+  const topH = 4 * dpr;
   const plotW = W - labelW;
   const plotH = H - bottomH - topH;
-  const cellH = plotH / nFreqs;
+  const cellH = Math.max(1, plotH / nFreqs);
 
-  // Time-proportional x positioning (same as timeline)
-  function hmTsToMin(ts) {
-    const m = (ts||'').match(/(\d+):(\d+)\s*(AM|PM)/i);
-    if (!m) return null;
-    let hr = parseInt(m[1]); const mn = parseInt(m[2]);
-    if (m[3].toUpperCase() === 'PM' && hr !== 12) hr += 12;
-    if (m[3].toUpperCase() === 'AM' && hr === 12) hr = 0;
-    return hr * 60 + mn;
-  }
-  const hmTMins = hist.map(h => hmTsToMin(h.ts));
-  const hmT0 = hmTMins.find(t => t !== null) || 0;
-  for (let i = 0; i < hmTMins.length; i++) {
-    if (hmTMins[i] !== null && hmTMins[i] < hmT0 - 120) hmTMins[i] += 1440;
-  }
-  const hmValid = hmTMins.filter(t => t !== null);
-  const hmTMin = Math.min(...hmValid);
-  const hmTMax = Math.max(...hmValid);
-  const hmTRange = Math.max(hmTMax - hmTMin, 1);
+  // Use shared time axis (same as timeline above)
+  const { tMins: hmTMins, tMin: hmTMin, tRange: hmTRange } = computeTimeAxis();
 
   function hmXi(i) {
     const t = hmTMins[i];
@@ -991,7 +995,12 @@ function poll() {
 }
 
 poll();
-window.addEventListener('resize', () => { draw(); drawHeatmap(); });
+// Debounced resize — prevent flicker from rapid resize events
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => { draw(); drawHeatmap(); }, 100);
+});
 </script>
 </body>
 </html>"""
