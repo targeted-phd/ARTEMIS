@@ -48,7 +48,7 @@ After each topic's chunks, a **Relation to ML Results** section assesses whether
 
 ## 1. SPEECH / FREY EFFECT (ZONE B)
 
-**ML Result:** Speech difficulty shows the strongest RF association (AUC = 0.864, lag = -3, rho = +0.726 for total_pulse_duration). Zone B (826--834 MHz) escalation drives severity. RF precedes symptom onset.
+**ML Result:** Speech perception shows the strongest RF association (AUC = 0.864, lag = -3, rho = +0.726 for total_pulse_duration). Zone B (826--834 MHz) escalation drives severity. RF precedes symptom onset.
 
 ### Chunk 1.1
 **Title:** Auditory perception of radio frequency electromagnetic fields
