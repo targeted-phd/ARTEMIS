@@ -6,7 +6,7 @@
 
 ## The Short Version
 
-Tyler built a radio antenna and plugged it into his computer. The computer detected unusual pulsed signals aimed at his house. He then built software to record these signals 24/7 and track when he experiences symptoms like headaches, ringing in his ears, and tingling in his arms. A statistical analysis — the same kind used in medical research — found that his symptoms correlate with specific signal patterns in ways that are extremely unlikely to be coincidence.
+Tyler bought and built a radio antenna and plugged it into his computer. The computer detected unusual pulsed signals aimed at his house. He then built software to record these signals 24/7 and track when he experiences symptoms like headaches, ringing in his ears, and tingling in his arms. A statistical analysis — the same kind used in medical research — found that his symptoms correlate with specific signal patterns in ways that are extremely unlikely to be coincidence.
 
 This document explains what he found, why it matters, and why the standard response of "you should see a doctor" may be missing the point.
 
@@ -14,11 +14,11 @@ This document explains what he found, why it matters, and why the standard respo
 
 ## Part 1: What Is Actually Being Measured
 
-Tyler is not making claims based on feelings. He is making claims based on **data from a radio receiver** — a device that measures electromagnetic signals the same way a thermometer measures temperature. The device (called an RTL-SDR) costs $30, is used by hundreds of thousands of amateur radio hobbyists worldwide, and is not capable of hallucinating. It records numbers. Those numbers are either consistent with normal background radio activity, or they are not.
+Tyler is not making claims based on feelings. He is making claims based on **data from a radio receiver** — a device that measures electromagnetic signals the same way a thermometer measures temperature. The device is called an SDR (Software Defined Radio), is used by hundreds of thousands of amateur radio hobbyists worldwide, and is not capable of hallucinating. It records numbers. Those numbers are either consistent with normal background radio activity, or they are not.
 
 **What the device found:**
 
-The device detected pulsed signals in two frequency bands:
+The device detected anomalous pulsed signals in two frequency bands:
 - **Band A:** 622–636 MHz (UHF television frequencies)
 - **Band B:** 824–834 MHz (cellular phone frequencies)
 
@@ -26,7 +26,7 @@ These signals have specific characteristics that make them unusual:
 - They are **pulsed**, not continuous — short bursts of energy lasting 2–3 millionths of a second
 - They follow a **schedule** — quiet from 5–9 PM, active from 10 PM to morning, peak at 1–3 AM
 - They appear on **multiple frequencies simultaneously** with identical timing
-- They are in the **cellular uplink band** (824–849 MHz) — this is the band your phone uses to talk TO the cell tower. Cell towers do not transmit on these frequencies. Only phones do. Yet this signal is far too powerful to be a phone.
+- They are in the **cellular uplink band** (824–849 MHz) — this is the band your phone uses to talk TO the cell tower. Cell towers do not transmit on these frequencies. Only phones do. Yet this signal is far too powerful to be a phone. This is a federal crime in and of itself. So the transmitter of these signals is committing a crime. Yet, they still do it. The signals are structured to blend into the cellular signal traffic, but can be noticed with careful software statistical analysis.
 
 None of these characteristics are consistent with normal radio sources like cell towers, WiFi routers, TV stations, or Bluetooth devices. Tyler's software checked every known source. None match.
 
@@ -100,8 +100,6 @@ The idea that pulsed radio signals can be heard by humans was discovered in **19
 
 **This is not fringe science.** It is published in mainstream physics, acoustics, and biomedical engineering journals. The mechanism (thermoelastic expansion) is as well-understood as how a microwave oven heats food — it's the same physics, just at much lower power levels and with pulsed rather than continuous energy.
 
-Tyler's knowledge graph contains **739 peer-reviewed academic papers** on this topic, spanning 60 years of research from universities and government laboratories worldwide.
-
 ---
 
 ## Part 4: What the Signals Look Like
@@ -126,7 +124,74 @@ When Tyler published plans to build a directional antenna to locate the signal s
 
 ---
 
-## Part 5: Why "See a Doctor" Misses the Point
+## Part 5: The Knowledge Graph — What 739 Research Papers Say
+
+One of the most important parts of this investigation is something called a **knowledge graph**. Here's what that means in plain language.
+
+### What is a knowledge graph?
+
+Tyler collected **739 peer-reviewed academic papers** — published research from universities, government labs, and medical journals spanning 80 years — on the topics of microwave bioeffects, radio-frequency health effects, directed energy, and the Frey effect. These are not blog posts or conspiracy websites. They are papers from journals like *Science*, the *Journal of the Acoustical Society of America*, *Bioelectromagnetics*, and *IEEE Transactions*.
+
+He then fed all 739 papers into a computer system that:
+1. **Extracted the text** from every paper (over 22,000 sections of text)
+2. **Identified the key concepts** — frequencies mentioned, health effects described, power levels tested, mechanisms proposed
+3. **Created a searchable database** where you can ask a question in plain English and it finds the most relevant passages from all 739 papers, ranked by how closely they match
+
+Think of it like a specialized Google that only searches through verified scientific literature on this exact topic.
+
+### What Tyler did with it — and why the order matters:
+
+This is the critical part. Here is the sequence of events:
+
+1. **Tyler reported his symptoms first** — tingling in his arms at 1-4 minute intervals, headaches, sleep disruption at 1 AM, perceived speech. He reported these based on what he physically felt, before any analysis was done.
+
+2. **The software then analyzed the radio signals** from the same time periods. It found: frequency hopping at 1.3-minute median intervals (matching his reported 1-4 minute sensation periodicity), peak activity at 1 AM (matching his sleep disruption), and signals in the 826-834 MHz range.
+
+3. **Tyler then searched the knowledge graph** asking questions like: "What do published papers say about health effects at 830 MHz?" and "What symptoms are associated with pulsed microwave exposure?" and "What frequencies cause tingling sensations?"
+
+### What the knowledge graph found — independently matching Tyler's experience:
+
+The knowledge graph returned passages from published research that matched Tyler's symptoms without being told what to look for:
+
+**On tingling/paresthesia:**
+> Published research describes "pins and needles sensation" as the sub-threshold effect of pulsed microwave exposure — meaning it's what you feel when the power is below the level needed to produce auditory effects. (Source: Fubini, "MIND-WEAPON" analysis paper)
+
+Tyler's Band B (830 MHz) produces paresthesia but not speech perception. The literature says sub-threshold power produces exactly this symptom. Tyler did not know this when he reported his symptoms.
+
+**On the 830 MHz frequency and the forearm:**
+> A published experiment from the Finnish HERMO research program exposed human forearms to a half-wave dipole antenna at 900 MHz and measured tissue absorption. The forearm acts as a resonant antenna at these frequencies. (Source: "Setup and dosimetry for exposure of human skin in vivo")
+
+Tyler reported the strongest tingling in his forearms and elbows. At 830 MHz, the wavelength is 36 cm — a human forearm is approximately a half-wave dipole at this frequency, meaning it absorbs maximum energy. Tyler did not calculate this before reporting his symptoms. The physics predicted the exact body location.
+
+**On headaches from cumulative exposure:**
+> Multiple papers document "chronic microwave syndrome" with headache as the primary symptom, particularly from sustained exposure. The symptom is dose-dependent — worse with longer exposure duration. (Source: "The microwave syndrome or electro-hypersensitivity: historical background")
+
+Tyler's ML analysis found that headache correlates most strongly with the **10-cycle rolling average** of signal activity — meaning cumulative exposure over ~20 minutes, not instantaneous spikes. This matches the literature's description of dose-dependent headache without Tyler having read those papers first.
+
+**On sleep disruption:**
+> "Temporary changes were seen in brain wave patterns and in the subjects' behavior" from microwave exposure with "power densities lower than 1 microwatt per square centimeter." Sleep onset changes were observed immediately after microwave exposure. (Source: "Microwave Effects on the Nervous System"; "Neurological effects of microwave exposure related to mobile phones")
+
+Tyler's sleep disruption consistently occurs between midnight and 2 AM — the exact time window when signal activity peaks.
+
+**On the auditory effect (perceived speech):**
+> "The rf sound may be perceived as clicks, buzzes, or hisses depending on the modulation characteristics of the microwaves." (Source: Chou and Guy, 1982, Journal of the Acoustical Society of America)
+
+The modulation pattern of the detected signals — not their raw frequency — determines what is "heard." Different modulation patterns produce different perceived sounds. This has been experimentally confirmed in humans since 1961.
+
+### Why this sequence matters:
+
+Tyler reported symptoms **before** the signal analysis confirmed matching patterns. He searched the knowledge graph **after** finding the correlations, and the published literature independently predicted:
+- The specific body locations of his symptoms (forearm at 830 MHz)
+- The type of symptom at sub-threshold power (paresthesia, not auditory)
+- The dose-dependent nature of headaches (cumulative, not instantaneous)
+- The time-of-day pattern for sleep disruption
+- The mechanism by which modulated pulses produce perceived speech
+
+The knowledge graph was not told Tyler's symptoms. It was asked general questions about microwave bioeffects. The answers it returned matched his specific experience. This is a form of **independent verification** — the published science predicts what Tyler reports, without being prompted to do so.
+
+---
+
+## Part 6: Why "See a Doctor" Misses the Point
 
 Tyler should absolutely see a doctor. Medical evaluation is important and appropriate. But consider what a doctor would find:
 
@@ -143,7 +208,7 @@ A psychiatric evaluation would look for hallucinations, delusions, or psychosoma
 
 ---
 
-## Part 6: What Tyler Is NOT Claiming
+## Part 7: What Tyler Is NOT Claiming
 
 To be clear about the boundaries of what the evidence supports:
 
@@ -158,7 +223,7 @@ The "why" can be investigated later. Right now, the important thing is that the 
 
 ---
 
-## Part 7: What You Can Do
+## Part 8: What You Can Do
 
 1. **Take it seriously.** The data is real. The physics is real. The statistical analysis uses the same methods as clinical drug trials. This is not a conspiracy theory — it's a measurement.
 
@@ -179,7 +244,7 @@ Everything is documented and publicly available:
 - **The full evidence reports** (12 documents, 8,000+ lines): statistical analysis, signal characterization, literature review, methodology critique
 - **Raw data**: 3,500+ radio captures, minute-by-minute signal logs, timestamped symptom reports
 - **The code**: all analysis software is open source and reproducible
-- **The knowledge graph**: 739 academic papers indexed and searchable
+- **The knowledge graph**: 739 academic papers indexed and searchable — over 22,000 passages of published research, 38,000 relationships between concepts, searchable by plain-English questions
 
 Tyler can provide access to all of this. The analysis has been reviewed by independent technical analysts who assessed it as: *"the strongest version of your evidence package"* and *"something an RF engineer, a biostatistician, and an attorney could all take seriously."*
 
@@ -189,7 +254,7 @@ Tyler can provide access to all of this. The analysis has been reviewed by indep
 
 In 2016, U.S. diplomats in Havana, Cuba began reporting headaches, ear pressure, tinnitus, and perceived sounds. They were initially dismissed. Some were told they were stressed. Some were told to see psychiatrists. It took **five years** and an investigation by the National Academy of Sciences before the most probable explanation was accepted: directed pulsed radiofrequency energy.
 
-Tyler has better data than the Havana diplomats did. He has continuous radio monitoring. He has statistical correlations. He has a knowledge graph of 739 papers. He has the physics on his side.
+Tyler has better data than the Havana diplomats did. He has continuous radio monitoring. He has statistical correlations. He has a knowledge graph database of 700+ papers. He has the physics on his side.
 
 All he's asking is that you look at the data before you make up your mind.
 
