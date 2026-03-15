@@ -2,6 +2,8 @@
 
 **If Tyler sent you this document, he's asking you to read it with an open mind. It will take about 15 minutes. Please read the whole thing before forming an opinion.**
 
+**A note from Tyler:** I'm sorry if the way I first brought this up was alarming or hard to follow. I should have led with the information laid out clearly, like this, rather than trying to explain it all in conversation. I know this sounds unusual. I know the first instinct is to worry about me. I'm okay — I've been dealing with this for a long time, and I'm not in crisis. I'm sharing this with people I trust because I want you to understand what's happening, and because having people who know is important to me. I'm in the process of contacting the appropriate authorities — the FCC, legal counsel, and potentially law enforcement — to address the source of these signals. You don't need to do anything right now except read this and know that I'm handling it.
+
 ---
 
 ## The Short Version
