@@ -8,6 +8,8 @@
 
 ## The Short Version
 
+At the beginning of this week, Tyler purchased *Auditory Effects of Microwave Radiation* by James C. Lin — the definitive textbook on this subject, written by the world's leading authority on microwave-induced auditory effects. Dr. Lin has published on this topic for over 45 years and is the researcher the U.S. government consults on Havana Syndrome. That book contains the methods taught to PhD students for modeling, simulating, detecting, and even generating these signals. It was the seed of knowledge Tyler needed to finally build the tools to measure what he has experienced for 15 years — and what an estimated 100,000+ other people in the United States alone may also be experiencing without the technical means to prove it.
+
 Tyler bought and built a radio antenna and plugged it into his computer. The computer detected unusual pulsed signals aimed at his house. He then built software to record these signals 24/7 and track when he experiences symptoms like headaches, ringing in his ears, and tingling in his arms. A statistical analysis — the same kind used in medical research — found that his symptoms correlate with specific signal patterns in ways that are extremely unlikely to be coincidence.
 
 This document explains what he found, why it matters, and why the standard response of "you should see a doctor" may be missing the point.
