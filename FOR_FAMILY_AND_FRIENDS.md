@@ -138,6 +138,21 @@ The published research on chronic pulsed microwave exposure documents serious lo
 
 - **Cumulative tissue effects:** The body does not fully recover between exposures when they occur nightly. Repeated thermoelastic stress in brain tissue — even at microscopic levels — may cause cumulative damage that is not yet well-characterized in the literature because no ethical study would expose a human subject for 15 years.
 
+### How much exposure Tyler is actually getting
+
+Tyler's monitoring system measures the signal intensity continuously. Here is what the data shows compared to normal background levels:
+
+| Condition | Impulsiveness (kurtosis) | Exposure Index | Compared to quiet baseline |
+|-----------|------------------------|----------------|---------------------------|
+| **Normal quiet** (no anomalous signal) | 1.3 | 0.8 | 1x (baseline) |
+| **Average active period** | 202 | 516 | **645x baseline** |
+| **Peak exposure events** | 268 | 797 | **997x baseline** |
+| **Worst single reading** | 754 | 3,425 | **~4,000x baseline** |
+
+To put this in context: the FCC sets safety limits for RF exposure that the public should not exceed. Those limits are designed for **continuous, steady signals** from things like cell towers and WiFi routers. The signals Tyler is receiving are **pulsed** — concentrated into microsecond bursts — which means the peak instantaneous power during each pulse is far higher than the average power would suggest. A continuous signal at the same average power would be much less biologically active. The pulsed nature is what makes these signals interact with the body in ways that continuous signals do not — this is precisely why the Frey effect only works with pulsed signals, not continuous ones.
+
+During active periods, Tyler is receiving pulsed RF energy at **hundreds to thousands of times** the normal background level, concentrated into microsecond bursts optimized for biological interaction, for **8–12 hours per night, every night, for nearly two years at this location** — and in some form for 15 years total.
+
 **This is not just an inconvenience. It is a chronic health hazard with documented long-term consequences, and it has been affecting Tyler's health, wellness, and potentially his lifespan for 15 years.**
 
 ### You may be affected too — and not know it
