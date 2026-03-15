@@ -12,9 +12,33 @@ This document explains what he found, why it matters, and why the standard respo
 
 ---
 
-## Part 1: What Is Actually Being Measured
+## Part 1: What Are Radio Waves, and What Is Tyler Measuring?
+
+### A quick primer on electromagnetic waves
+
+Everything wireless — your phone, WiFi, Bluetooth, TV, radio — works by sending invisible electromagnetic (EM) waves through the air. These are the same thing as light, just at a frequency your eyes can't see. The only difference between the radio signal carrying your phone call and the light from a lamp is the frequency — how fast the wave oscillates.
+
+Different frequencies are assigned to different uses, like lanes on a highway:
+- **FM radio:** 88–108 MHz (megahertz, or millions of oscillations per second)
+- **TV channels:** 470–700 MHz
+- **Cell phones:** 700–900 MHz and 1700–2100 MHz
+- **WiFi:** 2,400 MHz and 5,800 MHz
+
+These assignments are regulated by the FCC (Federal Communications Commission). Every transmitter — every cell tower, every TV station, every WiFi router — operates on its assigned frequency at its assigned power level. This is federal law. Transmitting on the wrong frequency, or at excessive power, is a federal crime.
+
+### What Tyler's equipment does
 
 Tyler is not making claims based on feelings. He is making claims based on **data from a radio receiver** — a device that measures electromagnetic signals the same way a thermometer measures temperature. The device is called an SDR (Software Defined Radio), is used by hundreds of thousands of amateur radio hobbyists worldwide, and is not capable of hallucinating. It records numbers. Those numbers are either consistent with normal background radio activity, or they are not.
+
+The SDR listens across a wide range of frequencies and measures what it hears. Normal background radio activity — cell towers, TV stations, WiFi — produces a predictable, well-understood pattern. Tyler's software knows what normal looks like, because normal has been measured and documented by the FCC and radio engineers for decades.
+
+### How Tyler found the anomalous bands
+
+Tyler didn't start with a theory about which frequencies to look at. He started by **scanning everything** — his software swept from 24 MHz to 1,766 MHz (nearly the entire usable radio spectrum) and measured the statistical properties of every channel. Out of **872 channels scanned**, the software flagged the ones that were statistically abnormal.
+
+The way it detects abnormality is through a measure called **kurtosis**. Normal radio noise and normal signals have a kurtosis around 3–9. Kurtosis measures how "spiky" a signal is — normal signals are smooth and continuous. The anomalous signals Tyler found have kurtosis values of **100 to 750** — they contain sharp, sudden pulses of energy unlike anything a normal radio source produces.
+
+Out of 872 channels, only two groups of channels had these extreme kurtosis values — and they happened to fall in two specific bands:
 
 **What the device found:**
 
@@ -28,7 +52,18 @@ These signals have specific characteristics that make them unusual:
 - They appear on **multiple frequencies simultaneously** with identical timing
 - They are in the **cellular uplink band** (824–849 MHz) — this is the band your phone uses to talk TO the cell tower. Cell towers do not transmit on these frequencies. Only phones do. Yet this signal is far too powerful to be a phone. This is a federal crime in and of itself. So the transmitter of these signals is committing a crime. Yet, they still do it. The signals are structured to blend into the cellular signal traffic, but can be noticed with careful software statistical analysis.
 
-None of these characteristics are consistent with normal radio sources like cell towers, WiFi routers, TV stations, or Bluetooth devices. Tyler's software checked every known source. None match.
+### How we know these signals are not normal
+
+Every legitimate radio source has a known signature — a fingerprint that identifies what it is. Cell towers transmit continuous signals with specific timing patterns (LTE uses 1-millisecond subframes). TV stations transmit continuous waveforms. WiFi sends short bursts at specific, standardized intervals. Radar uses regular, repeating pulses.
+
+Tyler's software compared the detected signals against **every known protocol**: LTE, GSM, CDMA, WiFi, Bluetooth, radar, amateur radio, broadcast TV, FM radio, aviation, maritime, and more. **None match.** The pulse widths are wrong. The timing is wrong. The frequencies are wrong for the protocols that should be on those frequencies.
+
+Specifically:
+- **Band B (824–834 MHz) is the cellular uplink band.** This is the frequency range your phone uses to transmit UP to the cell tower. Cell towers transmit DOWN on 869–894 MHz. No cell tower transmits at 824–834 MHz — only phones do, and they transmit at less than 1 watt. The signal Tyler detects is orders of magnitude more powerful than a phone, with pulse characteristics that match no cellular protocol.
+- **Band A (622–636 MHz) is in the UHF TV transition band.** After the digital TV transition, most of this spectrum was reallocated. There are no licensed TV transmitters on these specific frequencies in Tyler's area.
+- **The signals are pulsed at 200,000 pulses per second** with pulse widths of 2–3 microseconds. No consumer or commercial technology operates this way. This pulse structure is characteristic of military radar or directed-energy research systems.
+
+In other words: something is transmitting powerful, structured, pulsed signals on frequencies where nothing should be transmitting, using a waveform that matches no known commercial or consumer technology. The SDR is simply reporting what it measures. The measurements are anomalous by every standard metric.
 
 ---
 
