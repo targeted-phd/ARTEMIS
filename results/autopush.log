@@ -25,3 +25,11 @@ To github-artemis:targeted-phd/ARTEMIS.git
  create mode 100644 results/sentinel_20260315_13.jsonl
 To github-artemis:targeted-phd/ARTEMIS.git
    eb42469..ca2e621  main -> main
+[main a6d577a] auto: 2026-03-15 14:00 snapshot
+ 13 files changed, 184454 insertions(+), 7378 deletions(-)
+ create mode 100644 attach_sdr.ps1
+ create mode 100755 attach_sdr.sh
+ delete mode 100644 results/sentinel_20260315_12.jsonl
+ create mode 100644 results/sentinel_20260315_14.jsonl
+To github-artemis:targeted-phd/ARTEMIS.git
+   ca2e621..a6d577a  main -> main
