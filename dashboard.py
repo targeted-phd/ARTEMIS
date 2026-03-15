@@ -50,7 +50,8 @@ HTML = r"""<!DOCTYPE html>
     color: var(--text);
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
     font-size: 13px;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
   }
 
   /* Scanline overlay */
@@ -71,7 +72,7 @@ HTML = r"""<!DOCTYPE html>
   .header {
     background: linear-gradient(180deg, #0d0d1e 0%, #07070f 100%);
     padding: 0 20px;
-    height: 46px;
+    height: 5vh;
     border-bottom: 1px solid var(--border2);
     display: flex;
     justify-content: space-between;
@@ -118,8 +119,10 @@ HTML = r"""<!DOCTYPE html>
   .grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    padding: 12px;
+    gap: 6px;
+    padding: 6px 12px;
+    height: calc(95vh - 5vh);
+    grid-template-rows: auto auto 1fr;
   }
   @media (max-width: 1100px) { .grid { grid-template-columns: repeat(2, 1fr); } }
 
@@ -128,7 +131,7 @@ HTML = r"""<!DOCTYPE html>
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--r);
-    padding: 14px 16px;
+    padding: 8px 12px;
     position: relative;
     overflow: hidden;
   }
@@ -167,8 +170,8 @@ HTML = r"""<!DOCTYPE html>
     opacity: 0;
     transition: opacity 1.4s ease, background 1.4s ease;
   }
-  .metric { font-size: 44px; font-weight: bold; line-height: 1; font-variant-numeric: tabular-nums; transition: color 0.8s ease, text-shadow 0.8s ease; position: relative; z-index: 1; }
-  .sub { font-size: 10px; color: var(--muted); margin-top: 8px; letter-spacing: 0.5px; position: relative; z-index: 1; }
+  .metric { font-size: 36px; font-weight: bold; line-height: 1; font-variant-numeric: tabular-nums; transition: color 0.8s ease, text-shadow 0.8s ease; position: relative; z-index: 1; }
+  .sub { font-size: 9px; color: var(--muted); margin-top: 4px; letter-spacing: 0.5px; position: relative; z-index: 1; }
 
   /* ── Zone Exposure bars ── */
   .zone-bars { display: flex; flex-direction: column; gap: 12px; padding-top: 2px; }
@@ -193,7 +196,7 @@ HTML = r"""<!DOCTYPE html>
   .span4 { grid-column: 1 / -1; }
 
   /* ── Symptom list ── */
-  .sym-list { display: flex; flex-direction: column; max-height: 134px; overflow-y: auto; }
+  .sym-list { display: flex; flex-direction: column; max-height: 14vh; overflow-y: auto; }
   .sym-list::-webkit-scrollbar { width: 3px; }
   .sym-list::-webkit-scrollbar-track { background: transparent; }
   .sym-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
@@ -224,11 +227,15 @@ HTML = r"""<!DOCTYPE html>
   /* ── Unified chart panel ── */
   .chart-panel {
     grid-column: 1 / -1;
+    grid-row: 3;
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--r);
     overflow: hidden;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
   }
   .chart-panel::before {
     content: '';
@@ -264,10 +271,10 @@ HTML = r"""<!DOCTYPE html>
     background: var(--bg-card); padding: 0 4px;
   }
 
-  .chart-wrap { width: 100%; position: relative; }
-  .chart-wrap canvas { width: 100%; height: 100%; display: block; }
-  .chart-wrap.timeline { height: 200px; }
-  .chart-wrap.heatmap  { height: 400px; overflow: visible; margin-bottom: 40px; }
+  .chart-wrap { width: 100%; position: relative; padding: 2px 0; }
+  .chart-wrap canvas { width: 100% !important; }
+  .chart-wrap.timeline { height: 22vh; }
+  .chart-wrap.heatmap  { height: 35vh; }
 </style>
 </head>
 <body>
@@ -378,304 +385,323 @@ HTML = r"""<!DOCTYPE html>
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@2.0.1/dist/chartjs-chart-matrix.min.js"></script>
 <script>
 let hist = [];
-const cv = document.getElementById('cv');
-const ctx = cv.getContext('2d');
 
-// ── Continuous metric color gradient ───────────────────────────────────────
-// Input: raw kurtosis value. Output: CSS color string.
-// dark (#334) → green (#3c8) → amber (#fa0) → red (#f43)
+// ── Metric color ──
 function metricColor(k) {
   if (k <= 0) return '#334';
-  // Anchor points: [value, r, g, b]
-  const stops = [
-    [0,    0x33, 0x33, 0x44],
-    [30,   0x22, 0xcc, 0x77],
-    [80,   0xff, 0xaa, 0x00],
-    [200,  0xff, 0x44, 0x22],
-  ];
+  const stops = [[0,0x33,0x33,0x44],[30,0x22,0xcc,0x77],[80,0xff,0xaa,0x00],[200,0xff,0x44,0x22]];
   for (let i = 1; i < stops.length; i++) {
     if (k <= stops[i][0]) {
       const t = (k - stops[i-1][0]) / (stops[i][0] - stops[i-1][0]);
       const lerp = (a, b) => Math.round(a + (b - a) * t);
-      return 'rgb(' + lerp(stops[i-1][1], stops[i][1]) + ',' +
-                      lerp(stops[i-1][2], stops[i][2]) + ',' +
-                      lerp(stops[i-1][3], stops[i][3]) + ')';
+      return 'rgb(' + lerp(stops[i-1][1],stops[i][1]) + ',' + lerp(stops[i-1][2],stops[i][2]) + ',' + lerp(stops[i-1][3],stops[i][3]) + ')';
     }
   }
   return '#f43';
 }
 
-// ── Waterfall heat color (dark → zone-tinted bright) ──────────────────────
-// zoneRgb: [r,g,b] base color; t: 0..1 intensity
-function waterfallColor(t, zoneRgb) {
-  t = Math.max(0, Math.min(1, t));
-  const [zr, zg, zb] = zoneRgb;
-  // Dark base: nearly black, tinted slightly with zone color
-  const br = Math.round(8  + t * zr * 0.85);
-  const bg = Math.round(8  + t * zg * 0.85);
-  const bb = Math.round(12 + t * zb * 0.85);
-  const alpha = 0.18 + t * 0.82;
-  return 'rgba(' + br + ',' + bg + ',' + bb + ',' + alpha.toFixed(2) + ')';
+// ── Chart.js setup ──
+Chart.defaults.color = '#4e4e74';
+Chart.defaults.borderColor = '#13132a';
+Chart.defaults.font.family = "'Consolas','Monaco','Courier New',monospace";
+Chart.defaults.font.size = 10;
+Chart.defaults.animation.duration = 300;
+
+function freqZoneColor(f) {
+  if (f < 640) return 'rgba(34,136,255,';
+  if (f < 870) return 'rgba(255,136,0,';
+  return 'rgba(170,68,255,';
 }
 
-const ZONE_A_RGB  = [0x22, 0x88, 0xff];
-const ZONE_B_RGB  = [0xff, 0x88, 0x00];
-const ZONE_UL_RGB = [0xaa, 0x44, 0xff];
+// ── Chart.js Timeline Chart ──────────────────────────────────────────────
+const timelineChart = new Chart(document.getElementById('cv'), {
+  type: 'line',
+  data: {
+    labels: [],
+    datasets: [
+      { label: 'Zone A EI', data: [], borderColor: 'rgba(34,136,255,0.8)', backgroundColor: 'rgba(34,136,255,0.12)', fill: true, tension: 0.3, borderWidth: 1.5, pointRadius: 0, yAxisID: 'yA', order: 3 },
+      { label: 'Zone B EI', data: [], borderColor: 'rgba(255,136,0,0.8)', backgroundColor: 'rgba(255,136,0,0.12)', fill: true, tension: 0.3, borderWidth: 1.5, pointRadius: 0, yAxisID: 'yB', order: 4 },
+      { label: 'UL EI', data: [], borderColor: 'rgba(170,68,255,0.8)', backgroundColor: 'rgba(170,68,255,0.12)', fill: true, tension: 0.3, borderWidth: 1.5, pointRadius: 0, yAxisID: 'yUL', order: 5 },
+      { label: 'Total EI', data: [], borderColor: 'rgba(0,255,140,0.6)', backgroundColor: 'transparent', fill: false, tension: 0.3, borderWidth: 1.5, borderDash: [6,4], pointRadius: 0, yAxisID: 'yEI', order: 2 },
+      { label: 'Max Kurt', data: [], borderColor: 'rgba(255,255,255,0.85)', backgroundColor: 'transparent', fill: false, tension: 0.3, borderWidth: 2, pointRadius: 0, yAxisID: 'yK', order: 1 },
+    ],
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: 'rgba(8,8,18,0.95)', borderColor: '#2a2a4a', borderWidth: 1,
+        titleFont: { size: 10 }, bodyFont: { size: 10 },
+        callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y != null ? ctx.parsed.y.toFixed(1) : '—') }
+      },
+    },
+    scales: {
+      x: { display: false },
+      yA:  { display: false, beginAtZero: true },
+      yB:  { display: false, beginAtZero: true },
+      yUL: { display: false, beginAtZero: true },
+      yEI: { display: false, beginAtZero: true },
+      yK:  { display: false, beginAtZero: true },
+    },
+  },
+});
 
-function freqZone(freq) {
-  if (freq < 640)  return { label: 'A',  rgb: ZONE_A_RGB,  css: '#28f' };
-  if (freq < 850)  return { label: 'B',  rgb: ZONE_B_RGB,  css: '#f80' };
-  return           { label: 'UL', rgb: ZONE_UL_RGB, css: '#a4f' };
-}
-
-// ── Catmull-Rom spline helper ─────────────────────────────────────────────
-function splinePath(pts, ctx2d) {
-  if (pts.length < 2) return;
-  ctx2d.moveTo(pts[0][0], pts[0][1]);
-  if (pts.length === 2) { ctx2d.lineTo(pts[1][0], pts[1][1]); return; }
-  for (let i = 0; i < pts.length - 1; i++) {
-    const p0 = pts[Math.max(0, i - 1)];
-    const p1 = pts[i];
-    const p2 = pts[Math.min(pts.length - 1, i + 1)];
-    const p3 = pts[Math.min(pts.length - 1, i + 2)];
-    const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
-    const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
-    const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
-    const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
-    ctx2d.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2[0], p2[1]);
-  }
-}
-
-// Draw a filled area under a spline path
-// Split point array at null values (gaps) into segments
-function splitAtGaps(pts) {
-  const segments = [];
-  let current = [];
-  for (const p of pts) {
-    if (p[1] === null || isNaN(p[1])) {
-      if (current.length >= 2) segments.push(current);
-      current = [];
-    } else {
-      current.push(p);
-    }
-  }
-  if (current.length >= 2) segments.push(current);
-  return segments;
-}
-
-function drawAreaFill(pts, baseY, fillStyle, ctx2d) {
-  for (const seg of splitAtGaps(pts)) {
-    if (seg.length < 2) continue;
-    ctx2d.beginPath();
-    ctx2d.moveTo(seg[0][0], baseY);
-    ctx2d.lineTo(seg[0][0], seg[0][1]);
-    splinePath(seg, ctx2d);
-    ctx2d.lineTo(seg[seg.length - 1][0], baseY);
-    ctx2d.closePath();
-    ctx2d.fillStyle = fillStyle;
-    ctx2d.fill();
-  }
-}
-
-// Draw a spline stroke, breaking at gaps
-function drawLine(pts, strokeStyle, lineWidth, ctx2d) {
-  for (const seg of splitAtGaps(pts)) {
-    if (seg.length < 2) continue;
-    ctx2d.beginPath();
-    splinePath(seg, ctx2d);
-    ctx2d.strokeStyle = strokeStyle;
-    ctx2d.lineWidth = lineWidth;
-    ctx2d.lineJoin = 'round';
-    ctx2d.stroke();
-  }
-}
-
-// ── Shared time parsing — used by both timeline and heatmap ──────────────
-function tsToMin(ts) {
-  if (!ts) return null;
-  const m = ts.match(/(\d+):(\d+)\s*(AM|PM)/i);
-  if (!m) return null;
-  let hr = parseInt(m[1]); const mn = parseInt(m[2]);
-  if (m[3].toUpperCase() === 'PM' && hr !== 12) hr += 12;
-  if (m[3].toUpperCase() === 'AM' && hr === 12) hr = 0;
-  return hr * 60 + mn;
-}
-
-// Compute time-proportional x positions for the current hist array
-// Returns { tMins, tMin, tMax, tRange } — shared between charts
-function computeTimeAxis() {
-  const tMins = hist.map(h => tsToMin(h.ts));
-  const t0 = tMins.find(t => t !== null);
-  if (t0 == null) return { tMins, tMin: 0, tMax: 1, tRange: 1 };
-  // Handle midnight wrap
-  for (let i = 0; i < tMins.length; i++) {
-    if (tMins[i] !== null && tMins[i] < t0 - 120) tMins[i] += 1440;
-  }
-  const validTimes = tMins.filter(t => t !== null);
-  if (!validTimes.length) return { tMins, tMin: 0, tMax: 1, tRange: 1 };
-  const tMin = Math.min(...validTimes);
-  const tMax = Math.max(...validTimes);
-  return { tMins, tMin, tMax, tRange: Math.max(tMax - tMin, 1) };
-}
-
-// ── Canvas DPR helper — call once per draw, returns { W, H, dpr } ────────
-function setupCanvas(canvas) {
-  const dpr = window.devicePixelRatio || 2;
-  const rect = canvas.getBoundingClientRect();
-  const W = Math.round(rect.width * dpr);
-  const H = Math.round(rect.height * dpr);
-  if (canvas.width !== W || canvas.height !== H) {
-    canvas.width = W;
-    canvas.height = H;
-  }
-  return { W, H, dpr };
-}
-
-// ── Main timeline draw ────────────────────────────────────────────────────
-function draw() {
-  const { W, H, dpr } = setupCanvas(cv);
-  ctx.clearRect(0, 0, W, H);
-  if (hist.length < 2) return;
-
-  const n  = hist.length;
-  const labelW = 55 * dpr;
-  const padTop    = H * 0.10;
-  const padBottom = H * 0.14;
-  const plotW = W - labelW;
-  const plotH = H - padTop - padBottom;
-  const baseY = padTop + plotH;
-
-  const { tMins, tMin, tRange } = computeTimeAxis();
-
-  // Compute per-series maxima (with floor)
-  const maxK   = Math.max(50,  ...hist.map(h => h.k   || 0));
-  const maxEIA = Math.max(10,  ...hist.map(h => h.eiA  || 0));
-  const maxEIB = Math.max(10,  ...hist.map(h => h.eiB  || 0));
-  const maxEIU = Math.max(10,  ...hist.map(h => h.eiUL || 0));
-
-  const yOf = (v, maxV) => padTop + plotH - Math.max(0, Math.min(1, (v || 0) / maxV)) * plotH;
-  const xi = i => {
-    const t = tMins[i];
-    if (t === null) return labelW;  // gap entry
-    return labelW + ((t - tMin) / tRange) * plotW;
-  };
-
-  // Each zone gets its own vertical scale so B and UL aren't crushed
-  const maxEI  = Math.max(10, ...hist.map(h => (h.eiA||0) + (h.eiB||0) + (h.eiUL||0)));
-  // Gap entries have null values — these become null y-coords which splitAtGaps() handles
-  const gapVal = (v, mx) => (v === null || v === undefined) ? null : yOf(v, mx);
-  const ptsA  = hist.map((h, i) => [xi(i), h.gap ? null : gapVal(h.eiA, maxEIA)]);
-  const ptsB  = hist.map((h, i) => [xi(i), h.gap ? null : gapVal(h.eiB, maxEIB)]);
-  const ptsUL = hist.map((h, i) => [xi(i), h.gap ? null : gapVal(h.eiUL || 0, maxEIU)]);
-  const ptsK  = hist.map((h, i) => [xi(i), h.gap ? null : gapVal(h.k, maxK)]);
-  const ptsEI = hist.map((h, i) => [xi(i), h.gap ? null : gapVal((h.eiA||0)+(h.eiB||0)+(h.eiUL||0), maxEI)]);
-
-  // Subtle grid lines
-  ctx.save();
-  ctx.strokeStyle = '#131320';
-  ctx.lineWidth = 1;
-  for (let g = 0; g <= 4; g++) {
-    const gy = padTop + (g / 4) * plotH;
-    ctx.beginPath();
-    ctx.moveTo(labelW, gy);
-    ctx.lineTo(W, gy);
-    ctx.stroke();
-  }
-  ctx.restore();
-
-  // Gradient fills — Zone A (blue)
-  const gradA = ctx.createLinearGradient(0, padTop, 0, baseY);
-  gradA.addColorStop(0, 'rgba(34,136,255,0.45)');
-  gradA.addColorStop(1, 'rgba(34,136,255,0.02)');
-  drawAreaFill(ptsA, baseY, gradA, ctx);
-
-  // Zone B (orange)
-  const gradB = ctx.createLinearGradient(0, padTop, 0, baseY);
-  gradB.addColorStop(0, 'rgba(255,136,0,0.38)');
-  gradB.addColorStop(1, 'rgba(255,136,0,0.02)');
-  drawAreaFill(ptsB, baseY, gradB, ctx);
-
-  // 878 UL (purple)
-  const gradUL = ctx.createLinearGradient(0, padTop, 0, baseY);
-  gradUL.addColorStop(0, 'rgba(170,68,255,0.38)');
-  gradUL.addColorStop(1, 'rgba(170,68,255,0.02)');
-  drawAreaFill(ptsUL, baseY, gradUL, ctx);
-
-  // Area outlines
-  drawLine(ptsA,  'rgba(60,160,255,0.65)',  1.5, ctx);
-  drawLine(ptsB,  'rgba(255,160,0,0.65)',   1.5, ctx);
-  drawLine(ptsUL, 'rgba(190,100,255,0.65)', 1.5, ctx);
-
-  // Total EI line — bright green, dashed
-  ctx.save();
-  ctx.setLineDash([6, 4]);
-  drawLine(ptsEI, 'rgba(0,255,140,0.7)', 1.8, ctx);
-  ctx.restore();
-
-  // Kurtosis line — bright white/silver on top of everything
-  drawLine(ptsK, 'rgba(255,255,255,0.82)', 2.2, ctx);
-
-  // Y-axis labels — small, left gutter, show each zone's scale
-  const yFont = Math.max(9, Math.round(W / 100));
-  ctx.font = yFont + 'px monospace';
-  ctx.textAlign = 'right';
-  // Kurtosis scale (white line)
-  ctx.fillStyle = 'rgba(255,255,255,0.35)';
-  ctx.fillText('k' + maxK.toFixed(0), labelW - 4, padTop + yFont);
-  // Zone A scale (blue)
-  ctx.fillStyle = 'rgba(40,136,255,0.5)';
-  ctx.fillText('A:' + maxEIA.toFixed(0), labelW - 4, padTop + yFont * 2.5);
-  // Zone B scale (orange)
-  ctx.fillStyle = 'rgba(255,136,0,0.5)';
-  ctx.fillText('B:' + maxEIB.toFixed(0), labelW - 4, padTop + yFont * 4);
-  // UL scale (purple)
-  ctx.fillStyle = 'rgba(170,68,255,0.5)';
-  ctx.fillText('UL:' + maxEIU.toFixed(0), labelW - 4, padTop + yFont * 5.5);
-  // Total EI scale (green)
-  ctx.fillStyle = 'rgba(0,255,140,0.5)';
-  ctx.fillText('EI:' + maxEI.toFixed(0), labelW - 4, padTop + yFont * 7);
-  ctx.textAlign = 'left';
-
-  // Time labels at TOP — shared x-axis for timeline + heatmap below
-  ctx.fillStyle = '#3a3a50';
-  ctx.textAlign = 'center';
-  const timeFontSize = Math.max(10, Math.round(W / 90));
-  ctx.font = timeFontSize + 'px monospace';
-  const tLabelIdxs = [0, Math.floor(n*0.25), Math.floor(n*0.5), Math.floor(n*0.75), n-1];
-  tLabelIdxs.forEach(i => {
-    if (i >= 0 && i < n && hist[i] && hist[i].ts) {
-      ctx.fillText(hist[i].ts, xi(i), padTop - 4);
-    }
-  });
-  ctx.textAlign = 'left';
-}
-
-// ── Time × Frequency Heatmap ─────────────────────────────────────────────
-const hmCv = document.getElementById('heatmap');
-const hmCtx = hmCv.getContext('2d');
+// ── Chart.js Heatmap ─────────────────────────────────────────────────────
+const hmCtx2 = document.getElementById('heatmap');
 let freqBins = [];
 let symptomsData = [];
+let heatmapChart = null;
 
-function heatColor(t, zoneRgb) {
-  // 0=black, 1=zone color at full brightness
-  t = Math.max(0, Math.min(1, t));
-  const [zr, zg, zb] = zoneRgb;
-  return 'rgb(' + Math.round(t*zr) + ',' + Math.round(t*zg) + ',' + Math.round(t*zb) + ')';
+function buildHeatmap() {
+  if (heatmapChart) heatmapChart.destroy();
+  if (!hist.length || !freqBins.length) return;
+
+  const labels = hist.map(h => h.ts || '');
+  const freqLabels = freqBins.map(f => f + ' MHz');
+
+  // Build matrix data: [{x: timeIdx, y: freqIdx, v: kurtosis}]
+  let globalMaxK = 50;
+  hist.forEach(h => { if (h.fh) Object.values(h.fh).forEach(k => { if (k > globalMaxK) globalMaxK = k; }); });
+
+  const matrixData = [];
+  hist.forEach((h, ti) => {
+    if (h.gap) return;
+    freqBins.forEach((freq, fi) => {
+      const k = (h.fh && h.fh[freq]) ? h.fh[freq] : 0;
+      if (k > 0) matrixData.push({ x: ti, y: fi, v: k });
+    });
+  });
+
+  // Match symptoms to time indices for marker overlay
+  const symColors = { speech:'#fb0', headache:'#f55', tinnitus:'#f8f', paresthesia:'#4bf', nausea:'#6d4', pressure:'#aaf', sleep:'#88f' };
+  function tsToMin(ts) {
+    if (!ts) return -1;
+    const m = ts.match(/(\d+):(\d+)\s*(AM|PM)/i);
+    if (!m) return -1;
+    let hr = parseInt(m[1]); const mn = parseInt(m[2]);
+    if (m[3].toUpperCase() === 'PM' && hr !== 12) hr += 12;
+    if (m[3].toUpperCase() === 'AM' && hr === 12) hr = 0;
+    return hr * 60 + mn;
+  }
+  const symMarkers = [];
+  (symptomsData || []).forEach(s => {
+    if (!s.symptom) return;
+    const sTime = s.alertLocalTime || s.localTime || '';
+    const sMin = tsToMin(sTime);
+    if (sMin < 0) return;
+    let bestIdx = -1, bestDist = Infinity;
+    hist.forEach((h, i) => {
+      if (!h.ts) return;
+      const d = Math.abs(tsToMin(h.ts) - sMin);
+      if (d < bestDist) { bestDist = d; bestIdx = i; }
+    });
+    if (bestIdx >= 0 && bestDist < 10) {
+      symMarkers.push({ x: bestIdx, y: freqBins.length, sym: s.symptom, color: symColors[s.symptom] || '#888' });
+    }
+  });
+
+  heatmapChart = new Chart(hmCtx2, {
+    type: 'matrix',
+    data: {
+      datasets: [{
+        data: matrixData,
+        backgroundColor: ctx => {
+          if (!ctx.raw) return 'transparent';
+          const v = ctx.raw.v;
+          if (v <= 0) return 'transparent';
+          const t = Math.min(v / globalMaxK, 1);
+          const fi = ctx.raw.y;
+          const freq = freqBins[fi] || 830;
+          const base = freqZoneColor(freq);
+          return base + t.toFixed(2) + ')';
+        },
+        width: ctx => {
+          const ca = ctx.chart.chartArea;
+          if (!ca) return 10;
+          const xScale = ctx.chart.scales.x;
+          if (!xScale) return 10;
+          return Math.abs(xScale.getPixelForValue(1) - xScale.getPixelForValue(0));
+        },
+        height: ctx => {
+          const ca = ctx.chart.chartArea;
+          if (!ca) return 10;
+          const yScale = ctx.chart.scales.y;
+          if (!yScale) return 10;
+          // Size cell to match 1 unit on the y-axis, not chartArea/nFreqs
+          return Math.abs(yScale.getPixelForValue(1) - yScale.getPixelForValue(0));
+        },
+        borderWidth: 0.5,
+        borderColor: 'rgba(5,5,14,0.8)',
+      },
+      // Symptom markers as scatter points below the heatmap
+      {
+        type: 'scatter',
+        data: symMarkers.map(s => ({ x: s.x, y: s.y })),
+        backgroundColor: symMarkers.map(s => s.color),
+        pointRadius: 5,
+        pointStyle: 'triangle',
+        pointRotation: 180,
+        label: 'Symptoms',
+      }],
+    },
+    plugins: [{
+      // Draw symptom text labels below the triangles
+      id: 'symLabels',
+      afterDraw(chart) {
+        if (!symMarkers.length) return;
+        const ca = chart.chartArea;
+        if (!ca) return;
+        const xScale = chart.scales.x;
+        const yScale = chart.scales.y;
+        if (!xScale || !yScale) return;
+        const ctx2 = chart.ctx;
+        const dpr = window.devicePixelRatio || 1;
+        const fontSize = Math.max(8, Math.round(9 * dpr));
+        ctx2.font = 'bold ' + fontSize + 'px monospace';
+        ctx2.textAlign = 'center';
+
+        // Group symptoms by x index to stack labels
+        const byIdx = {};
+        symMarkers.forEach(s => {
+          if (!byIdx[s.x]) byIdx[s.x] = [];
+          if (!byIdx[s.x].find(e => e.sym === s.sym)) byIdx[s.x].push(s);
+        });
+
+        Object.entries(byIdx).forEach(([idx, syms]) => {
+          const xPx = xScale.getPixelForValue(parseInt(idx));
+          const yBase = yScale.getPixelForValue(freqBins.length) + 8 * dpr;
+          syms.forEach((s, si) => {
+            ctx2.fillStyle = s.color;
+            ctx2.save();
+            ctx2.translate(xPx, yBase + si * (fontSize + 2));
+            ctx2.rotate(Math.PI / 6);
+            ctx2.textAlign = 'left';
+            ctx2.fillText(s.sym, 0, 0);
+            ctx2.restore();
+          });
+        });
+      }
+    }],
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(8,8,18,0.95)', borderColor: '#2a2a4a', borderWidth: 1,
+          bodyFont: { size: 10 }, titleFont: { size: 11 },
+          callbacks: {
+            title: ctx => {
+              const d = ctx[0].raw;
+              const h = hist[d.x] || {};
+              return h.ts + '  |  EI-A:' + (h.eiA||0).toFixed(0) + '  B:' + (h.eiB||0).toFixed(0) + '  UL:' + (h.eiUL||0).toFixed(0) + '  k:' + (h.k||0).toFixed(0);
+            },
+            label: ctx => {
+              // Show ALL frequencies for this time column, not just the hovered cell
+              const ti = ctx.raw.x;
+              const h = hist[ti] || {};
+              if (!h.fh) return '';
+              // Only called once per tooltip — return array of all freqs
+              if (ctx.dataIndex !== ctx.dataset.data.findIndex(d => d.x === ti)) return null;
+              const lines = [];
+              freqBins.forEach(f => {
+                const k = h.fh[f] || 0;
+                if (k > 0) {
+                  const zone = f < 640 ? 'A' : f < 870 ? 'B' : 'UL';
+                  lines.push(f + ' MHz [' + zone + ']: kurt=' + k.toFixed(1));
+                }
+              });
+              return lines;
+            },
+            // Filter to show only one tooltip item per column (not per cell)
+            filter: (item, data) => {
+              const ti = item.raw.x;
+              const firstIdx = data.datasets[0].data.findIndex(d => d.x === ti);
+              return item.dataIndex === firstIdx;
+            }
+          }
+        },
+      },
+      scales: {
+        x: {
+          type: 'linear', offset: false, min: -0.5, max: hist.length - 0.5,
+          display: false,
+        },
+        y: {
+          type: 'linear', offset: false, min: -0.5, max: freqBins.length + 5, reverse: true,
+          display: false,
+        },
+      },
+    },
+  });
 }
 
-function freqZoneRgb(f) {
-  if (f < 640) return ZONE_A_RGB;
-  if (f < 870) return ZONE_B_RGB;
-  return ZONE_UL_RGB;
+// (old canvas helpers removed — using Chart.js now)
+
+// (old time parsing and canvas helpers removed — Chart.js handles this)
+
+// ── Sync vertical cursor between timeline and heatmap ──
+// Converts hover position to a data INDEX, then draws line at that index on both charts
+let syncIdx = null;
+
+const verticalLinePlugin = {
+  id: 'verticalLine',
+  afterDraw(chart) {
+    if (syncIdx === null || !hist.length) return;
+    const ca = chart.chartArea;
+    if (!ca) return;
+    const xScale = chart.scales.x;
+    if (!xScale) return;
+    const xPx = xScale.getPixelForValue(syncIdx);
+    if (xPx < ca.left || xPx > ca.right) return;
+    const ctx2 = chart.ctx;
+    ctx2.save();
+    ctx2.beginPath();
+    ctx2.moveTo(xPx, ca.top);
+    ctx2.lineTo(xPx, ca.bottom);
+    ctx2.strokeStyle = 'rgba(255,255,255,0.3)';
+    ctx2.lineWidth = 1;
+    ctx2.setLineDash([4, 3]);
+    ctx2.stroke();
+    ctx2.restore();
+  },
+  afterEvent(chart, args) {
+    if (args.event.type === 'mouseout') { syncIdx = null; return; }
+    if (args.event.type !== 'mousemove') return;
+    const ca = chart.chartArea;
+    if (!ca) return;
+    const xPx = args.event.x;
+    if (xPx < ca.left || xPx > ca.right) { syncIdx = null; return; }
+    const xScale = chart.scales.x;
+    if (!xScale) return;
+    syncIdx = Math.round(xScale.getValueForPixel(xPx));
+    // Redraw the other chart so its line updates
+    const other = chart === timelineChart ? heatmapChart : timelineChart;
+    if (other) other.draw();
+  }
+};
+Chart.register(verticalLinePlugin);
+
+// ── Update timeline chart with new data ──
+function updateTimeline() {
+  if (hist.length < 2) return;
+  const labels = hist.map(h => h.ts || '');
+  const nullGap = h => h.gap ? null : undefined;
+  timelineChart.data.labels = labels;
+  timelineChart.data.datasets[0].data = hist.map(h => h.gap ? null : (h.eiA || 0));
+  timelineChart.data.datasets[1].data = hist.map(h => h.gap ? null : (h.eiB || 0));
+  timelineChart.data.datasets[2].data = hist.map(h => h.gap ? null : (h.eiUL || 0));
+  timelineChart.data.datasets[3].data = hist.map(h => h.gap ? null : ((h.eiA||0)+(h.eiB||0)+(h.eiUL||0)));
+  timelineChart.data.datasets[4].data = hist.map(h => h.gap ? null : (h.k || 0));
+  timelineChart.update('none');
 }
 
-function freqZoneLabel(f) {
-  if (f < 640) return 'A';
-  if (f < 870) return 'B';
-  return 'UL';
-}
+// (old heatmap code removed — using Chart.js matrix plugin)
 
 function drawHeatmap() {
   const { W, H, dpr } = setupCanvas(hmCv);
@@ -937,7 +963,7 @@ function upd(data) {
       k:    h.gap ? null : (h.maxK || 0),
       eiA:  h.gap ? null : (h.eiA || 0),
       eiB:  h.gap ? null : (h.eiB || 0),
-      eiUL: 0,
+      eiUL: h.gap ? null : (h.eiUL || 0),
       ts:   h.ts     || '',
       sym:  h.symptom || null,
       fh:   h.fh     || {},
@@ -947,8 +973,12 @@ function upd(data) {
   if (data.freqBins) freqBins = data.freqBins;
   symptomsData = data.symptoms || [];
 
-  draw();
-  drawHeatmap();
+  updateTimeline();
+  // Only rebuild heatmap when data length changes (new cycle arrived)
+  if (!heatmapChart || hist.length !== heatmapChart._lastLen) {
+    buildHeatmap();
+    if (heatmapChart) heatmapChart._lastLen = hist.length;
+  }
 }
 
 // ── Poll loop ─────────────────────────────────────────────────────────────
@@ -995,12 +1025,7 @@ function poll() {
 }
 
 poll();
-// Debounced resize — prevent flicker from rapid resize events
-let resizeTimer;
-window.addEventListener('resize', () => {
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => { draw(); drawHeatmap(); }, 100);
-});
+// Chart.js handles resize automatically via responsive:true
 </script>
 </body>
 </html>"""
@@ -1166,6 +1191,7 @@ def get_state():
         ei = c.get("exposure_index")
         eiA = c.get("ei_zone_a")
         eiB = c.get("ei_zone_b")
+        eiUL = 0.0
         if ei is None:
             K_NOISE = 8.5
             ei = 0.0
@@ -1191,6 +1217,27 @@ def get_state():
                     if isinstance(f2, (int, float)):
                         if 618 < f2 < 640: eiA += ei_r
                         elif 820 < f2 < 840: eiB += ei_r
+                        elif 870 < f2 < 890: eiUL += ei_r
+        else:
+            # Compute UL EI from stare data even when total EI exists
+            K_NOISE = 8.5
+            for freq_str2, readings2 in c.get("stare", {}).items():
+                for r2 in readings2:
+                    f2 = r2.get("freq_mhz", r2.get("nominal_freq_mhz", 0))
+                    if isinstance(f2, (int, float)) and 870 < f2 < 890:
+                        k2 = r2.get("kurtosis", K_NOISE)
+                        pdb = r2.get("mean_pwr_db", -44)
+                        pl = 10 ** (pdb / 10)
+                        pc = r2.get("pulse_count", 0)
+                        pls = r2.get("pulses", [])
+                        if isinstance(pls, list) and pls and isinstance(pls[0], dict):
+                            tw = sum(p.get("width_us", 0) for p in pls if isinstance(p, dict))
+                            nl = len([p for p in pls if isinstance(p, dict)])
+                            if nl > 0 and pc > nl:
+                                tw = (tw / nl) * pc
+                        else:
+                            tw = pc * 2.5
+                        eiUL += pl * tw * max(k2 / K_NOISE, 1.0)
 
         # Detect gaps > 5 min — insert null entry so chart shows break
         try:
@@ -1211,6 +1258,7 @@ def get_state():
             "ei": round(ei, 1) if ei else 0,
             "eiA": round(eiA, 1) if eiA else 0,
             "eiB": round(eiB, 1) if eiB else 0,
+            "eiUL": round(eiUL, 1),
             "ts": ts_short,
             "fh": freq_heat,
             "symptom": None,
@@ -1250,21 +1298,28 @@ def get_state():
     except FileNotFoundError:
         pass
 
-    # Map symptoms onto history by alert_cycle (when signal fired, not button press)
-    sym_by_cycle = {}
-    for s in symptoms:
-        ac = s.get("alert_cycle")
-        if ac and s.get("symptom"):
-            sym_by_cycle[ac] = s.get("symptom")
-    for h_entry in history:
-        # Match by cycle number from the original cycle data
-        pass  # We'll send symptoms separately and let JS match by alert_ts
+    # Filter symptoms to only those within the displayed time window
+    # This prevents old symptoms from matching current cycles by time-of-day
+    window_symptoms = []
+    if history:
+        # Get the date range of displayed history from timestamps
+        hist_dates = set()
+        for c in cycles[start_idx:end_idx]:
+            ts = c.get("timestamp", "")
+            if ts:
+                hist_dates.add(ts[:10])  # YYYY-MM-DD
+        for s in symptoms:
+            sts = s.get("timestamp", s.get("alert_ts", ""))
+            if sts and sts[:10] in hist_dates:
+                window_symptoms.append(s)
+    else:
+        window_symptoms = symptoms
 
     return {
         "current": latest,
         "history": history,
         "freqBins": FREQ_BINS,
-        "symptoms": symptoms,
+        "symptoms": window_symptoms,
     }
 
 
