@@ -1,11 +1,9 @@
 .venv/
 __pycache__/
 .env
-#captures/
-#results/*
-#!results/knowledge_graph_v2/
-#results/knowledge_graph_v2/*
-#!results/knowledge_graph_v2/*.json
-#!results/knowledge_graph_v2/grobid/
-#*.iq
+captures_local/
+*.iq
+results/hires/
+results/sentinel_stdout.log
+results/sentinel_stderr.log
 *.pyc

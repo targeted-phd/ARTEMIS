@@ -84,7 +84,10 @@ for ts, c in cycles:
         'day_of_week':ts.strftime('%A'),'is_night':ts.hour>=21 or ts.hour<6,
         'type':'ACTIVE' if ei_total>20 else 'QUIET','has_zone_a':ha,
         'ei_total':round(ei_total,2),'ei_zone_a':round(ei_a,2) if ha else None,
-        'ei_zone_b':round(ei_b,2),'max_kurt':round(max_k,1),
+        'ei_zone_b':round(ei_b,2),
+        'ei_delta':round(c.get('ei_delta',0) or 0,2),
+        'ei_choppiness':round(c.get('ei_choppiness',0) or 0,2),
+        'max_kurt':round(max_k,1),
         'max_kurt_zone_a':round(max_ka,1) if ha else None,'max_kurt_zone_b':round(max_kb,1),
         'max_kurt_ul':round(max_kul,1),'n_active_targets':len(active_t),
         'total_pulses':total_p,'mean_pulse_width_us':round(float(np.mean(all_w)),2) if all_w else None,
@@ -131,6 +134,39 @@ for s in symptoms:
         # Track max severity per symptom per row
         sev_key = f'sev_{sym}'
         dataset[bi][sev_key] = max(dataset[bi].get(sev_key, 0), sev)
+
+# ── Gradient, convexity, volatility features (computed from neighboring rows) ──
+eis_arr = np.array([r.get('ei_total',0) or 0 for r in dataset])
+kurts_arr = np.array([r.get('max_kurt',0) or 0 for r in dataset])
+eia_arr = np.array([r.get('ei_zone_a',0) or 0 for r in dataset])
+eib_arr = np.array([r.get('ei_zone_b',0) or 0 for r in dataset])
+ka_arr = np.array([r.get('max_kurt_zone_a',0) or 0 for r in dataset])
+kb_arr = np.array([r.get('max_kurt_zone_b',0) or 0 for r in dataset])
+
+for i, r in enumerate(dataset):
+    if r.get('type') == 'GAP_NO_DATA': continue
+    # Gradient (1st derivative): change from previous cycle
+    r['ei_gradient'] = round(float(eis_arr[i] - eis_arr[i-1]),2) if i > 0 else 0
+    r['kurt_gradient'] = round(float(kurts_arr[i] - kurts_arr[i-1]),2) if i > 0 else 0
+    # Convexity (2nd derivative): acceleration of change
+    if i > 1:
+        r['ei_convexity'] = round(float((eis_arr[i] - 2*eis_arr[i-1] + eis_arr[i-2])),2)
+        r['kurt_convexity'] = round(float((kurts_arr[i] - 2*kurts_arr[i-1] + kurts_arr[i-2])),2)
+    else:
+        r['ei_convexity'] = 0; r['kurt_convexity'] = 0
+    # Rolling volatility (RMS deviation from 10-cycle EMA)
+    lo = max(0, i-9)
+    window = eis_arr[lo:i+1]
+    if len(window) > 1:
+        ema = window[0]
+        for v in window[1:]: ema = 0.1*v + 0.9*ema
+        r['ei_volatility'] = round(float(np.sqrt(np.mean((window - ema)**2))),2)
+    else: r['ei_volatility'] = 0
+    # Cross-zone beta components (for artifact vs real test)
+    r['ei_a_gradient'] = round(float(eia_arr[i] - eia_arr[i-1]),2) if i > 0 else 0
+    r['ei_b_gradient'] = round(float(eib_arr[i] - eib_arr[i-1]),2) if i > 0 else 0
+    r['kurt_a_gradient'] = round(float(ka_arr[i] - ka_arr[i-1]),2) if i > 0 else 0
+    r['kurt_b_gradient'] = round(float(kb_arr[i] - kb_arr[i-1]),2) if i > 0 else 0
 
 # All 7 symptom types — always present as columns even if unreported
 all_st={'speech','headache','tinnitus','paresthesia','pressure','sleep','nausea'}

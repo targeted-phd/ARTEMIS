@@ -171,8 +171,14 @@ def disk_free_mb():
 
 def iq_dir_size_mb():
     total = 0
-    for f in Path(IQ_DUMP_DIR).glob("*.iq"):
-        total += f.stat().st_size
+    try:
+        for f in Path(IQ_DUMP_DIR).glob("*.iq"):
+            try:
+                total += f.stat().st_size
+            except (FileNotFoundError, OSError):
+                continue
+    except Exception:
+        pass
     return total / (1024 * 1024)
 
 
@@ -532,6 +538,15 @@ def run_sentinel(target_freqs_mhz, sweep_start, sweep_stop, sweep_step,
                     if 618 < f_mhz < 640: ei_zone_a += ei_r
                     elif 820 < f_mhz < 840: ei_zone_b += ei_r
 
+        # Track EI history for choppiness (dT/dt proxy)
+        if not hasattr(run_sentinel, '_ei_history'):
+            run_sentinel._ei_history = []
+        run_sentinel._ei_history.append(ei_total)
+        if len(run_sentinel._ei_history) > 10:
+            run_sentinel._ei_history = run_sentinel._ei_history[-10:]
+        run_sentinel._ei_std5 = float(np.std(run_sentinel._ei_history[-5:])) if len(run_sentinel._ei_history) >= 2 else 0
+        run_sentinel._prev_ei = run_sentinel._ei_history[-2] if len(run_sentinel._ei_history) >= 2 else ei_total
+
         # Ensure EI is defined even if stare phase produced nothing
         try: ei_total
         except (NameError, UnboundLocalError): ei_total = 0.0
@@ -655,6 +670,8 @@ def run_sentinel(target_freqs_mhz, sweep_start, sweep_stop, sweep_step,
             "exposure_index": round(ei_total, 2),
             "ei_zone_a": round(ei_zone_a, 2),
             "ei_zone_b": round(ei_zone_b, 2),
+            "ei_delta": round(abs(ei_total - getattr(run_sentinel, '_prev_ei', ei_total)), 2),
+            "ei_choppiness": round(getattr(run_sentinel, '_ei_std5', 0), 2),
             "stare": {str(f): results
                       for f, results in stare_results.items()},
             "new_anomalies": new_anomalies,

@@ -671,8 +671,41 @@ function drawHeatmap() {
   const topH = 4 * dpr;      // minimal top — all labels at bottom
   const plotW = W - labelW;
   const plotH = H - bottomH - topH;
-  const cellW = plotW / nTime;
   const cellH = plotH / nFreqs;
+
+  // Time-proportional x positioning (same as timeline)
+  function hmTsToMin(ts) {
+    const m = (ts||'').match(/(\d+):(\d+)\s*(AM|PM)/i);
+    if (!m) return null;
+    let hr = parseInt(m[1]); const mn = parseInt(m[2]);
+    if (m[3].toUpperCase() === 'PM' && hr !== 12) hr += 12;
+    if (m[3].toUpperCase() === 'AM' && hr === 12) hr = 0;
+    return hr * 60 + mn;
+  }
+  const hmTMins = hist.map(h => hmTsToMin(h.ts));
+  const hmT0 = hmTMins.find(t => t !== null) || 0;
+  for (let i = 0; i < hmTMins.length; i++) {
+    if (hmTMins[i] !== null && hmTMins[i] < hmT0 - 120) hmTMins[i] += 1440;
+  }
+  const hmValid = hmTMins.filter(t => t !== null);
+  const hmTMin = Math.min(...hmValid);
+  const hmTMax = Math.max(...hmValid);
+  const hmTRange = Math.max(hmTMax - hmTMin, 1);
+
+  function hmXi(i) {
+    const t = hmTMins[i];
+    if (t === null) return -999;
+    return labelW + ((t - hmTMin) / hmTRange) * plotW;
+  }
+
+  // Compute cell width per entry based on gap to next
+  function hmCellW(i) {
+    if (i >= nTime - 1) return plotW / nTime;
+    const x1 = hmXi(i);
+    const x2 = hmXi(i + 1);
+    if (x1 < 0 || x2 < 0) return 0;
+    return Math.max(x2 - x1, 1);
+  }
 
   // Find global max kurtosis for normalization
   let globalMaxK = 50;
@@ -682,7 +715,7 @@ function drawHeatmap() {
     }
   });
 
-  // Draw cells
+  // Draw cells with time-proportional widths
   for (let fi = 0; fi < nFreqs; fi++) {
     const freq = freqBins[fi];
     const rgb = freqZoneRgb(freq);
@@ -690,12 +723,15 @@ function drawHeatmap() {
 
     for (let ti = 0; ti < nTime; ti++) {
       const h = hist[ti];
-      const x = labelW + ti * cellW;
+      if (h.gap) continue;
+      const x = hmXi(ti);
+      if (x < 0) continue;
+      const cw = hmCellW(ti);
       const k = (h.fh && h.fh[freq]) ? h.fh[freq] : 0;
       const t = Math.min(k / globalMaxK, 1);
 
       hmCtx.fillStyle = heatColor(t, rgb);
-      hmCtx.fillRect(x, y, cellW + 0.5, cellH + 0.5);
+      hmCtx.fillRect(x, y, cw + 0.5, cellH + 0.5);
     }
   }
 
@@ -766,7 +802,7 @@ function drawHeatmap() {
 
   Object.entries(colSyms).forEach(([idxStr, symSet]) => {
     const idx = parseInt(idxStr);
-    const x = labelW + idx * cellW + cellW / 2;
+    const x = hmXi(idx) + hmCellW(idx) / 2;
     let offset = 0;
     Array.from(symSet).forEach(sym => {
       const color = symColors[sym] || '#888';
