@@ -1323,6 +1323,606 @@ def get_state():
     }
 
 
+# ── Direction Finding state ────────────────────────────────────────────────
+import subprocess
+import threading
+import numpy as np
+from scipy import stats as sp_stats
+
+_df_running = False
+_df_data = {}       # latest capture results
+_df_bearings = []   # saved bearing points
+_df_lock = threading.Lock()
+_df_thread = None
+
+DF_FREQS = [622, 624, 628, 630, 632, 634, 636]
+DF_SAMPLE_RATE = 2_400_000
+DF_DWELL_MS = 100  # 100ms dwell — fast captures for DF
+DF_SETTLE = 24000  # reduced settle for speed
+DF_DC_NOTCH = 32
+
+
+def _df_capture_one(freq_mhz, gain=28.0):
+    """Single fast capture, return kurtosis + pulse count."""
+    freq_hz = int(freq_mhz * 1e6)
+    num_samples = int(DF_SAMPLE_RATE * DF_DWELL_MS / 1000)
+    total = num_samples + DF_SETTLE
+    nbytes = total * 2
+    try:
+        r = subprocess.run(
+            ["rtl_sdr", "-f", str(freq_hz), "-s", str(DF_SAMPLE_RATE),
+             "-g", str(gain), "-n", str(nbytes), "-"],
+            capture_output=True, timeout=10)
+        if len(r.stdout) < nbytes:
+            return {"freq": freq_mhz, "kurt": 0, "pulses": 0, "pwr": -99}
+        raw = r.stdout[:nbytes]
+    except Exception:
+        return {"freq": freq_mhz, "kurt": 0, "pulses": 0, "pwr": -99}
+
+    iq = np.frombuffer(raw, dtype=np.uint8).astype(np.float32)
+    iq = (iq - 127.5) / 127.5
+    z = iq[0::2] + 1j * iq[1::2]
+    z = z[DF_SETTLE:]
+    # DC notch
+    Z = np.fft.fft(z)
+    h = DF_DC_NOTCH // 2
+    Z[:h] = 0; Z[-h:] = 0
+    z = np.fft.ifft(Z)
+    amp = np.abs(z).astype(np.float32)
+    mu, sigma = np.mean(amp), np.std(amp)
+    kurt = float(sp_stats.kurtosis(amp, fisher=False))
+    pwr = float(10 * np.log10(np.mean(amp**2))) if np.mean(amp**2) > 0 else -99
+    thresh = mu + 4 * sigma
+    pulses = int(np.sum(np.diff((amp > thresh).astype(np.int8)) == 1))
+    return {"freq": freq_mhz, "kurt": round(kurt, 1), "pulses": pulses, "pwr": round(pwr, 1)}
+
+
+_df_measurement = None  # result of last completed measurement
+_df_progress = {"state": "idle", "cycle": 0, "total": 10, "countdown": 0}
+N_CYCLES = 10
+PREP_SECONDS = 10
+
+
+def _df_measure(azimuth):
+    """Run a full measurement: 10s prep, then N rapid captures, running average updated live."""
+    global _df_measurement, _df_progress
+
+    _df_progress = {"state": "prep", "cycle": 0, "total": N_CYCLES, "countdown": PREP_SECONDS}
+
+    for s in range(PREP_SECONDS, 0, -1):
+        if not _df_running:
+            return
+        _df_progress["countdown"] = s
+        time.sleep(1)
+
+    _df_progress["state"] = "scanning"
+    _df_progress["countdown"] = 0
+
+    # Running accumulators per freq
+    sums = {f: {"kurt": 0, "pulses": 0, "pwr": 0, "kurt_max": 0, "kurt_min": 9999, "n": 0} for f in DF_FREQS}
+
+    for cyc in range(N_CYCLES):
+        if not _df_running:
+            return
+        _df_progress["cycle"] = cyc + 1
+
+        # One capture per freq — fast, ~300ms each for 7 freqs = ~2s per cycle
+        for f in DF_FREQS:
+            if not _df_running:
+                return
+            r = _df_capture_one(f)
+            s = sums[f]
+            s["kurt"] += r["kurt"]
+            s["pulses"] += r["pulses"]
+            s["pwr"] += r["pwr"]
+            s["n"] += 1
+            if r["kurt"] > s["kurt_max"]:
+                s["kurt_max"] = r["kurt"]
+            if r["kurt"] < s["kurt_min"]:
+                s["kurt_min"] = r["kurt"]
+
+        # Build running average and push to live display
+        avg = {}
+        for f in DF_FREQS:
+            s = sums[f]
+            n = max(s["n"], 1)
+            avg[f] = {
+                "freq": f,
+                "kurt": round(s["kurt"] / n, 1),
+                "kurt_max": round(s["kurt_max"], 1),
+                "kurt_min": round(s["kurt_min"], 1),
+                "pulses": round(s["pulses"] / n),
+                "pwr": round(s["pwr"] / n, 1),
+            }
+        with _df_lock:
+            _df_data.update({
+                "freqs": avg,
+                "ts": datetime.now().strftime("%H:%M:%S"),
+                "max_kurt": max((v["kurt"] for v in avg.values()), default=0),
+            })
+
+    # Final averaged result
+    final_avg = {}
+    for f in DF_FREQS:
+        s = sums[f]
+        n = max(s["n"], 1)
+        final_avg[f] = {
+            "freq": f,
+            "kurt": round(s["kurt"] / n, 1),
+            "kurt_max": round(s["kurt_max"], 1),
+            "kurt_min": round(s["kurt_min"], 1),
+            "pulses": round(s["pulses"] / n),
+            "pwr": round(s["pwr"] / n, 1),
+        }
+
+    result = {
+        "azimuth": azimuth,
+        "freqs": final_avg,
+        "n_cycles": N_CYCLES,
+        "ts": datetime.now().strftime("%H:%M:%S"),
+        "saved_at": datetime.now().isoformat(),
+        "max_kurt": max((r["kurt"] for r in final_avg.values()), default=0),
+    }
+
+    _df_bearings.append(result)
+    with open("results/df_bearings.json", "w") as f:
+        json.dump(_df_bearings, f, indent=2, default=str)
+
+    _df_progress = {"state": "done", "cycle": N_CYCLES, "total": N_CYCLES, "countdown": 0}
+    with _df_lock:
+        _df_data.update({"freqs": final_avg, "max_kurt": result["max_kurt"], "ts": result["ts"]})
+
+
+_df_disconnected = False
+_df_live = False
+_df_live_thread = None
+
+
+_df_live_accum = {}  # freq -> {"kurt_sum": 0, "pulses_sum": 0, "n": 0}
+
+
+def _df_live_loop():
+    """Continuous fast scan — update after each freq for real-time display + running average."""
+    global _df_live, _df_live_accum
+    _df_live_accum = {f: {"kurt_sum": 0, "pulses_sum": 0, "pwr_sum": 0, "n": 0, "kurt_max": 0} for f in DF_FREQS}
+    while _df_live:
+        for f in DF_FREQS:
+            if not _df_live:
+                break
+            r = _df_capture_one(f)
+            # Accumulate
+            a = _df_live_accum[f]
+            a["kurt_sum"] += r["kurt"]
+            a["pulses_sum"] += r["pulses"]
+            a["pwr_sum"] += r["pwr"]
+            a["n"] += 1
+            if r["kurt"] > a["kurt_max"]:
+                a["kurt_max"] = r["kurt"]
+            # Build avg dict
+            avgs = {}
+            for ff in DF_FREQS:
+                aa = _df_live_accum[ff]
+                nn = max(aa["n"], 1)
+                avgs[ff] = {
+                    "kurt_avg": round(aa["kurt_sum"] / nn, 1),
+                    "kurt_max": round(aa["kurt_max"], 1),
+                    "pulses_avg": round(aa["pulses_sum"] / nn),
+                    "n": aa["n"],
+                }
+            with _df_lock:
+                current = dict(_df_data.get("freqs", {}))
+                current[f] = r
+                _df_data.update({
+                    "freqs": current,
+                    "avgs": avgs,
+                    "ts": datetime.now().strftime("%H:%M:%S"),
+                    "max_kurt": max((v.get("kurt", 0) for v in current.values()), default=0),
+                    "total_samples": sum(aa["n"] for aa in _df_live_accum.values()),
+                })
+
+
+def df_start_live():
+    """Start continuous live scanning."""
+    global _df_live, _df_live_thread
+    os.system("pkill -9 rtl_sdr 2>/dev/null")
+    time.sleep(0.3)
+    _df_live = True
+    _df_live_thread = threading.Thread(target=_df_live_loop, daemon=True)
+    _df_live_thread.start()
+
+
+def df_stop_live():
+    """Stop live scanning."""
+    global _df_live
+    _df_live = False
+    if _df_live_thread:
+        _df_live_thread.join(timeout=3)
+    os.system("pkill -9 rtl_sdr 2>/dev/null")
+
+
+def df_disconnect():
+    """Kill sentinel and free the SDR for DF use."""
+    global _df_disconnected
+    os.system("pkill -f sentinel.py 2>/dev/null")
+    os.system("pkill -9 rtl_sdr 2>/dev/null")
+    time.sleep(2)
+    _df_disconnected = True
+
+
+def df_reconnect():
+    """Restart sentinel after DF session."""
+    global _df_disconnected, _df_running
+    _df_running = False
+    os.system("pkill -9 rtl_sdr 2>/dev/null")
+    time.sleep(1)
+    subprocess.Popen(
+        [".venv/bin/python3", "sentinel.py", "--duration", "2592000", "--iq-budget-mb", "500000"],
+        stdout=open("results/sentinel_nohup.log", "a"),
+        stderr=subprocess.STDOUT,
+        start_new_session=True)
+    _df_disconnected = False
+
+
+def df_start_measure(azimuth):
+    """Run one measurement at given azimuth (sentinel must already be disconnected)."""
+    global _df_running, _df_thread
+    os.system("pkill -9 rtl_sdr 2>/dev/null")
+    time.sleep(0.5)
+    _df_running = True
+    _df_thread = threading.Thread(target=_df_measure, args=(azimuth,), daemon=True)
+    _df_thread.start()
+
+
+def df_abort():
+    """Abort current measurement but stay disconnected."""
+    global _df_running
+    _df_running = False
+    if _df_thread:
+        _df_thread.join(timeout=5)
+    os.system("pkill -9 rtl_sdr 2>/dev/null")
+
+
+DF_HTML = r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARTEMIS — Direction Finding</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  :root { --bg: #05050e; --card: #080812; --border: #13132a; --dim: #36365a; --text: #b0b0cc; --accent: #55aaff; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Consolas',monospace; font-size:13px; height:100vh; overflow:hidden; }
+  .header { background:#0d0d1e; padding:0 20px; height:5vh; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #1c1c36; }
+  .header h1 { font-size:14px; color:var(--accent); letter-spacing:4px; font-weight:normal; }
+  .header a { color:var(--dim); text-decoration:none; font-size:11px; }
+  .header a:hover { color:var(--accent); }
+  .main { display:grid; grid-template-columns: 1fr 300px; gap:8px; padding:8px; height:95vh; }
+  .left { display:flex; flex-direction:column; gap:8px; }
+  .right { display:flex; flex-direction:column; gap:8px; }
+  .panel { background:var(--card); border:1px solid var(--border); border-radius:4px; padding:10px; }
+  .panel h2 { font-size:9px; color:var(--dim); text-transform:uppercase; letter-spacing:2px; margin-bottom:8px; }
+  .controls { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  .controls input { background:#0a0a18; border:1px solid #2a2a4a; color:#ddd; padding:6px 10px; border-radius:3px; width:80px; font-family:monospace; font-size:14px; text-align:center; }
+  .controls button { padding:6px 16px; border-radius:3px; border:none; cursor:pointer; font-family:monospace; font-size:12px; font-weight:bold; }
+  .btn-start { background:#0a3a0a; color:#4c4; border:1px solid #2a5a2a; }
+  .btn-stop { background:#3a0a0a; color:#f44; border:1px solid #5a2a2a; }
+  .btn-save { background:#0a1a3a; color:#4af; border:1px solid #2a3a5a; }
+  .btn-start:hover { background:#0c4c0c; } .btn-stop:hover { background:#4c0c0c; } .btn-save:hover { background:#0c2c4c; }
+  .status { font-size:11px; color:var(--dim); }
+  .status.active { color:#4c4; }
+  .live-bars { flex:1; overflow-y:auto; }
+  .freq-bar { display:flex; align-items:center; gap:6px; padding:3px 0; border-bottom:1px solid #0a0a14; }
+  .freq-label { width:50px; font-size:10px; text-align:right; flex-shrink:0; }
+  .freq-label.za { color:#28f; } .freq-label.zb { color:#f80; } .freq-label.zul { color:#a4f; }
+  .bar-outer { flex:1; height:14px; background:#0a0a14; border-radius:2px; overflow:hidden; position:relative; }
+  .bar-inner { height:100%; border-radius:2px; transition:width 0.3s; }
+  .bar-inner.za { background:linear-gradient(90deg,#0a1a3a,#28f); } .bar-inner.zb { background:linear-gradient(90deg,#2a1a00,#f80); } .bar-inner.zul { background:linear-gradient(90deg,#1a0a2a,#a4f); }
+  .kurt-val { width:45px; font-size:10px; text-align:right; font-variant-numeric:tabular-nums; }
+  .pulse-val { width:40px; font-size:9px; color:var(--dim); text-align:right; }
+  .polar-wrap { flex:1; min-height:0; }
+  .polar-wrap canvas { width:100% !important; height:100% !important; }
+  .bearings-list { max-height:20vh; overflow-y:auto; font-size:10px; }
+  .bearing-item { padding:4px 0; border-bottom:1px solid #0a0a14; display:flex; justify-content:space-between; }
+  .big-kurt { font-size:48px; font-weight:bold; text-align:center; padding:8px 0; font-variant-numeric:tabular-nums; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>DIRECTION FINDING</h1>
+  <div style="display:flex;gap:20px;align-items:center">
+    <span>Yagi: 630 MHz / 11el / 35.5&deg; beam</span>
+    <a href="/">&#9664; Dashboard</a>
+  </div>
+</div>
+<div class="main">
+  <div class="left">
+    <div class="panel">
+      <div class="controls">
+        <button class="btn-stop" id="btnDisconnect" onclick="disconnectSentinel()">DISCONNECT SENTINEL</button>
+        <button class="btn-start" id="btnReconnect" onclick="reconnectSentinel()" style="display:none">RECONNECT SENTINEL</button>
+        <button class="btn-save" id="btnLive" onclick="startLive()" style="display:none">LIVE SCAN</button>
+        <button class="btn-stop" id="btnLiveStop" onclick="stopLive()" style="display:none">STOP LIVE</button>
+        <span style="color:#333;margin:0 6px">|</span>
+        <label style="font-size:10px;color:var(--dim)">BEARING &deg;</label>
+        <input type="number" id="azimuth" min="0" max="360" value="0" step="5">
+        <button class="btn-start" id="btnStart" onclick="startMeasurement()" disabled>MEASURE 10x</button>
+        <button class="btn-stop" id="btnStop" onclick="stopDF()" style="display:none">ABORT</button>
+        <span class="status" id="dfStatus">Disconnect sentinel first</span>
+      </div>
+    </div>
+    <div class="panel" style="flex:1;display:flex;flex-direction:column">
+      <h2>Live Kurtosis by Frequency</h2>
+      <div class="big-kurt" id="bigKurt" style="color:#334">—</div>
+      <div class="live-bars" id="liveBars"></div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="panel polar-wrap">
+      <h2>Polar Plot — Kurtosis vs Bearing</h2>
+      <canvas id="polarChart"></canvas>
+    </div>
+    <div class="panel">
+      <h2>Saved Bearings <button onclick="clearAll()" style="float:right;background:#2a0a0a;color:#f55;border:1px solid #4a1a1a;padding:2px 8px;border-radius:3px;cursor:pointer;font-size:9px">CLEAR ALL</button></h2>
+      <div class="bearings-list" id="bearingsList"></div>
+    </div>
+  </div>
+</div>
+<script>
+Chart.defaults.color = '#4e4e74';
+Chart.defaults.borderColor = '#13132a';
+Chart.defaults.font.family = "'Consolas',monospace";
+
+const FREQS = [622,624,628,630,632,634,636];
+const polarChart = new Chart(document.getElementById('polarChart'), {
+  type: 'radar',
+  data: {
+    labels: [],
+    datasets: [{
+      label: 'Zone A Max Kurt (622-636 MHz)',
+      data: [],
+      borderColor: 'rgba(34,136,255,0.8)',
+      backgroundColor: 'rgba(34,136,255,0.15)',
+      pointBackgroundColor: '#28f',
+      pointRadius: 5,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      r: {
+        beginAtZero: true,
+        grid: { color: '#1a1a2a' },
+        angleLines: { color: '#1a1a2a' },
+        ticks: { color: '#3a3a50', backdropColor: 'transparent', font: { size: 9 } },
+        pointLabels: { color: '#888', font: { size: 10 } }
+      }
+    },
+    plugins: {
+      legend: { display: true, position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } },
+      tooltip: { backgroundColor: 'rgba(8,8,18,0.95)', borderColor: '#2a2a4a', borderWidth: 1 }
+    }
+  }
+});
+
+let pollTimer = null;
+
+function disconnectSentinel() {
+  document.getElementById('dfStatus').textContent = 'Disconnecting sentinel...';
+  fetch('/api/df/disconnect', {method:'POST'}).then(() => {
+    document.getElementById('btnDisconnect').style.display = 'none';
+    document.getElementById('btnReconnect').style.display = 'inline';
+    document.getElementById('btnStart').disabled = false;
+    document.getElementById('btnLive').style.display = 'inline';
+    document.getElementById('dfStatus').textContent = 'Ready — LIVE SCAN or MEASURE';
+    document.getElementById('dfStatus').className = 'status active';
+  });
+}
+
+let liveTimer = null;
+
+function startLive() {
+  document.getElementById('btnLive').style.display = 'none';
+  document.getElementById('btnLiveStop').style.display = 'inline';
+  document.getElementById('btnStart').disabled = true;
+  document.getElementById('dfStatus').textContent = 'LIVE — point and shoot';
+  document.getElementById('dfStatus').className = 'status active';
+  fetch('/api/df/live/start', {method:'POST'}).then(() => {
+    liveTimer = setInterval(pollLive, 500);
+  });
+}
+
+function stopLive() {
+  clearInterval(liveTimer);
+  fetch('/api/df/live/stop', {method:'POST'}).then(() => {
+    document.getElementById('btnLive').style.display = 'inline';
+    document.getElementById('btnLiveStop').style.display = 'none';
+    document.getElementById('btnStart').disabled = false;
+    document.getElementById('dfStatus').textContent = 'Live stopped — ready';
+    document.getElementById('dfStatus').className = 'status active';
+  });
+}
+
+function pollLive() {
+  fetch('/api/df/data').then(r => r.json()).then(d => {
+    if (!d.freqs) return;
+    const avgs = d.avgs || {};
+    const container = document.getElementById('liveBars');
+    const allK = Object.values(d.freqs).map(f => f.kurt || 0);
+    const allAvgK = Object.values(avgs).map(a => a.kurt_avg || 0);
+    const maxK = Math.max(20, ...allK, ...allAvgK);
+    container.innerHTML = '';
+    FREQS.forEach(f => {
+      const r = d.freqs[f] || {kurt:0, pulses:0};
+      const a = avgs[f] || {kurt_avg:0, kurt_max:0, pulses_avg:0, n:0};
+      const pctNow = Math.min((r.kurt || 0) / maxK * 100, 100);
+      const pctAvg = Math.min((a.kurt_avg || 0) / maxK * 100, 100);
+      container.innerHTML += '<div class="freq-bar">' +
+        '<span class="freq-label za">' + f + '</span>' +
+        '<div class="bar-outer" style="position:relative">' +
+          '<div class="bar-inner za" style="width:' + pctNow.toFixed(1) + '%"></div>' +
+          '<div style="position:absolute;top:0;left:' + pctAvg.toFixed(1) + '%;width:2px;height:100%;background:#fff;opacity:0.6"></div>' +
+        '</div>' +
+        '<span class="kurt-val">' + (r.kurt||0).toFixed(1) + '</span>' +
+        '<span class="pulse-val" style="color:#28f;min-width:50px" title="avg / max / n">' +
+          a.kurt_avg.toFixed(0) + '/' + a.kurt_max.toFixed(0) +
+        '</span>' +
+        '</div>';
+    });
+    const k = d.max_kurt || 0;
+    const bigEl = document.getElementById('bigKurt');
+    const n = d.total_samples || 0;
+    bigEl.textContent = k.toFixed(1);
+    bigEl.style.color = k > 200 ? '#f43' : k > 80 ? '#fa0' : k > 30 ? '#2c8' : '#334';
+    document.getElementById('dfStatus').textContent = 'LIVE — n=' + n + ' samples';
+  });
+}
+
+function reconnectSentinel() {
+  clearInterval(liveTimer);
+  document.getElementById('dfStatus').textContent = 'Reconnecting sentinel...';
+  document.getElementById('btnStart').disabled = true;
+  fetch('/api/df/live/stop', {method:'POST'}).then(() =>
+    fetch('/api/df/reconnect', {method:'POST'})
+  ).then(() => {
+    document.getElementById('btnDisconnect').style.display = 'inline';
+    document.getElementById('btnReconnect').style.display = 'none';
+    document.getElementById('btnLive').style.display = 'none';
+    document.getElementById('btnLiveStop').style.display = 'none';
+    document.getElementById('dfStatus').textContent = 'Sentinel running — disconnect to measure';
+    document.getElementById('dfStatus').className = 'status';
+  });
+}
+
+function startMeasurement() {
+  const az = parseInt(document.getElementById('azimuth').value) || 0;
+  document.getElementById('btnStart').disabled = true;
+  document.getElementById('btnStop').style.display = 'inline';
+  document.getElementById('dfStatus').textContent = 'Preparing...';
+
+  fetch('/api/df/start?azimuth=' + az, {method:'POST'}).then(() => {
+    pollTimer = setInterval(pollDF, 800);
+  });
+}
+
+function stopDF() {
+  clearInterval(pollTimer);
+  fetch('/api/df/stop', {method:'POST'}).then(() => {
+    document.getElementById('btnStart').disabled = false;
+    document.getElementById('btnStop').style.display = 'none';
+    document.getElementById('dfStatus').textContent = 'Aborted — ready for next measurement';
+    document.getElementById('dfStatus').className = 'status active';
+  });
+}
+
+function pollDF() {
+  fetch('/api/df/data').then(r => r.json()).then(d => {
+    const p = d.progress || {};
+    const statusEl = document.getElementById('dfStatus');
+    const bigEl = document.getElementById('bigKurt');
+
+    if (p.state === 'prep') {
+      statusEl.textContent = 'HOLD STEADY — measuring in ' + p.countdown + 's...';
+      statusEl.className = 'status';
+      bigEl.textContent = p.countdown;
+      bigEl.style.color = '#fa0';
+      return;
+    }
+
+    if (p.state === 'scanning') {
+      statusEl.textContent = 'SCANNING cycle ' + p.cycle + '/' + p.total;
+      statusEl.className = 'status active';
+    }
+
+    if (p.state === 'done') {
+      clearInterval(pollTimer);
+      statusEl.textContent = 'SAVED — rotate Yagi, enter next bearing, hit MEASURE';
+      statusEl.className = 'status active';
+      document.getElementById('btnStart').disabled = false;
+      document.getElementById('btnStop').style.display = 'none';
+      // Auto-increment azimuth by beamwidth (36 deg)
+      const azEl = document.getElementById('azimuth');
+      azEl.value = (parseInt(azEl.value) + 36) % 360;
+      updatePolar();
+      updateBearingsList();
+    }
+
+    if (!d.freqs) return;
+    const container = document.getElementById('liveBars');
+    const maxK = Math.max(50, ...Object.values(d.freqs).map(f => f.kurt || 0));
+    container.innerHTML = '';
+    FREQS.forEach(f => {
+      const r = d.freqs[f] || {kurt:0, pulses:0};
+      const pct = Math.min((r.kurt || 0) / maxK * 100, 100);
+      container.innerHTML += '<div class="freq-bar">' +
+        '<span class="freq-label za">' + f + '</span>' +
+        '<div class="bar-outer"><div class="bar-inner za" style="width:' + pct.toFixed(1) + '%"></div></div>' +
+        '<span class="kurt-val">' + (r.kurt||0).toFixed(1) + '</span>' +
+        '<span class="pulse-val">' + (r.pulses||0) + 'p</span>' +
+        '</div>';
+    });
+
+    const k = d.max_kurt || 0;
+    bigEl.textContent = k.toFixed(1);
+    bigEl.style.color = k > 200 ? '#f43' : k > 80 ? '#fa0' : k > 30 ? '#2c8' : '#334';
+  });
+}
+
+function updatePolar() {
+  fetch('/api/df/bearings').then(r => r.json()).then(bearings => {
+    if (!bearings.length) return;
+    const labels = bearings.map(b => b.azimuth + '\u00B0');
+    const zoneAData = bearings.map(b => {
+      const freqs = b.freqs || {};
+      const vals = [622,624,628,630,632,634,636].map(f => (freqs[f]||{}).kurt||0);
+      return Math.max(...vals);
+    });
+    polarChart.data.labels = labels;
+    polarChart.data.datasets[0].data = zoneAData;
+    polarChart.update();
+  });
+}
+
+function deleteBearing(idx) {
+  fetch('/api/df/delete?index=' + idx, {method:'POST'}).then(() => {
+    updatePolar();
+    updateBearingsList();
+  });
+}
+
+function clearAll() {
+  if (!confirm('Delete all bearings?')) return;
+  fetch('/api/df/clear', {method:'POST'}).then(() => {
+    updatePolar();
+    updateBearingsList();
+  });
+}
+
+function updateBearingsList() {
+  fetch('/api/df/bearings').then(r => r.json()).then(bearings => {
+    const el = document.getElementById('bearingsList');
+    el.innerHTML = '';
+    bearings.forEach((b, i) => {
+      const freqs = b.freqs || {};
+      const maxA = Math.max(...[622,624,628,630,632,634,636].map(f => (freqs[f]||{}).kurt||0));
+      el.innerHTML += '<div class="bearing-item">' +
+        '<span style="min-width:35px">' + b.azimuth + '&deg;</span>' +
+        '<span style="color:#28f;min-width:45px">k=' + maxA.toFixed(0) + '</span>' +
+        '<span style="flex:1">' + (b.ts||'') + '</span>' +
+        '<button onclick="deleteBearing(' + i + ')" style="background:none;border:none;color:#633;cursor:pointer;font-size:14px;padding:0 4px">&times;</button>' +
+        '</div>';
+    });
+  });
+}
+
+// Load existing bearings on page load
+updatePolar();
+updateBearingsList();
+</script>
+</body>
+</html>"""
+
+
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/" or self.path == "/index.html":
@@ -1330,6 +1930,24 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Content-Type", "text/html")
             self.end_headers()
             self.wfile.write(HTML.encode())
+        elif self.path == "/df":
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html")
+            self.end_headers()
+            self.wfile.write(DF_HTML.encode())
+        elif self.path.startswith("/api/df/data"):
+            with _df_lock:
+                data = dict(_df_data)
+            data["progress"] = dict(_df_progress)
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(json.dumps(data, default=str).encode())
+        elif self.path.startswith("/api/df/bearings"):
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(json.dumps(_df_bearings, default=str).encode())
         elif self.path.startswith("/api/state"):
             # Support ?offset=N for scrolling back in time
             from urllib.parse import urlparse, parse_qs
@@ -1345,6 +1963,70 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Content-Type", "application/json")
             self.end_headers()
             self.wfile.write(json.dumps(state or {}).encode())
+        else:
+            self.send_response(404)
+            self.end_headers()
+
+    def do_POST(self):
+        from urllib.parse import urlparse, parse_qs
+        parsed = urlparse(self.path)
+        if parsed.path == "/api/df/live/start":
+            df_start_live()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(b'{"ok":true}')
+        elif parsed.path == "/api/df/live/stop":
+            df_stop_live()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(b'{"ok":true}')
+        elif parsed.path == "/api/df/disconnect":
+            df_disconnect()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(b'{"ok":true}')
+        elif parsed.path == "/api/df/reconnect":
+            df_reconnect()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(b'{"ok":true}')
+        elif parsed.path == "/api/df/start":
+            params = parse_qs(parsed.query)
+            az = int(params.get("azimuth", [0])[0])
+            df_start_measure(az)
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(b'{"ok":true}')
+        elif parsed.path == "/api/df/stop":
+            df_abort()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(b'{"ok":true}')
+        elif parsed.path == "/api/df/delete":
+            params = parse_qs(parsed.query)
+            idx = int(params.get("index", [-1])[0])
+            if 0 <= idx < len(_df_bearings):
+                _df_bearings.pop(idx)
+                with open("results/df_bearings.json", "w") as f:
+                    json.dump(_df_bearings, f, indent=2, default=str)
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(b'{"ok":true}')
+        elif parsed.path == "/api/df/clear":
+            _df_bearings.clear()
+            with open("results/df_bearings.json", "w") as f:
+                json.dump([], f)
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(b'{"ok":true}')
         else:
             self.send_response(404)
             self.end_headers()

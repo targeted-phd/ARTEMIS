@@ -1,0 +1,67 @@
+[
+  {
+    "azimuth": 0,
+    "freqs": {
+      "622": {
+        "freq": 622,
+        "kurt": 5.9,
+        "kurt_max": 11.4,
+        "kurt_min": 2.9,
+        "pulses": 537,
+        "pwr": -13.9
+      },
+      "624": {
+        "freq": 624,
+        "kurt": 20.8,
+        "kurt_max": 53.0,
+        "kurt_min": 2.3,
+        "pulses": 970,
+        "pwr": -15.1
+      },
+      "628": {
+        "freq": 628,
+        "kurt": 29.1,
+        "kurt_max": 70.2,
+        "kurt_min": 3.7,
+        "pulses": 934,
+        "pwr": -19.4
+      },
+      "630": {
+        "freq": 630,
+        "kurt": 28.6,
+        "kurt_max": 79.2,
+        "kurt_min": 3.1,
+        "pulses": 1299,
+        "pwr": -15.2
+      },
+      "632": {
+        "freq": 632,
+        "kurt": 24.8,
+        "kurt_max": 64.7,
+        "kurt_min": 2.2,
+        "pulses": 1112,
+        "pwr": -15.3
+      },
+      "634": {
+        "freq": 634,
+        "kurt": 26.4,
+        "kurt_max": 69.9,
+        "kurt_min": 3.2,
+        "pulses": 914,
+        "pwr": -17.5
+      },
+      "636": {
+        "freq": 636,
+        "kurt": 30.7,
+        "kurt_max": 128.0,
+        "kurt_min": 2.3,
+        "pulses": 750,
+        "pwr": -18.3
+      }
+    },
+    "n_cycles": 10,
+    "ts": "18:54:02",
+    "saved_at": "2026-03-15T18:54:02.315461",
+    "max_kurt": 30.7
+  }
+]
