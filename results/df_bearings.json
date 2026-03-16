@@ -4,64 +4,64 @@
     "freqs": {
       "622": {
         "freq": 622,
-        "kurt": 5.9,
-        "kurt_max": 11.4,
-        "kurt_min": 2.9,
-        "pulses": 537,
-        "pwr": -13.9
+        "kurt": 12.1,
+        "kurt_max": 50.7,
+        "kurt_min": 5.9,
+        "pulses": 386,
+        "pwr": -21.1
       },
       "624": {
         "freq": 624,
-        "kurt": 20.8,
-        "kurt_max": 53.0,
-        "kurt_min": 2.3,
-        "pulses": 970,
-        "pwr": -15.1
+        "kurt": 49.3,
+        "kurt_max": 128.2,
+        "kurt_min": 13.3,
+        "pulses": 513,
+        "pwr": -27.2
       },
       "628": {
         "freq": 628,
-        "kurt": 29.1,
-        "kurt_max": 70.2,
-        "kurt_min": 3.7,
-        "pulses": 934,
-        "pwr": -19.4
+        "kurt": 33.1,
+        "kurt_max": 115.9,
+        "kurt_min": 6.5,
+        "pulses": 763,
+        "pwr": -26.6
       },
       "630": {
         "freq": 630,
-        "kurt": 28.6,
-        "kurt_max": 79.2,
-        "kurt_min": 3.1,
-        "pulses": 1299,
-        "pwr": -15.2
+        "kurt": 77.6,
+        "kurt_max": 140.3,
+        "kurt_min": 22.1,
+        "pulses": 667,
+        "pwr": -22.3
       },
       "632": {
         "freq": 632,
-        "kurt": 24.8,
-        "kurt_max": 64.7,
-        "kurt_min": 2.2,
-        "pulses": 1112,
-        "pwr": -15.3
+        "kurt": 70.1,
+        "kurt_max": 137.4,
+        "kurt_min": 26.1,
+        "pulses": 758,
+        "pwr": -20.8
       },
       "634": {
         "freq": 634,
-        "kurt": 26.4,
-        "kurt_max": 69.9,
-        "kurt_min": 3.2,
-        "pulses": 914,
-        "pwr": -17.5
+        "kurt": 59.5,
+        "kurt_max": 137.4,
+        "kurt_min": 15.1,
+        "pulses": 589,
+        "pwr": -25.4
       },
       "636": {
         "freq": 636,
-        "kurt": 30.7,
-        "kurt_max": 128.0,
-        "kurt_min": 2.3,
-        "pulses": 750,
-        "pwr": -18.3
+        "kurt": 49.2,
+        "kurt_max": 170.6,
+        "kurt_min": 11.0,
+        "pulses": 365,
+        "pwr": -28.8
       }
     },
     "n_cycles": 10,
-    "ts": "18:54:02",
-    "saved_at": "2026-03-15T18:54:02.315461",
-    "max_kurt": 30.7
+    "ts": "19:52:52",
+    "saved_at": "2026-03-15T19:52:52.940561",
+    "max_kurt": 77.6
   }
 ]

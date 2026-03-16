@@ -1342,32 +1342,115 @@ DF_SETTLE = 24000  # reduced settle for speed
 DF_DC_NOTCH = 32
 
 
-def _df_capture_one(freq_mhz, gain=28.0):
-    """Single fast capture, return kurtosis + pulse count."""
-    freq_hz = int(freq_mhz * 1e6)
-    num_samples = int(DF_SAMPLE_RATE * DF_DWELL_MS / 1000)
-    total = num_samples + DF_SETTLE
-    nbytes = total * 2
+import ctypes
+
+_rtl_lib = None
+_rtl_dev = None
+
+
+def _rtl_open():
+    """Open RTL-SDR device once, keep handle for reuse."""
+    global _rtl_lib, _rtl_dev
+    if _rtl_dev is not None:
+        return True
     try:
-        r = subprocess.run(
-            ["rtl_sdr", "-f", str(freq_hz), "-s", str(DF_SAMPLE_RATE),
-             "-g", str(gain), "-n", str(nbytes), "-"],
-            capture_output=True, timeout=10)
-        if len(r.stdout) < nbytes:
-            return {"freq": freq_mhz, "kurt": 0, "pulses": 0, "pwr": -99}
-        raw = r.stdout[:nbytes]
-    except Exception:
+        _rtl_lib = ctypes.CDLL("librtlsdr.so")
+        dev_p = ctypes.c_void_p()
+        ret = _rtl_lib.rtlsdr_open(ctypes.byref(dev_p), 0)
+        if ret != 0:
+            log.error(f"rtlsdr_open failed: {ret}")
+            return False
+        _rtl_dev = dev_p
+        _rtl_lib.rtlsdr_set_sample_rate(_rtl_dev, DF_SAMPLE_RATE)
+        _rtl_lib.rtlsdr_set_tuner_gain_mode(_rtl_dev, 1)
+        _rtl_lib.rtlsdr_set_tuner_gain(_rtl_dev, 280)  # 28.0 dB
+        _rtl_lib.rtlsdr_reset_buffer(_rtl_dev)
+        log.info("RTL-SDR opened via ctypes — persistent handle")
+        return True
+    except Exception as e:
+        log.error(f"rtlsdr open error: {e}")
+        return False
+
+
+def _rtl_close():
+    """Close RTL-SDR device."""
+    global _rtl_dev
+    if _rtl_dev is not None and _rtl_lib is not None:
+        try:
+            _rtl_lib.rtlsdr_close(_rtl_dev)
+        except Exception:
+            pass
+        _rtl_dev = None
+        log.info("RTL-SDR closed")
+
+
+import SoapySDR
+
+_soapy_dev = None
+_soapy_stream = None
+_soapy_buf = None
+
+
+def _soapy_open():
+    """Open SoapySDR device once, keep for reuse."""
+    global _soapy_dev, _soapy_stream, _soapy_buf
+    if _soapy_dev is not None:
+        return True
+    try:
+        os.system("pkill -9 rtl_sdr 2>/dev/null")
+        time.sleep(0.3)
+        _soapy_dev = SoapySDR.Device({"driver": "rtlsdr"})
+        _soapy_dev.setSampleRate(SoapySDR.SOAPY_SDR_RX, 0, DF_SAMPLE_RATE)
+        _soapy_dev.setGain(SoapySDR.SOAPY_SDR_RX, 0, 28)
+        _soapy_stream = _soapy_dev.setupStream(SoapySDR.SOAPY_SDR_RX, SoapySDR.SOAPY_SDR_CF32)
+        _soapy_dev.activateStream(_soapy_stream)
+        _soapy_buf = np.zeros(240000, dtype=np.complex64)
+        log.info("SoapySDR opened — persistent handle")
+        return True
+    except Exception as e:
+        log.error(f"SoapySDR open failed: {e}")
+        _soapy_dev = None
+        return False
+
+
+def _soapy_close():
+    """Close SoapySDR device."""
+    global _soapy_dev, _soapy_stream
+    if _soapy_dev and _soapy_stream:
+        try:
+            _soapy_dev.deactivateStream(_soapy_stream)
+            _soapy_dev.closeStream(_soapy_stream)
+        except Exception:
+            pass
+    _soapy_dev = None
+    _soapy_stream = None
+    log.info("SoapySDR closed")
+
+
+def _df_capture_one(freq_mhz, gain=28.0):
+    """Capture via SoapySDR — retune + read, no process spawning. ~30ms per freq."""
+    if not _soapy_open():
         return {"freq": freq_mhz, "kurt": 0, "pulses": 0, "pwr": -99}
 
-    iq = np.frombuffer(raw, dtype=np.uint8).astype(np.float32)
-    iq = (iq - 127.5) / 127.5
-    z = iq[0::2] + 1j * iq[1::2]
-    z = z[DF_SETTLE:]
-    # DC notch
-    Z = np.fft.fft(z)
-    h = DF_DC_NOTCH // 2
-    Z[:h] = 0; Z[-h:] = 0
-    z = np.fft.ifft(Z)
+    try:
+        t0 = time.time()
+        _soapy_dev.setFrequency(SoapySDR.SOAPY_SDR_RX, 0, freq_mhz * 1e6)
+        time.sleep(0.02)  # PLL settle
+        # Flush stale samples
+        _soapy_dev.readStream(_soapy_stream, [_soapy_buf], len(_soapy_buf), timeoutUs=100000)
+        # Real capture
+        sr = _soapy_dev.readStream(_soapy_stream, [_soapy_buf], len(_soapy_buf), timeoutUs=500000)
+        dt = time.time() - t0
+        if sr.ret <= 0:
+            log.warning(f"DF {freq_mhz}MHz: readStream ret={sr.ret}")
+            return {"freq": freq_mhz, "kurt": 0, "pulses": 0, "pwr": -99}
+        z = _soapy_buf[:sr.ret]
+        log.debug(f"DF {freq_mhz}MHz: {sr.ret} samples in {dt:.3f}s")
+    except Exception as e:
+        log.error(f"DF {freq_mhz}MHz: {e}")
+        _soapy_close()
+        return {"freq": freq_mhz, "kurt": 0, "pulses": 0, "pwr": -99}
+
     amp = np.abs(z).astype(np.float32)
     mu, sigma = np.mean(amp), np.std(amp)
     kurt = float(sp_stats.kurtosis(amp, fisher=False))
@@ -1478,19 +1561,26 @@ _df_live = False
 _df_live_thread = None
 
 
-_df_live_accum = {}  # freq -> {"kurt_sum": 0, "pulses_sum": 0, "n": 0}
+_df_live_accum = {}
+_df_live_recent = []  # last 3 full cycle max-kurts
+_df_live_all_maxk = []  # ALL cycle max-kurts for running average
 
 
 def _df_live_loop():
-    """Continuous fast scan — update after each freq for real-time display + running average."""
-    global _df_live, _df_live_accum
+    """Continuous fast scan — real-time + running average + last-3-cycle average."""
+    global _df_live, _df_live_accum, _df_live_recent
     _df_live_accum = {f: {"kurt_sum": 0, "pulses_sum": 0, "pwr_sum": 0, "n": 0, "kurt_max": 0} for f in DF_FREQS}
-    while _df_live:
+    _df_live_recent = []
+    _df_live_all_maxk.clear()
+    try:
+      while _df_live:
+        cycle_kurts = []
         for f in DF_FREQS:
             if not _df_live:
                 break
             r = _df_capture_one(f)
-            # Accumulate
+            cycle_kurts.append(r["kurt"])
+            # Running accumulator
             a = _df_live_accum[f]
             a["kurt_sum"] += r["kurt"]
             a["pulses_sum"] += r["pulses"]
@@ -1509,6 +1599,11 @@ def _df_live_loop():
                     "pulses_avg": round(aa["pulses_sum"] / nn),
                     "n": aa["n"],
                 }
+            # Running average: max kurt per cycle averaged over all cycles
+            # NOT averaging subband measures — averaging the per-cycle peak kurtosis
+            # Use per-freq averages and take the max
+            running_avg_k = round(max((aa["kurt_sum"] / max(aa["n"], 1)) for aa in _df_live_accum.values()), 1)
+            total_samples = sum(aa["n"] for aa in _df_live_accum.values())
             with _df_lock:
                 current = dict(_df_data.get("freqs", {}))
                 current[f] = r
@@ -1517,18 +1612,41 @@ def _df_live_loop():
                     "avgs": avgs,
                     "ts": datetime.now().strftime("%H:%M:%S"),
                     "max_kurt": max((v.get("kurt", 0) for v in current.values()), default=0),
-                    "total_samples": sum(aa["n"] for aa in _df_live_accum.values()),
+                    "running_avg_kurt": running_avg_k,
+                    "total_samples": total_samples,
                 })
+        # End of one full cycle
+        # Cycle average = mean kurtosis across all subbands
+        cycle_avg_k = round(sum(cycle_kurts) / len(cycle_kurts), 1) if cycle_kurts else 0
+        _df_live_recent.append(cycle_avg_k)
+        if len(_df_live_recent) > 10:
+            _df_live_recent = _df_live_recent[-10:]
+        _df_live_all_maxk.append(cycle_avg_k)
+        last10 = round(sum(_df_live_recent) / len(_df_live_recent), 1) if _df_live_recent else 0
+        lifetime = round(sum(_df_live_all_maxk) / len(_df_live_all_maxk), 1) if _df_live_all_maxk else 0
+        with _df_lock:
+            _df_data["recent3_avg_kurt"] = last10
+            _df_data["running_avg_kurt"] = lifetime
+            _df_data["total_cycles"] = len(_df_live_all_maxk)
+    except Exception as e:
+        log.error(f"DF LIVE LOOP CRASHED: {e}")
+        import traceback
+        log.error(traceback.format_exc())
 
 
 def df_start_live():
     """Start continuous live scanning."""
-    global _df_live, _df_live_thread
+    global _df_live, _df_live_thread, _df_live_recent, _df_live_accum
+    log.info("DF LIVE START — killing rtl_sdr, starting scan loop")
     os.system("pkill -9 rtl_sdr 2>/dev/null")
     time.sleep(0.3)
+    _df_live_recent = []
+    _df_live_accum = {}
+    _df_data.clear()
     _df_live = True
     _df_live_thread = threading.Thread(target=_df_live_loop, daemon=True)
     _df_live_thread.start()
+    log.info(f"DF LIVE thread started: {_df_live_thread.is_alive()}")
 
 
 def df_stop_live():
@@ -1537,22 +1655,27 @@ def df_stop_live():
     _df_live = False
     if _df_live_thread:
         _df_live_thread.join(timeout=3)
+    _soapy_close()
     os.system("pkill -9 rtl_sdr 2>/dev/null")
 
 
 def df_disconnect():
     """Kill sentinel and free the SDR for DF use."""
     global _df_disconnected
+    log.info("DF DISCONNECT — killing sentinel + rtl_sdr")
+    _soapy_close()
     os.system("pkill -f sentinel.py 2>/dev/null")
     os.system("pkill -9 rtl_sdr 2>/dev/null")
     time.sleep(2)
     _df_disconnected = True
+    log.info("DF DISCONNECT done")
 
 
 def df_reconnect():
     """Restart sentinel after DF session."""
     global _df_disconnected, _df_running
     _df_running = False
+    _soapy_close()
     os.system("pkill -9 rtl_sdr 2>/dev/null")
     time.sleep(1)
     subprocess.Popen(
@@ -1653,7 +1776,16 @@ DF_HTML = r"""<!DOCTYPE html>
     </div>
     <div class="panel" style="flex:1;display:flex;flex-direction:column">
       <h2>Live Kurtosis by Frequency</h2>
-      <div class="big-kurt" id="bigKurt" style="color:#334">—</div>
+      <div style="display:flex;justify-content:center;gap:30px;align-items:baseline">
+        <div style="text-align:center">
+          <div style="font-size:9px;color:var(--dim);letter-spacing:2px;margin-bottom:2px">LAST 10 CYCLES</div>
+          <div class="big-kurt" id="bigKurt" style="color:#334">—</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:9px;color:var(--dim);letter-spacing:2px;margin-bottom:2px">RUNNING AVG</div>
+          <div class="big-kurt" id="bigAvg" style="color:#334">—</div>
+        </div>
+      </div>
       <div class="live-bars" id="liveBars"></div>
     </div>
   </div>
@@ -1769,12 +1901,20 @@ function pollLive() {
         '</span>' +
         '</div>';
     });
-    const k = d.max_kurt || 0;
+    // Left number: last 3 full cycle average
+    const recent3 = d.recent3_avg_kurt || 0;
     const bigEl = document.getElementById('bigKurt');
-    const n = d.total_samples || 0;
-    bigEl.textContent = k.toFixed(1);
-    bigEl.style.color = k > 200 ? '#f43' : k > 80 ? '#fa0' : k > 30 ? '#2c8' : '#334';
-    document.getElementById('dfStatus').textContent = 'LIVE — n=' + n + ' samples';
+    bigEl.textContent = recent3.toFixed(1);
+    bigEl.style.color = recent3 > 200 ? '#f43' : recent3 > 80 ? '#fa0' : recent3 > 30 ? '#2c8' : '#334';
+
+    // Right number: entire process running average
+    const runAvg = d.running_avg_kurt || 0;
+    const avgEl = document.getElementById('bigAvg');
+    avgEl.textContent = runAvg.toFixed(1);
+    avgEl.style.color = runAvg > 200 ? '#f43' : runAvg > 80 ? '#fa0' : runAvg > 30 ? '#2c8' : '#334';
+
+    const nc = d.total_cycles || 0;
+    document.getElementById('dfStatus').textContent = 'LIVE — ' + nc + ' cycles';
   });
 }
 
@@ -2033,6 +2173,16 @@ class Handler(BaseHTTPRequestHandler):
 
     def log_message(self, fmt, *args):
         pass
+
+
+import logging
+logging.basicConfig(
+    filename="results/dashboard.log",
+    level=logging.DEBUG,
+    format="%(asctime)s %(levelname)s %(message)s",
+    datefmt="%H:%M:%S",
+)
+log = logging.getLogger("dashboard")
 
 
 def main():
